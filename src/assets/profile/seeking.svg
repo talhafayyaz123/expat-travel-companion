@@ -1,0 +1,11 @@
+<svg width="100" height="100" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Outer Circle -->
+  <circle cx="12" cy="12" r="10" stroke="black" stroke-width="2"/>
+  
+  <!-- Interlocked Circles (Male & Female Representation) -->
+  <circle cx="10" cy="12" r="3" stroke="black" stroke-width="2"/>
+  <circle cx="14" cy="12" r="3" stroke="black" stroke-width="2"/>
+
+  <!-- Connection Line -->
+  <line x1="11" y1="12" x2="13" y2="12" stroke="black" stroke-width="2"/>
+</svg>

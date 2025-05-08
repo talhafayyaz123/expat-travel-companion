@@ -1,0 +1,7 @@
+.perspectiveCustom {
+    perspective: 800px;
+  }
+
+  .roted-testimonial{
+    transform: 'rotateY(0deg)'
+  }
