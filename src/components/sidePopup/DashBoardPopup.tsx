@@ -58,11 +58,15 @@ function DashBoardPopup() {
           </button>
         </div>
         <div className="p-4 bg-white h-full">
-          <h4 className="text-[17px] text-gray-800 font-semibold text-center">
+          <h4
+            className="text-[18px] text-gray-800 font-semibold text-center"
+            style={{ fontFamily: "'Dancing Script', cursive" }}
+          >
             If you want to go fast, go alone. If you want to go far, go
             together.
           </h4>
-          <h4 className="text-[17px] text-primary font-semibold text-center border-b pb-4">
+
+          <h4 className="text-[17px] text-blue-600 font-semibold text-center border-b pb-4">
             - African Proverb
           </h4>
           <div className="max-h-[480px] overflow-y-auto">
@@ -93,9 +97,10 @@ function DashBoardPopup() {
                 together!
               </li>
             </ul>
-            <h3 className="text-[17px] text-gray-800 font-normal text-center mt-3 ps-2">
-              🔍 Find your ideal travel housemate today! **
-              <span className="font-semibold">JOIN NOW</span>**
+            <h3 className="text-[17px] text-gray-800 font-normal text-center ps-2">
+              🔍 Find your ideal travel housemate today!
+              <br />
+              **<span className="font-semibold">JOIN NOW</span>**
             </h3>
           </div>
         </div>

@@ -1,4 +1,10 @@
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 
 interface TextareaFieldProps {
@@ -8,14 +14,21 @@ interface TextareaFieldProps {
   form: any;
 }
 
-export function TextareaField({ name, label, placeholder, form }: TextareaFieldProps) {
+export function TextareaField({
+  name,
+  label,
+  placeholder,
+  form,
+}: TextareaFieldProps) {
   return (
     <FormField
       control={form.control}
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="text-[#263238] font-semibold text-[20px]">{label}</FormLabel>
+          <FormLabel className="text-[#263238] font-semibold text-[20px]">
+            {label}
+          </FormLabel>
           <FormControl>
             <Textarea
               placeholder={placeholder}
@@ -29,4 +42,3 @@ export function TextareaField({ name, label, placeholder, form }: TextareaFieldP
     />
   );
 }
-

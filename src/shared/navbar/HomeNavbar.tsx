@@ -1,5 +1,5 @@
 "use client";
-import logo from "@/assets/expat-logo-pro.png";
+import logo from "@/assets/expat-logo-transparent.png";
 import { menuItems } from "@/constants/menuItems";
 import Image from "next/image";
 import Link from "next/link";
@@ -46,7 +46,8 @@ const HomeNavbar = () => {
               <Image
                 src={logo}
                 alt="Expat Group logo"
-                className="lg:w-[108px] w-[65px] h-[auto] lg:h-[60px] object-contain "
+                className="lg:w-[150px] w-[65px] h-[auto] lg:h-[60px] object-cover"
+                style={{ marginLeft: "-1rem" }}
               />
             </Link>
             <ul className="lg:flex hidden items-center gap-[56px]">

@@ -38,13 +38,22 @@ const UserAgreement = () => {
             <ul className="list-disc ml-6 mt-2 space-y-2 pl-6">
               <li>You must be at least 21 years old to join our platform.</li>
               <li>
-                This Website and its associated services are open to all individuals who meet the eligibility criteria, regardless of gender. By registering for an account, you confirm that you meet these criteria and agree to respect the inclusive nature of the platform. We are committed to fostering a safe, supportive, and respectful environment for all users.
+                This Website and its associated services are open to all
+                individuals who meet the eligibility criteria, regardless of
+                gender. By registering for an account, you confirm that you meet
+                these criteria and agree to respect the inclusive nature of the
+                platform. We are committed to fostering a safe, supportive, and
+                respectful environment for all users.
               </li>
               <li>
-              By registering, you affirm that all information you provide, including identification documents and social media account links, are accurate and truthful.
+                By registering, you affirm that all information you provide,
+                including identification documents and social media account
+                links, are accurate and truthful.
               </li>
               <li>
-              <span className="font-bold">B&B Global Ventures, LLC.</span>, the parent company, reserves the right to refuse service to any individual at its sole discretion.
+                <span className="font-bold">B&B Global Ventures, LLC.</span>,
+                the parent company, reserves the right to refuse service to any
+                individual at its sole discretion.
               </li>
             </ul>
           </li>
@@ -78,7 +87,11 @@ const UserAgreement = () => {
             <h3 className="text-xl font-semibold text-gray-800">
               4. Community Conduct
             </h3>
-            <p>You agree to abide by our Community Guidelines, which promote a respectful, safe, and inclusive environment. Prohibited actions include but are not limited to:</p>
+            <p>
+              You agree to abide by our Community Guidelines, which promote a
+              respectful, safe, and inclusive environment. Prohibited actions
+              include but are not limited to:
+            </p>
             <ul className="list-disc ml-6 mt-2 space-y-2 pl-6">
               <li>Harassment, discrimination, or hate speech.</li>
               <li>Soliciting or spamming other members.</li>
@@ -99,8 +112,9 @@ const UserAgreement = () => {
               </li>
               <li>
                 <strong>Messaging and Video Features:</strong> Use the internal
-                messaging and third-party video call tools responsibly. Do not use these
-                features for unsolicited promotion or inappropriate conduct.
+                messaging and third-party video call tools responsibly. Do not
+                use these features for unsolicited promotion or inappropriate
+                conduct.
               </li>
               <li>
                 <strong>Posting Businesses:</strong> Members may share their
@@ -115,7 +129,11 @@ const UserAgreement = () => {
             <h3 className="text-xl font-semibold text-gray-800">
               6. Safety and Disclaimer
             </h3>
-            <p>While we strive to provide a secure environment, ExpatGlobalGroup.com cannot guarantee the safety or reliability of every interaction. You acknowledge:</p>
+            <p>
+              While we strive to provide a secure environment,
+              ExpatGlobalGroup.com cannot guarantee the safety or reliability of
+              every interaction. You acknowledge:
+            </p>
             <ul className="list-disc ml-6 mt-2 space-y-2 pl-6">
               <li>
                 You are responsible for exercising caution in all communications
@@ -171,7 +189,9 @@ const UserAgreement = () => {
             <h3 className="text-xl font-semibold text-gray-800">
               9. Dispute Resolution
             </h3>
-            <p>In the event of a dispute between you and ExpatGlobalGroup.com:</p>
+            <p>
+              In the event of a dispute between you and ExpatGlobalGroup.com:
+            </p>
             <ul className="list-disc ml-6 mt-2 space-y-2 pl-6">
               <li>
                 Attempt to resolve issues informally by contacting our support
@@ -235,7 +255,11 @@ const UserAgreement = () => {
         </div>
       </div>
 
-      <p className="mt-4">By creating an account on ExpatGlobalGroup.com, you agree to this User Agreement. Thank you for being a part of our community and helping us build a safe, empowering space for solo travelers!</p>
+      <p className="mt-4">
+        By creating an account on ExpatGlobalGroup.com, you agree to this User
+        Agreement. Thank you for being a part of our community and helping us
+        build a safe, empowering space for solo travelers!
+      </p>
 
       <p className="text-gray-500 text-sm mt-8">Last updated: 5 January 2025</p>
     </div>

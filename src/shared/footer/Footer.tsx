@@ -86,9 +86,9 @@ export default function Footer() {
 
           <div className="flex justify-center items-center gap-4">
             <p>
-              {" "}
-              Expat Global Group <span className="text-[12px]">(TM)</span>{" "}
-              ©2025. All Rights Reserved
+              Expat Global Group
+              <span className="text-[15px] ml-1">&trade;</span> ©2025. All
+              Rights Reserved
             </p>
           </div>
         </div>

@@ -8,7 +8,7 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 // import whyChoosecenter from  '@/assets/home/whyChoosCenter.jpg'
-import logo from "@/assets/expat-logo-pro.png";
+import logo from "@/assets/expat-logo-transparent.png";
 
 interface FeatureCardProps {
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
@@ -138,9 +138,8 @@ export const WhyChooseCard = () => {
           <Image
             src={logo}
             alt="Expat Global Group Logo"
-            // width={80}
-            // height={80}
-            className="lg:w-[120px] lg:h-[100px]  object-contain"
+            width={100}
+            className="lg:w-[150px] lg:h-[100px]  object-cover"
           />
         </div>
       </div>
