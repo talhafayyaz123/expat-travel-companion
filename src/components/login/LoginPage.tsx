@@ -71,12 +71,13 @@ export default function LoginPage() {
         toast.dismiss();
 
         // Decode the token to extract `isPayment`
-        const decodedToken: { role: string,isPayment:boolean } = jwtDecode(token);
+        const decodedToken: { role: string; isPayment: boolean } =
+          jwtDecode(token);
 
         // Prevent redirect if already on the target page
         if (!isLoading) {
           if (decodedToken?.isPayment) {
-            router.push('/travel');
+            router.push("/travel");
           } else if (decodedToken?.isPayment === false) {
             router.push("/membership");
           }
@@ -90,12 +91,11 @@ export default function LoginPage() {
         );
       }
     } catch (err) {
-      console.log("err",err);
+      console.log("err", err);
       toast.dismiss();
       toast.error("An error occurred. Please try again.");
     }
   };
-
 
   return (
     <div className="flex flex-col lg:flex-row bg-white min-h-screen">
@@ -115,7 +115,7 @@ export default function LoginPage() {
             <Image
               src={logo}
               alt="Expat Logo"
-              className="w-24 h-auto object-contain lg:w-28"
+              className="w-24 h-auto object-contain lg:w-[9rem]"
             />
           </div>
 

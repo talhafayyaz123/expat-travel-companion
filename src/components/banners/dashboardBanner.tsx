@@ -26,32 +26,29 @@ function DashboardBanner() {
   return (
     <>
       {show && (
-        <div className="flex justify-between flex-col gap-2 w-3/4 mx-auto items-center px-[50px] py-[7px] bg-violet-200 border border-[#7860d7] rounded-lg mb-5">
-          <div className="flex items-center">
-            <FaExclamationCircle className="me-2" color="#4b3d82" />
-            {/* max-w-[85%] */}
-            <span className="text-[#4b3d82] select-none ">
-              New here? Welcome! Set up your profile under{" "}
-              <Link href="/user-profile" className="text-[blue]">
-                ‘My Profile’
-              </Link>{" "}
-              and connect with others once your photo is approved!
-            </span>
-          </div>
-          <div className="flex text-[#4b3d82]">
-            <label className="me-3 text-[#4b3d82] whitespace-nowrap">
-              <input
-                type="checkbox"
-                className="me-1"
-                onChange={(e) => closeBannerForever(e.target.checked)}
-              />
-              Got it! Turn off this reminder
-            </label>
-            |
-            <button className="ms-2" onClick={() => setShow(false)}>
-              <X color="#4b3d82" />
-            </button>
-          </div>
+        <div className="flex flex-wrap items-center justify-between gap-4 w-4/5 mx-auto px-[30px] py-[10px] bg-violet-200 border border-[#7860d7] rounded-lg mb-5 overflow-hidden">
+          <FaExclamationCircle className="me-2 flex-shrink-0" color="#4b3d82" />
+
+          <span className="text-[#4b3d82] select-none min-w-0 flex-1 text-[11px] overflow-hidden text-ellipsis whitespace-nowrap">
+            New here? Welcome! Set up your profile under{" "}
+            <Link href="/user-profile" className="text-[blue] underline">
+              ‘My Profile’
+            </Link>{" "}
+            and connect with others once your photo is approved!
+          </span>
+
+          <label className="flex items-center text-[#4b3d82] text-[11px] whitespace-nowrap me-2">
+            <input
+              type="checkbox"
+              className="me-1"
+              onChange={(e) => closeBannerForever(e.target.checked)}
+            />
+            Got it! Turn off this reminder
+          </label>
+
+          <button className="ms-1" onClick={() => setShow(false)}>
+            <X color="#4b3d82" />
+          </button>
         </div>
       )}
     </>

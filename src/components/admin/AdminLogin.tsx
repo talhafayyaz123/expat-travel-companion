@@ -22,7 +22,7 @@ export default function AdminLogin() {
   const [loginUser, { isLoading }] = useLoginUserMutation();
   const router = useRouter();
   const dispatch = useDispatch();
-  const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const {
     register,
@@ -129,7 +129,6 @@ export default function AdminLogin() {
             )}
           </div>
 
-       
           <div className="space-y-2">
             <Label
               className="text-[16px] text-gray-700 font-medium"
@@ -150,13 +149,7 @@ export default function AdminLogin() {
                 className="absolute inset-y-0 right-0 px-5 text-gray-500"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                {showPassword ? (
-                      <Eye/>
-         
-                ) : (
-             
-                 <EyeOff/>
-                )}
+                {showPassword ? <Eye /> : <EyeOff />}
               </button>
             </div>
             {errors.password && (

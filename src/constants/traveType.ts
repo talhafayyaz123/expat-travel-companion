@@ -6,15 +6,15 @@ export const travelOption = [
 
   {
     label: "Slow Travel 2-6 mo",
-    value: "Slow_Travel_2-6mon",
+    value: "Slow_Travel_2-6 mon",
   },
   {
     label: "Scouting Trip 1-8 wks",
-    value: "Scouting_Trip_1-8wks",
+    value: "Scouting_Trip_1-8 wks",
   },
   {
     label: "Long Term 6 mo - 1 yr",
-    value: "Long_Term_6mon-1yr",
+    value: "Long_Term_6 mon-1 yr",
   },
 ];
 

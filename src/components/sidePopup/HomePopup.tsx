@@ -35,7 +35,7 @@ function HomePopup() {
             onClick={() => setIsOpen(true)}
           >
             <Notebook size={18} />
-            <button className="ms-2">News</button>
+            <button className="ms-4">New</button>
           </div>
         </div>
         <div className="relative h-5 mt-4">
@@ -97,14 +97,15 @@ function HomePopup() {
                 our community
               </li>
               <li className="text-sm text-gray-800 font-normal text-start mt-3">
-                <p>Earn a commission when your invitee becomes a member</p>{" "}
-                (they’ll get 10% off 1st month)
+                <p>Earn a commission when your invitee becomes a member</p>
+                (they’ll get 10% off their 1<sup>st</sup> month)
               </li>
+
               <li className="text-sm text-gray-800 font-normal text-start mt-3">
                 <b>Win-Win-Win!</b> <p>Expat Global Group grows</p>{" "}
-                <p>you make passive income, and</p>
+                <p>You make passive income, and</p>
                 <p>
-                  your invitee discovers a budget-friendly travel hack! 🏡✈️
+                  Your invitee discovers a budget-friendly travel hack! 🏡✈️
                 </p>
               </li>
             </ul>

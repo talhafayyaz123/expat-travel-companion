@@ -16,6 +16,7 @@ import ChatModal from "../chatModal/chat";
 import genderIcon from "@/assets/profile/gender.svg";
 import seekingIcon from "@/assets/profile/seeking.svg";
 import { FaExclamation, FaExclamationCircle } from "react-icons/fa";
+import Placeholder from "@/assets/placholder.png";
 
 interface User {
   id: any | string;
@@ -49,7 +50,7 @@ interface UserData {
 export const ProfileDetailsView = () => {
   const { id } = useParams(); // Profile ID from URL params
 
-  const [currentUserData, setCurrentUserData] = useState<UserData>([]);
+  const [currentUserData, setCurrentUserData] = useState<UserData>();
   const [isFavorite, setIsFavorite] = useState(false); // Manage favorite state
   const [chatModalisOpen, setChatModalIsOpen] = useState(false);
   const [floatingButtonIsDisplayed, setFloatingButtonIsDisplayed] =
@@ -140,6 +141,7 @@ export const ProfileDetailsView = () => {
   }
 
   const currentUser = data?.data;
+  console.log("My Profile Detail", currentUser);
 
   const date = new Date(currentUser?.createdAt);
 
@@ -153,20 +155,25 @@ export const ProfileDetailsView = () => {
     <div>
       <div className="flex flex-col md:flex-row items-start justify-between p-4 md:p-6 gap-4 bg-white">
         <div className="flex flex-col md:flex-row gap-8 items-center w-full md:w-auto">
-          <div className="relative w-32 h-32 md:w-[133px] md:h-[133px] bg-red-500 rounded-full">
-            <Avatar className="w-[133px] h-[133px]">
-              <AvatarImage src={avatarSrc} alt="Profile picture" />
-              <AvatarFallback>{currentUser?.firstName[0]}</AvatarFallback>
+          <div className="w-36 h-36 rounded-full overflow-hidden flex items-center justify-center">
+            <Avatar className="w-[133px] h-[133px]  border-2 border-slate-200">
+              <Image
+                src={currentUser.profileImage || Placeholder}
+                alt="Profile Image"
+                width={128}
+                height={128}
+                className="object-cover w-full h-full"
+              />
             </Avatar>
           </div>
 
           {/* <input
-                        type="file"
-                        ref={fileInputRef}
-                        onChange={handleImageUpload}
-                        className="hidden"
-                        accept="image/*"
-                    /> */}
+            type="file"
+            ref={fileInputRef}
+            onChange={handleImageUpload}
+            className="hidden"
+            accept="image/*"
+          /> */}
 
           {/* User Details */}
           <div className="text-center md:text-left">

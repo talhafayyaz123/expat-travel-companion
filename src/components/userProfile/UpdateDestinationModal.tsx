@@ -163,7 +163,7 @@ export const UpdateDestinationModal: React.FC<UpdateDestinationModalProps> = ({
     <div className="">
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Update Destination</DialogTitle>
+          <DialogTitle>Update the Destinations</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">

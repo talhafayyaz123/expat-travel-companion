@@ -50,14 +50,24 @@ export const MyTopView = () => {
 
   // Array of categories and their respective items
   const categories: Category[] = [
-    { title: "Personality", items: myTopData?.personality || [] },
-    { title: "Philosophies", items: myTopData?.philosophies || [] },
-    { title: "Goals", items: myTopData?.goals || [] },
+    {
+      title: "Personality",
+      items: myTopData?.personality || [],
+    },
+    {
+      title: "Philosophies",
+      items: myTopData?.philosophies || [],
+    },
+    {
+      title: "Goals",
+      items: myTopData?.goals || [],
+    },
     { title: "Hobbies", items: myTopData?.hobbies || [] },
     { title: "Social Groups", items: myTopData?.socialGroups || [] },
     { title: "Foodie Fan", items: myTopData?.foodieFan || [] },
     { title: "Musical Tastes", items: myTopData?.musicalTastes || [] },
   ];
+  console.log(categories);
 
   return (
     <div>
@@ -75,7 +85,7 @@ export const MyTopView = () => {
                 <h3 className="text-[18px] sm:text-[20px] md:text-[22px] font-sans font-semibold mb-2 text-center underline text-[#aca4a6] uppercase">
                   {category.title}
                 </h3>
-                <ul className="flex justify-between text-gray-600">
+                <ul className="flex justify-center flex-wrap gap-3 text-gray-600">
                   {category.items.map((item, idx) => (
                     <li
                       key={idx}

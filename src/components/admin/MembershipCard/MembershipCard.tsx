@@ -31,7 +31,6 @@ const MembershipCard = ({ membership }: Props) => {
     { isLoading: isDeleting, isError: createError, error: createErrorDetails },
   ] = useDeletePlanMutation();
 
-
   // Handle dialog visibility
   const openDialog = () => setIsDialogOpen(true);
   const closeDialog = () => setIsDialogOpen(false);

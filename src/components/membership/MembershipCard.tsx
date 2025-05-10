@@ -51,29 +51,26 @@ export default function MembershipCard({ plan }: MembershipCardProps) {
             onChange={handleCheckboxChange}
             className="mt-1"
           />
-          <span className="text-sm">
-            By checking this box I agree that I have read, understood, and
-            consent to SoFi’s{" "}
-            <a href="#" className="text-blue-600">
-              ESIGN Act Consent
+          <span className="text-sm space-x-1">
+            By checking this box, you have read and agree to our{" "}
+            <a href="#" className="text-blue-500 underline">
+              Terms
             </a>
-            :{" "}
-            <a href="#" className="text-blue-600">
-              GLBA Privacy Notice
-            </a>
-            .
-            <a href="privacy-policy" className="text-blue-600">
+            ,{" "}
+            <a href="#" className="text-blue-500 underline">
               Privacy Policy
             </a>
-            .{" "}
-            <a href="terms-and-condition" className="text-blue-600">
-              Terms of Use
+            ,{" "}
+            <a href="#" className="text-blue-500 underline">
+              Community Guidelines
+            </a>{" "}
+            and{" "}
+            <a href="#" className="text-blue-500 underline">
+              User Agreement
             </a>
-            , and
-            <a href="#" className="text-blue-600">
-              Arbitration Agreement
-            </a>
-            .
+            . You also agree to receive emails from Expat Global Group and
+            understand that you are free to withdraw consent to receive emails
+            at any time.
           </span>
         </label>
       </div>
