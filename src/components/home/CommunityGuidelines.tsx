@@ -24,7 +24,7 @@ const CommunityGuidelines = () => {
           </h1>
           <p className="mb-6 text-gray-700 mt-4 ">
             Welcome to Expat Global Group
-            <span className="text-[12px]"> (TM)</span>, a platform dedicated to
+            <sup className="text-[10px]">™</sup>. a platform dedicated to
             connecting adults seeking compatible, like-minded companions for
             travel, housing, and community-building adventures. To ensure a
             safe, supportive, and inclusive environment, we’ve established the

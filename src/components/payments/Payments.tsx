@@ -142,7 +142,7 @@ export default function Payments({
               <Image
                 src={logoPayments}
                 alt="Expat Group logo"
-                className="w-[80px] h-[80px] md:w-[108px] md:h-[108px] lg:w-[150px] lg:h-[120px] object-contain"
+                className="w-[80px] h-[80px] md:w-[108px] md:h-[108px] lg:w-[170px] lg:h-[140px] object-contain"
               />
             </div>
 

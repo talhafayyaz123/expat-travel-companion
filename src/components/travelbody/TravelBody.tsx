@@ -23,11 +23,10 @@ const TravelBody = () => {
   const { data: userDataa, isLoading, isError } = useVerifySixQuery(undefined);
 
   // Filter users where summitVerify is true
-  const userData = userDataa?.data?.data
-  
-    const { data: favouriteList, isLoading: isLoadingFavouriteList } =
+  const userData = userDataa?.data?.data;
+
+  const { data: favouriteList, isLoading: isLoadingFavouriteList } =
     useGetMyfavQuery([]);
-   
 
   // Check if data is still loading
   const isDataLoading = isLoading || isLoadingFavouriteList;
@@ -65,7 +64,13 @@ const TravelBody = () => {
       <div className="font-sans text-5xl font-semibold mt-2 text-[#1D2939]">
         <h1>Some of our verified members</h1>
         <p className="font-sans text-xl font-medium mt-4 text-[#344054]">
-        You&apos;re not just finding a potential housemate or travel companion - you&apos;re building a support system. The solo travelers you meet here share your passion for exploring new cultures and experiencing life abroad while making their money go further. Plus, by teaming up with someone on the same journey, you&apos;ll find a sense of synergy, safety and camaraderie that helps you stay motivated and focused on your goals.
+          You&apos;re not just finding a potential housemate or travel companion
+          - you&apos;re building a support system. The solo travelers you meet
+          here share your passion for exploring new cultures and experiencing
+          life abroad while making their money go further. Plus, by teaming up
+          with someone on the same journey, you&apos;ll find a sense of synergy,
+          safety and camaraderie that helps you stay motivated and focused on
+          your goals.
         </p>
       </div>
 

@@ -25,6 +25,7 @@ import { useGetAllConversationsQuery } from "@/redux/Api/messagesApi";
 import { FaExclamationCircle } from "react-icons/fa";
 import { formatDate2 } from "@/utilities/format";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
+import { Image as AntImage } from "antd";
 
 interface User {
   id: string;
@@ -226,14 +227,17 @@ export const ProfileView = () => {
             {/* Profile Image and Details Section */}
             <div className="flex flex-col md:flex-row gap-6 items-center w-full md:w-auto">
               {/* Profile Image */}
-              <div className="relative w-32 h-32 md:w-[133px] md:h-[133px] rounded-full">
-                <Image
-                  src={avatarSrc || currentUser?.profileImage}
-                  alt="Profile picture"
-                  width={133}
-                  height={133}
-                  className="rounded-full h-[133px] w-[133px] object-cover border-2 border-gray-300"
-                />
+              <div className="relative">
+                <div className="rounded-full overflow-hidden w-[133px] h-[133px]">
+                  <AntImage
+                    src={avatarSrc || currentUser?.profileImage}
+                    alt="Profile picture"
+                    width={133}
+                    height={133}
+                    className="object-cover w-full h-full"
+                  />
+                </div>
+
                 <div
                   onClick={triggerFileInput}
                   className="absolute border flex cursor-pointer justify-center items-center border-gray-400 bg-white top-24 left-24 rounded-full w-8 h-8 shadow-md"

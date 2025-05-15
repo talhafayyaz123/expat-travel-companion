@@ -5,16 +5,16 @@ export const travelOption = [
   },
 
   {
-    label: "Slow Travel 2-6 mo",
-    value: "Slow_Travel_2-6 mon",
+    label: "Slow Travel (2 mo - 6 mo)",
+    value: "Slow_Travel_(2 mo - 6 mo)",
   },
   {
-    label: "Scouting Trip 1-8 wks",
-    value: "Scouting_Trip_1-8 wks",
+    label: "Scouting Trip (1-8 wks)",
+    value: "Scouting_Trip_(1-8 wks)",
   },
   {
-    label: "Long Term 6 mo - 1 yr",
-    value: "Long_Term_6 mon-1 yr",
+    label: "Long Term (6 mo - 1 yr+)",
+    value: "Long_Term_(6 mo - 1 yr+)",
   },
 ];
 

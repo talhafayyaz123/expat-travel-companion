@@ -23,6 +23,8 @@ import { Required } from "../icon/Required";
 import { currentCountries } from "@/constants/currentCountries";
 import { stateOptions } from "@/constants/stateOptions";
 import { StateSelect } from "../userProfile/StateSelect";
+// import Select from "react-select";
+// import { Controller } from "react-hook-form";
 
 const profileSchema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters."),
@@ -35,8 +37,8 @@ const profileSchema = z.object({
   country: z.string(),
   state: z.string(),
   city: z.string().min(2, "City must be at least 2 characters."),
-  gender:z.any(),
-  memberSeeking:z.any(),
+  gender: z.any(),
+  memberSeeking: z.any(),
 
   haveRoom: z.boolean().default(false),
   profileImage: z
@@ -117,7 +119,6 @@ export default function ProfileForm() {
         profileImage: undefined,
         gender: userData?.data?.gender || "",
         memberSeeking: userData?.data?.memberSeeking || "",
-
       });
     }
   }, [userData, authUserLoading, form]);
@@ -168,6 +169,12 @@ export default function ProfileForm() {
     }
   };
 
+  // const genderOptions = [
+  //   { value: "Female", label: "Female" },
+  //   { value: "Male", label: "Male" },
+  //   { value: "Non-Binary", label: "Non-Binary" },
+  // ];
+
   return (
     <div className="mx-auto p-4 font-sans">
       <div className="grid grid-cols-12">
@@ -201,7 +208,15 @@ export default function ProfileForm() {
               form={form}
             />
           </div>
-          <div>You can upload images up to 256 x 256. Upload a clear head-and-shoulders photo of yourself only.<br/> <span className="font-[700]"> Your profile will remain inactive until the photo is approved.</span></div>
+          <div>
+            You can upload images up to 256 x 256. Upload a clear
+            head-and-shoulders photo of yourself only.
+            <br />{" "}
+            <span className="font-[700]">
+              {" "}
+              Your profile will remain inactive until the photo is approved.
+            </span>
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 ">
             <InputField
@@ -226,6 +241,26 @@ export default function ProfileForm() {
               options={["Female", "Male", "Non-Binary"]}
             />
           </div>
+          {/* <div>
+            <label className="font-semibold text-[20px]">
+              What Are Seeking You?
+            </label>
+            <Controller
+              name="gender"
+              control={form.control}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  className="mt-3"
+                  options={genderOptions}
+                  placeholder="Select"
+                  onChange={(selectedOption) =>
+                    field.onChange(selectedOption?.value)
+                  }
+                />
+              )}
+            />
+          </div> */}
           <div>
             <SelectField
               name="memberSeeking"
@@ -249,12 +284,12 @@ export default function ProfileForm() {
                 Date of Birth
               </p>
               <div className="relative group">
-      <Required />
-      {/* Tooltip */}
-      <span className="absolute left-1/2 bottom-full transform -translate-x-1/2 -translate-y-2 w-max px-2 py-1 text-xs text-white bg-black rounded opacity-0 group-hover:opacity-100 transition-opacity">
-      Not visible to the public
-      </span>
-    </div>
+                <Required />
+                {/* Tooltip */}
+                <span className="absolute left-1/2 bottom-full transform -translate-x-1/2 -translate-y-2 w-max px-2 py-1 text-xs text-white bg-black rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                  Not visible to the public
+                </span>
+              </div>
             </div>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -280,10 +315,14 @@ export default function ProfileForm() {
             />
 
             <InputField name="day" label="" placeholder="Date" form={form} />
-            <InputField name="year" label="" placeholder="Year(xxxx)" form={form} />
+            <InputField
+              name="year"
+              label=""
+              placeholder="Year(xxxx)"
+              form={form}
+            />
           </div>
 
-         
           <SelectField
             name="zodiac"
             label="Zodiac / Sun Sign"
@@ -326,7 +365,6 @@ export default function ProfileForm() {
                 value: so.value,
               }))}
               required={true}
-              
             />
 
             {/* <SelectField

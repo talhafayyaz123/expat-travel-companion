@@ -26,11 +26,12 @@ const SaftyTips = () => {
           <h2 className="text-3xl text-black/90">Safety Tips for Members</h2>
         </div>
         <p className="pt-6 pb-3">
-          Your safety is our top priority at Expat Global Group{" "}
-          <span className="text-[12px]">(TM)</span>. Whether you’re connecting
-          with other members online or meeting in person, following these safety
-          tips can help ensure a positive and secure experience:
+          Your safety is our top priority at Expat Global Group
+          <sup className="text-[10px]">™</sup>. Whether you’re connecting with
+          other members online or meeting in person, following these safety tips
+          can help ensure a positive and secure experience:
         </p>
+
         {/* ................. */}
         <section>
           <HeaderWithBorder text="Online Safety" />

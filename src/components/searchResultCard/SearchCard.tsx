@@ -34,8 +34,6 @@ export function SearchCard() {
   const currentPage = travelForm.page;
   const itemsPerPage = travelForm.limit;
 
-  // console.log("SearchCard:", travelForm);
-
   const { data: favouriteList, isLoading: isLoadingFavouriteList } =
     useGetMyfavQuery([]);
   const [triggerUserSearch, { data, isLoading }] = useLazyUserSearchQuery();
@@ -58,8 +56,11 @@ export function SearchCard() {
   }, [travelForm, triggerUserSearch]);
 
   const searchItem = data?.data?.data || [];
+  console.log(searchItem);
+
   const totalResults = data?.data?.meta?.total || 0;
   const totalPages = Math.ceil(totalResults / itemsPerPage);
+  console.log("totalPages", totalPages);
 
   const renderLoader = () => (
     <>
@@ -79,17 +80,17 @@ export function SearchCard() {
     }
 
     // Filter out users in the favorite list
-    const transformedData = !isLoadingFavouriteList
-      ? searchItem.filter(
-          (result: Result) =>
-            !favouriteList?.data?.some(
-              (user: any) => user?.userId === result?.id
-            )
-        )
-      : searchItem;
+    // const transformedData = !isLoadingFavouriteList
+    //   ? searchItem.filter(
+    //       (result: Result) =>
+    //         !favouriteList?.data?.some(
+    //           (user: any) => user?.userId === result?.id
+    //         )
+    //     )
+    //   : searchItem;
 
     // Map over the transformed data
-    return transformedData.map((result: Result) => {
+    return searchItem.map((result: Result) => {
       const {
         id,
         firstName,

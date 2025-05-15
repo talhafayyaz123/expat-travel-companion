@@ -175,13 +175,13 @@ export const DestinationView: React.FC = () => {
             </div>
             <hr className="bg-gray-300 mt-3" />
             <div>
-              <p className="font-sans text-[#344054] font-medium text-[16px] sm:text-[18px] mt-4">
+              <p className="font-sans text-[#344054] font-medium text-[16px] sm:text-[16px] mt-4">
                 My travel type:{" "}
                 <span className="text-[#475467] font-normal">
                   {destination?.travelType.replace(/_/g, " ")}
                 </span>
               </p>
-              <p className="font-sans text-[#344054] font-medium text-[16px] sm:text-[18px] mt-4">
+              <p className="font-sans text-[#344054] font-medium text-[16px] sm:text-[16px] mt-4">
                 My travel begins:{" "}
                 <span className="text-[#475467] font-normal">
                   {new Date(destination?.TravelBegins).toLocaleDateString(
@@ -194,13 +194,13 @@ export const DestinationView: React.FC = () => {
                   )}
                 </span>
               </p>
-              <p className="font-sans text-[#344054] font-medium text-[16px] sm:text-[18px] mt-4">
+              <p className="font-sans text-[#344054] font-medium text-[16px] sm:text-[16px] mt-4">
                 Destination country:{" "}
                 <span className="text-[#475467] font-normal">
                   {getCountryLabel(destination?.destinationCountry)}
                 </span>
               </p>
-              <p className="font-sans text-[#344054] font-medium text-[16px] sm:text-[18px] mt-4">
+              <p className="font-sans text-[#344054] font-medium text-[16px] sm:text-[16px] mt-4">
                 Destination city:{" "}
                 <span className="text-[#475467] font-normal">
                   {destination?.destinationCity || "N/A"}

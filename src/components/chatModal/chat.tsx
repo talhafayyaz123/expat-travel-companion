@@ -76,15 +76,10 @@ export default function ChatModal({
     pollingInterval: shouldPoll ? 10000 : 0,
   });
 
-  console.log("chat:conversation", conversation);
-
   const participants = [profileId, userData?.data?.id];
 
   useEffect(() => {
     if (!conversations?.data) return;
-
-    console.log("chat:currentConvvvv", conversations.data);
-    console.log("chat:part", participants);
 
     const currentConv = conversations.data.filter((conv: any) =>
       participants.every((part) => conv.participants.includes(part))

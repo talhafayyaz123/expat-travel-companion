@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import ReactSelect, { MultiValue } from "react-select";
 
 import {
   Select,
@@ -49,10 +48,8 @@ export default function FilterPanel() {
   // >(null);
   // const [hasSummit, setHasSummit] = React.useState<string | null>(null);
   const [travelTyped, setTravelTyped] = React.useState("");
-
   const [gender, setGender] = React.useState("all");
   const [genderList, setGenderList] = React.useState<string[]>([]);
-
   const [member, setMember] = React.useState("all");
   const [memberList, setMemberList] = React.useState<string[]>([]);
 
@@ -171,39 +168,37 @@ export default function FilterPanel() {
     dispatch(setGenders(gendersStrings));
   };
 
-  const options = [
-    { value: "Female", label: "Female" },
-    { value: "Male", label: "Male" },
-    { value: "Non-Binary", label: "Non-Binary" },
-  ];
-
-  const selectedOptions = options.filter((option) =>
-    memberList.includes(option.value)
-  );
-
-  const handleChange = (
-    newValue: MultiValue<{ value: string; label: string }>
-  ) => {
-    const selectedValues = newValue.map((option) => option.value);
-    handleMemberSeeking(selectedValues);
-  };
-
-  const handleMemberSeeking = (values: string[]) => {
-    const isAllSelected = ["Male", "Female", "Non-Binary"].every((item) =>
-      values.includes(item)
-    );
-
-    if (isAllSelected) {
-      setMemberList(["Male", "Female", "Non-Binary", "all"]);
-      setMember("all");
-      dispatch(setMembers("" as any)); // If "" means "all" in your Redux logic
+  const handleMemberSeeking = (value: string) => {
+    // If "all" is selected while "all" is already active, clear the selection
+    if (value === "all" && memberList.includes("all")) {
+      setMemberList([]);
+      setMember("");
+      dispatch(setMembers("" as any)); // Clear all selections
       return;
     }
 
-    const filteredValues = values.filter((v) => v !== "all");
-    setMemberList(filteredValues);
-    setMember(""); // Optional
-    dispatch(setMembers(filteredValues.join(",")));
+    // If "all" is selected and wasn't active, select all options
+    if (value === "all") {
+      setMemberList(["Male", "Female", "Non-Binary", "all"]);
+      setMember("all");
+      dispatch(setMembers("" as any));
+      return;
+    }
+
+    // Toggle individual member selection
+    setMemberList((prev) =>
+      prev.includes(value)
+        ? prev.filter((item) => item !== value)
+        : [...prev, value]
+    );
+
+    setMember(value);
+    const membersStrings = [
+      memberList.includes(value)
+        ? memberList.filter((item) => item !== value)
+        : [...memberList, value],
+    ].join(",");
+    dispatch(setMembers(membersStrings));
   };
 
   // const handleSummitVerifyChange = (value: any) => {
@@ -487,15 +482,34 @@ export default function FilterPanel() {
         </div>
         <div className="space-y-4 p-4 sm:p-6 lg:p-0">
           <h3 className="font-medium lg:mt-10 text-[18px] text-[#263238]">
-            What are you seeking?
+            Members Seeking
           </h3>
           <div className="space-y-2">
-            <ReactSelect
-              isMulti
-              options={options}
-              value={selectedOptions}
-              onChange={handleChange}
-              placeholder="Select"
+            <SquareRadioButton
+              label="All"
+              name="memberSeeking"
+              checked={["Female", "Male", "Non-Binary"].every((item) =>
+                memberList.includes(item)
+              )}
+              onChange={() => handleMemberSeeking("all")}
+            />
+            <SquareRadioButton
+              label="Female"
+              name="memberSeeking"
+              checked={memberList.includes("Female")}
+              onChange={() => handleMemberSeeking("Female")}
+            />
+            <SquareRadioButton
+              label="Male"
+              name="memberSeeking"
+              checked={memberList.includes("Male")}
+              onChange={() => handleMemberSeeking("Male")}
+            />
+            <SquareRadioButton
+              label="Non-Binary"
+              name="memberSeeking"
+              checked={memberList.includes("Non-Binary")}
+              onChange={() => handleMemberSeeking("Non-Binary")}
             />
           </div>
         </div>
