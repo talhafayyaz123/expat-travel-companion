@@ -141,7 +141,7 @@ export const ProfileDetailsView = () => {
   }
 
   const currentUser = data?.data;
-  console.log("My Profile Detail", currentUser);
+  // console.log("My Profile Detail", currentUser);
 
   const date = new Date(currentUser?.createdAt);
 

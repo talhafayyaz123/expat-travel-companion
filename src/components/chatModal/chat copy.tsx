@@ -78,30 +78,6 @@ export default function ChatModal({
 
   const participants = [profileId, userData?.data?.id];
 
-  // useEffect(() => {
-  //   if (!conversations?.data) return;
-
-  //   const currentConv = conversations.data.filter((conv: any) =>
-  //     participants.every((part) => conv.participants.includes(part))
-  //   );
-
-  //   if (currentConv?.length > 0) {
-  //     setConversation(currentConv[0]);
-  //     currentConv[0].messages;
-  //   } else {
-  //     createCurrentConversation();
-  //   }
-  // }, [conversations]);
-
-  // const createCurrentConversation = async () => {
-  //   try {
-  //     await createConversation(participants).unwrap();
-  //     refetch();
-  //   } catch (error) {
-  //     console.error("Failed to create conversation:", error);
-  //   }
-  // };
-
   useEffect(() => {
     if (!conversations?.data) return;
 
@@ -109,8 +85,9 @@ export default function ChatModal({
       participants.every((part) => conv.participants.includes(part))
     );
 
-    if (currentConv.length > 0) {
+    if (currentConv?.length > 0) {
       setConversation(currentConv[0]);
+      currentConv[0].messages;
     } else {
       createCurrentConversation();
     }
@@ -118,14 +95,10 @@ export default function ChatModal({
 
   const createCurrentConversation = async () => {
     try {
-      const response = await createConversation(participants).unwrap();
-      refetch(); // Refresh conversations
-    } catch (error: any) {
-      // console.log(error);
-      // console.error(
-      //   "❌ Failed to create conversation:",
-      //   error?.data || error?.message || error
-      // );
+      await createConversation(participants).unwrap();
+      refetch();
+    } catch (error) {
+      console.error("Failed to create conversation:", error);
     }
   };
 

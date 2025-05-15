@@ -1,14 +1,12 @@
-'use client'
-
+"use client";
 
 import { getCountryLabel } from "@/constants/countryOptions";
 
 import { ArrowRight, Trash2 } from "lucide-react";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
-import profImg from '@/assets/avatar.jpg'
+import profImg from "@/assets/avatar.jpg";
 import { getIndustryLabel } from "@/constants/industry";
-
 
 interface ProfileCardProps {
   profile: {
@@ -21,14 +19,16 @@ interface ProfileCardProps {
     accommodation: boolean;
     firstName: string;
     lastName: string;
- 
   };
   handleRemoveWishlist: (itemId: string) => void; // Add this prop type
   isRemovingFavouriteList: boolean; // Add this prop type
 }
 
-const ProfileCard: React.FC<ProfileCardProps> = ({ profile, handleRemoveWishlist, isRemovingFavouriteList }) => {
-
+const ProfileCard: React.FC<ProfileCardProps> = ({
+  profile,
+  handleRemoveWishlist,
+  isRemovingFavouriteList,
+}) => {
   // Transform incoming data to match the `Profile` interface
   const transformedProfile = {
     id: profile.userId,
@@ -42,9 +42,6 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ profile, handleRemoveWishlist
     profileImage: profile.profileImage || profImg,
   };
 
-
-
-  
   return (
     <div className="bg-white mt-7 rounded-lg shadow-sm border border-gray-100 p-6">
       <div className="flex flex-col lg:flex-row gap-6 lg:gap-12 items-center">
@@ -69,9 +66,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ profile, handleRemoveWishlist
             <div className="flex flex-col md:flex-row md:justify-between md:gap-2">
               <p className="mt-2 md:mt-4 font-normal text-[14px] md:text-[16px] text-[#263238]">
                 <span className="font-medium">Business type: </span>
-                              {getIndustryLabel(transformedProfile.businessType || "N/A")}
-                
-          
+                {getIndustryLabel(transformedProfile.businessType || "N/A")}
               </p>
               <p className="mt-2 md:mt-4 font-normal text-[14px] md:text-[16px] text-[#263238]">
                 <span className="font-medium">Age: </span>
@@ -84,25 +79,23 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ profile, handleRemoveWishlist
               {transformedProfile.travelType}
             </p>
 
-            <p className="mt-2 md:mt-3 font-normal text-[14px] md:text-[16px] text-[#263238]">
+            <div className="mt-2 md:mt-3 font-normal text-[14px] md:text-[16px] text-[#263238]">
               <span className="font-medium">Travel begins: </span>
               <p className="mt-2 md:mt-3 font-normal text-[14px] md:text-[16px] text-[#263238]">
                 <span className="font-medium">Travel begins: </span>
-                {
-                  transformedProfile?.travelBegins && !isNaN(new Date(transformedProfile.travelBegins).getTime())
-                    ? new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(
-                      new Date(transformedProfile.travelBegins)
-                    )
-                    : "NA"
-                }
+                {transformedProfile?.travelBegins &&
+                !isNaN(new Date(transformedProfile.travelBegins).getTime())
+                  ? new Intl.DateTimeFormat("en-US", {
+                      month: "long",
+                      year: "numeric",
+                    }).format(new Date(transformedProfile.travelBegins))
+                  : "N/A"}
               </p>
-
-            </p>
+            </div>
 
             <p className="mt-2 md:mt-3 font-normal text-[14px] md:text-[16px] text-[#263238]">
               <span className="font-medium">Destination Country: </span>
               {getCountryLabel(transformedProfile.destinationCountry)}
-          
             </p>
 
             {/* <p className="mt-2 md:mt-3 font-normal text-[14px] md:text-[16px] text-[#263238]">
@@ -119,7 +112,11 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ profile, handleRemoveWishlist
               </button>
             </Link>
 
-            <button disabled={isRemovingFavouriteList} onClick={() => handleRemoveWishlist(transformedProfile?.id)} className="flex items-center justify-center w-full sm:w-auto border border-red-500 rounded-xl py-3 px-8 text-red-500 hover:text-red-700">
+            <button
+              disabled={isRemovingFavouriteList}
+              onClick={() => handleRemoveWishlist(transformedProfile?.id)}
+              className="flex items-center justify-center w-full sm:w-auto border border-red-500 rounded-xl py-3 px-8 text-red-500 hover:text-red-700"
+            >
               Remove here
               <Trash2 className="ml-2 w-4 h-4" />
             </button>

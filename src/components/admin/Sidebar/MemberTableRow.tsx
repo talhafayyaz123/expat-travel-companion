@@ -118,9 +118,7 @@ const MemberTableRow = ({ member }: props) => {
             />
             <div className="">
               <p className="text-lg text-[#263238] font-bold">
-                <span className=" ">
-                  {member.firstName + " " + member.lastName}
-                </span>
+                <span>{member.firstName + " " + member.lastName}</span>
               </p>
               <p className="md:text-[16px]  text-[#263238] my-[12px] font-medium">
                 Country:{" "}

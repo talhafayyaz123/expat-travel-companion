@@ -1,11 +1,9 @@
-'use client';
+"use client";
 
 import ProfileCard from "./ProfileCard";
 import { useGetMyfavQuery, useMyfavAddMutation } from "@/redux/Api/favariteApi";
 import SavedProfileLoader from "../savedProfileLoader/SavedProfileLoader";
 import { toast } from "sonner";
-
-
 
 // interface Profile {
 //   userId: string;
@@ -21,9 +19,9 @@ import { toast } from "sonner";
 // }
 
 export default function SavedProfiles() {
-
   // const [wishlist, setWishlist] = useState("");
-  const [removeFavouriteList, { isLoading: isRemovingFavouriteList }] = useMyfavAddMutation();
+  const [removeFavouriteList, { isLoading: isRemovingFavouriteList }] =
+    useMyfavAddMutation();
 
   const {
     data: profiles,
@@ -40,15 +38,13 @@ export default function SavedProfiles() {
 
       if (res?.success) {
         toast.success("Removed from saved Profile", { id: toastID });
-      }
-      else {
+      } else {
         toast.error("Failed to remove from profile", { id: toastID });
       }
     } catch (error: any) {
-      toast.error(error.message, { id: toastID })
+      toast.error(error.message, { id: toastID });
     }
-  }
-
+  };
 
   return (
     <div className="p-6 mt-[100px] md:mt-[178px] text-[#1D293] container mx-auto">
@@ -57,27 +53,31 @@ export default function SavedProfiles() {
       </h1>
 
       {favLoading ? (
-      <div>
+        <div>
           <SavedProfileLoader />
-        <SavedProfileLoader />
-        <SavedProfileLoader />
-      </div>
+          <SavedProfileLoader />
+          <SavedProfileLoader />
+        </div>
       ) : favError ? (
         <div className="flex flex-col items-center justify-center min-h-[200px]">
           <p className="bg-white w-full h-44 flex justify-center items-center rounded">
-          No saved profiles found.
+            No saved profiles found.
           </p>
         </div>
       ) : !profiles?.data?.length ? (
         <p className="bg-white w-full h-44 flex justify-center items-center rounded">
-
-No saved profiles found.
-</p>
+          No saved profiles found.
+        </p>
       ) : (
         <div>
           <div className="grid grid-cols-1 gap-6">
             {profiles?.data?.map((profile: any) => (
-              <ProfileCard key={profile.userId} profile={profile} handleRemoveWishlist={handleRemoveWishlist} isRemovingFavouriteList={isRemovingFavouriteList} />
+              <ProfileCard
+                key={profile.userId}
+                profile={profile}
+                handleRemoveWishlist={handleRemoveWishlist}
+                isRemovingFavouriteList={isRemovingFavouriteList}
+              />
             ))}
           </div>
         </div>
