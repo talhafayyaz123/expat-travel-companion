@@ -51,5 +51,5 @@ export const {
   useSummitVerifyMemberMutation,
   useHideUnhideMemberMutation,
   useDeleteMemberMutation,
-  useMakeAdminMutation
+  useMakeAdminMutation,
 } = memberApi;

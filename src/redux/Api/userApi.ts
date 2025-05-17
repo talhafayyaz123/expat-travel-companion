@@ -113,7 +113,7 @@ const userApi = baseApi.injectEndpoints({
     verifySix: build.query({
       query: () => {
         return {
-          url: `/users?page=1&limit=6&summitVerify=true`, // Fixed query parameters
+          url: `/users?page=1&limit=10&summitVerify=true`, // Fixed query parameters
           method: "GET",
         };
       },

@@ -56,11 +56,9 @@ export function SearchCard() {
   }, [travelForm, triggerUserSearch]);
 
   const searchItem = data?.data?.data || [];
-  console.log(searchItem);
 
   const totalResults = data?.data?.meta?.total || 0;
   const totalPages = Math.ceil(totalResults / itemsPerPage);
-  console.log("totalPages", totalPages);
 
   const renderLoader = () => (
     <>
