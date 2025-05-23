@@ -50,7 +50,7 @@ function HomePopup() {
         </div>
       </div>
       <div
-        className={`fixed top-1/2 -translate-y-1/2 right-0 z-[999] w-[600px] bg-white shadow-lg transform transition-transform duration-300 ${
+        className={`fixed top-1/2 -translate-y-1/2 right-0 z-[999] w-[600px] custom-width bg-white shadow-lg transform custom-popup-height transition-transform duration-300 ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >

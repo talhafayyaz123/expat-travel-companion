@@ -43,9 +43,10 @@ function DashBoardPopup() {
         </div> */}
       </div>
       <div
-        className={`fixed top-1/2 -translate-y-1/2 right-0 z-[999] w-[600px] bg-white shadow-lg transform transition-transform duration-300 ${
+        className={`fixed top-1/2 -translate-y-1/2 right-0 z-[999] custom-height custom-new-width sm:w-[600px] bg-white shadow-lg transform transition-transform duration-300 ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
+
         // style={{ fontFamily: "Great Vibes, cursive" }}
       >
         {/* Header */}
