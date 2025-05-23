@@ -301,7 +301,7 @@ const FilterHomeData: React.FC = () => {
               country: [],
               planName: [],
               summitVerify: "",
-              status: "ACTIVE",
+              status: "",
             });
             // setCurrentPage(1);
           }}

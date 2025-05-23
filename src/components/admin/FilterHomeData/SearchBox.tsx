@@ -25,6 +25,7 @@ const SearchBox: React.FC<SearchDialogProps> = ({
 
   const handleSearch = () => {
     onSearch(query);
+
     if (query.length > 5) {
       setQuery("");
       onClose();
@@ -45,7 +46,6 @@ const SearchBox: React.FC<SearchDialogProps> = ({
     }
   };
 
-  
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       {/* DialogTrigger can be handled externally, here we do not need an extra button */}
