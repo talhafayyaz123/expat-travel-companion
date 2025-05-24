@@ -46,13 +46,13 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
     <div className="bg-white mt-7 rounded-lg shadow-sm border border-gray-100 p-6">
       <div className="flex flex-col lg:flex-row gap-6 lg:gap-12 items-center">
         {/* Image Section */}
-        <div className="relative w-full h-72 sm:h-96 md:h-96 lg:w-[479px] lg:h-[351px]">
+        <div className="relative flex justify-center w-full h-72 sm:h-96 md:h-96 lg:w-[479px] lg:h-[351px] custom-profile">
           <Image
             src={transformedProfile.profileImage}
             alt={transformedProfile.name}
             layout="fill"
             objectFit="cover"
-            className="rounded-2xl"
+            className="rounded-2xl !w-[300px] !h-[300px] m-auto"
           />
         </div>
 

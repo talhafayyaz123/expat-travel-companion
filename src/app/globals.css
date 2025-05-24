@@ -63,16 +63,27 @@ body {
     width: 100% !important;
   }
   .custom-popup-height {
-    max-height: 524px;
+    max-height: 524px !important;
   }
 }
 @media (max-width: 425px) {
   .custom-promos-width {
-    width: 100%;
+    width: 100% !important;
   }
 }
 @media (max-width: 525px) {
   .custom-promos-width {
-    width: 100%;
+    width: 100% !important;
+  }
+}
+@media (max-width: 425px) {
+  .custom-filter-width {
+    width: 100% !important;
+  }
+}
+@media (max-width: 425px) {
+  .custom-profile {
+    width: 250px !important;
+    max-height: 250px !important;
   }
 }

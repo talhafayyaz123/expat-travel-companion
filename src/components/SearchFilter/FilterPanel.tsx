@@ -251,7 +251,7 @@ export default function FilterPanel() {
       <div
         className={`${
           isDrawerOpen ? "translate-x-0" : "-translate-x-full"
-        } fixed inset-y-0 left-0 z-[1000] w-[374px] bg-white shadow-lg transition-transform duration-300 ease-in-out overflow-y-auto lg:translate-x-0 pb-8 lg:static lg:w-auto lg:shadow-none lg:rounded-2xl lg:px-3 lg:py-6 lg:max-w-[354px]`}
+        } fixed inset-y-0 left-0 z-[1000] w-[374px] bg-white shadow-lg custom-filter-width transition-transform duration-300 ease-in-out overflow-y-auto lg:translate-x-0 pb-8 lg:static lg:w-auto lg:shadow-none lg:rounded-2xl lg:px-3 lg:py-6 lg:max-w-[354px]`}
       >
         <button
           className="absolute top-5 right-3 bg-transparent lg:hidden"
