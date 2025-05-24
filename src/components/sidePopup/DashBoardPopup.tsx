@@ -43,7 +43,7 @@ function DashBoardPopup() {
         </div> */}
       </div>
       <div
-        className={`fixed top-1/2 -translate-y-1/2 right-0 z-[999] custom-height custom-new-width sm:w-[600px] bg-white shadow-lg transform transition-transform duration-300 ${
+        className={`fixed top-1/2 -translate-y-1/2 right-0 z-[999]  custom-new-width sm:w-[600px] bg-white shadow-lg transform transition-transform duration-300 ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
 
@@ -70,7 +70,7 @@ function DashBoardPopup() {
           <h4 className="text-[17px] text-blue-600 font-semibold text-center border-b pb-4">
             - African Proverb
           </h4>
-          <div className="max-h-[480px] overflow-y-auto">
+          <div className="max-h-[480px] custom-height overflow-y-auto">
             <h3 className="text-[17px] text-gray-800 font-semibold text-center mt-3 ps-2">
               💡 Top 5 reasons to share lodgings on your next solo adventure:
             </h3>
