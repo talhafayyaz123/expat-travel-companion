@@ -16,7 +16,7 @@ export function SearchFilters() {
     <div className="w-64 space-y-6">
       <div className="space-y-4">
         <h3 className="flex items-center gap-2 font-medium">FILTER BY :</h3>
-      
+
         <div className="space-y-4">
           <div className="space-y-2">
             <Label>Travel Type</Label>
@@ -27,7 +27,7 @@ export function SearchFilters() {
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="slow" id="slow" />
-                <Label htmlFor="slow">Slow Travel (2 mos - 6 mos)</Label>
+                <Label htmlFor="slow">Slow Travel (2 mon - 6 mon)</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="long" id="long" />

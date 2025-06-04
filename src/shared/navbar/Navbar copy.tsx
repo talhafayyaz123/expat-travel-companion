@@ -1,6 +1,6 @@
 "use client";
 
-import logo from "@/assets/expat-logo-transparent.png";
+import logo from "@/assets/expat-logo-pro.png";
 import Profile from "@/components/profile/Profile";
 import { menuItems } from "@/constants/menuItems";
 import Image from "next/image";
@@ -41,17 +41,15 @@ const Navbar = () => {
   return (
     <div className="fixed top-6 left-0 right-0 z-[9]">
       <div className="container">
-        <div className="py-[14px] pr-[11px] pl-[11rem] bg-white rounded-2xl">
+        <div className="py-[14px] px-5 bg-white rounded-2xl">
           <div className="flex items-center justify-between">
-            <div className="w-[220px] h-[50px] absolute -top-[52px] -left-[4px]">
-              <Link href={isPayment ? "#" : "/"}>
-                <Image
-                  src={logo}
-                  alt="Expat Group logo"
-                  className="object-cover"
-                />
-              </Link>
-            </div>
+            <Link href={isPayment ? "#" : "/"}>
+              <Image
+                src={logo}
+                alt="Expat Group logo"
+                className="lg:w-[108px] w-[65px] h-[auto] lg:h-[60px] object-contain"
+              />
+            </Link>
             <ul className="lg:flex hidden items-center gap-[56px]">
               {isPayment &&
                 menuItems.map((item) => (

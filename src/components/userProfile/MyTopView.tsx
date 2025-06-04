@@ -80,7 +80,7 @@ export const MyTopView = () => {
             {categories.map((category, index) => (
               <div
                 key={index}
-                className="border border-gray-300 rounded-lg p-4 bg-white shadow-sm mb-3"
+                className="border border-gray-300 rounded-lg mt-5 mb-5 p-4 bg-white shadow-sm w-[35%] m-auto"
               >
                 <h3 className="text-[18px] sm:text-[20px] md:text-[22px] font-sans font-semibold mb-2 text-center underline text-[#aca4a6] uppercase">
                   {category.title}

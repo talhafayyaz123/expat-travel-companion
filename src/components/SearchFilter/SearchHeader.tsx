@@ -41,6 +41,8 @@ import { Required } from "../icon/Required";
 export default function SearchHeader() {
   const dispatch = useDispatch();
 
+  //  const  { data, isLoading } = useLazyUserSearchQuery();
+
   const handleCountryChange = (value: string) => {
     dispatch(setCountry(value === "all" ? "" : value));
   };

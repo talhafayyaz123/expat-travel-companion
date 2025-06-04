@@ -2,6 +2,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Heart } from "lucide-react";
 import Image from "next/image";
+import { Image as AntImage } from "antd";
 import age from "@/assets/profile/fi_5670747.png";
 import zodiac from "@/assets/profile/fi_5796707.png";
 import { useGetUserByIdQuery, useGetUserQuery } from "@/redux/Api/userApi";
@@ -17,6 +18,7 @@ import genderIcon from "@/assets/profile/gender.svg";
 import seekingIcon from "@/assets/profile/seeking.svg";
 import { FaExclamation, FaExclamationCircle } from "react-icons/fa";
 import Placeholder from "@/assets/placholder.png";
+import { useUpdateUserBioMutation } from "@/redux/Api/userApi";
 
 interface User {
   id: any | string;
@@ -49,10 +51,13 @@ interface UserData {
 
 export const ProfileDetailsView = () => {
   const { id } = useParams(); // Profile ID from URL params
-
+  const charLimit = 300;
   const [currentUserData, setCurrentUserData] = useState<UserData>();
   const [isFavorite, setIsFavorite] = useState(false); // Manage favorite state
   const [chatModalisOpen, setChatModalIsOpen] = useState(false);
+  const [userBio, setUserBio] = useState("");
+  const [editBio, setEditBio] = useState(false);
+  const [updateUserBio] = useUpdateUserBioMutation();
   const [floatingButtonIsDisplayed, setFloatingButtonIsDisplayed] =
     useState(false);
   const [addFavorite, { data: res, isLoading: addProfile }] =
@@ -151,17 +156,53 @@ export const ProfileDetailsView = () => {
     year: "numeric",
   });
 
+  if (!userData) {
+    return <div>Loading...</div>;
+  }
+  // Update Bio
+  const handleUpdateBio = async () => {
+    try {
+      // Show a loading indicator
+      const loadingToastId = toast.loading("Updating bio...");
+
+      // Call the API to change the password
+      const response = await updateUserBio({
+        userBio,
+      }).unwrap();
+
+      // Check the API response (if additional checks are needed)
+      if (response?.success) {
+        toast.success("Bio update successfully!");
+        setEditBio(false);
+      } else {
+        toast.error(response?.message || "Failed to update the bio.");
+      }
+
+      // Dismiss the loading toast
+      if (!isLoading) {
+        toast.dismiss(loadingToastId);
+      }
+    } catch (error: any) {
+      // Handle errors and show the appropriate message
+      if (error?.data?.message) {
+        toast.error(error.data.message);
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+      }
+    }
+  };
+
   return (
     <div>
       <div className="flex flex-col md:flex-row items-start justify-between p-4 md:p-6 gap-4 bg-white">
         <div className="flex flex-col md:flex-row gap-8 items-center w-full md:w-auto">
           <div className="w-36 h-36 rounded-full overflow-hidden flex items-center justify-center">
             <Avatar className="w-[133px] h-[133px]  border-2 border-slate-200">
-              <Image
+              <AntImage
                 src={currentUser.profileImage || Placeholder}
                 alt="Profile Image"
-                width={128}
-                height={128}
+                width={130}
+                height={130}
                 className="object-cover w-full h-full"
               />
             </Avatar>
@@ -324,45 +365,33 @@ export const ProfileDetailsView = () => {
       {/* Request References */}
       <div>
         <h2 className="text-lg md:text-xl font-sans font-bold mt-10 md:mt-[65px]">
-          Request References
+          About Me – Bio
         </h2>
-        <div className="text-base md:text-[18px] font-normal font-sans mt-5 text-[#475467]">
-          Add another dimension of trust to your profile. You can request
-          references from your personal network, and the references will appear
-          publicly on your profile to help other members get to know you.
-        </div>
-        {/* <a
-          href="https://www.facebook.com/608837771792997"
-          target="_blank"
-          rel="noopener noreferrer"
-        > */}
-        <button className="mt-7 bg-primary flex items-center justify-center md:justify-start px-4 md:px-6 py-2 md:py-3 gap-2 md:gap-3 rounded-xl text-white">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 28 28"
-            fill="none"
-          >
-            <g clipPath="url(#clip0_543_4997)">
-              <path
-                d="M28 14C28 20.988 22.8802 26.7799 16.1875 27.8299V18.0469H19.4496L20.0703 14H16.1875V11.3739C16.1875 10.2665 16.73 9.1875 18.4691 9.1875H20.2344V5.74219C20.2344 5.74219 18.632 5.46875 17.1002 5.46875C13.9027 5.46875 11.8125 7.40687 11.8125 10.9156V14H8.25781V18.0469H11.8125V27.8299C5.11984 26.7799 0 20.988 0 14C0 6.26828 6.26828 0 14 0C21.7317 0 28 6.26828 28 14Z"
-                fill="#1877F2"
-              />
-              <path
-                d="M19.4496 18.0469L20.0703 14H16.1875V11.3739C16.1875 10.2667 16.7299 9.1875 18.469 9.1875H20.2344V5.74219C20.2344 5.74219 18.6323 5.46875 17.1005 5.46875C13.9026 5.46875 11.8125 7.40688 11.8125 10.9156V14H8.25781V18.0469H11.8125V27.8299C12.5253 27.9417 13.2558 28 14 28C14.7442 28 15.4747 27.9417 16.1875 27.8299V18.0469H19.4496Z"
-                fill="white"
-              />
-            </g>
-            <defs>
-              <clipPath id="clip0_543_4997">
-                <rect width="28" height="28" fill="white" />
-              </clipPath>
-            </defs>
-          </svg>
-          Request a Reference
+
+        {!editBio ? (
+          <p className="text-base md:text-[18px] font-normal font-sans mt-5 text-[#475467]">
+            {userBio}
+          </p>
+        ) : (
+          <textarea
+            value={userBio}
+            onChange={(e) => {
+              if (e.target.value.length <= charLimit) {
+                setUserBio(e.target.value);
+              }
+            }}
+            placeholder="Type here..."
+            rows={5}
+            className="w-full p-2 text-base border-none focus:outline-none"
+          />
+        )}
+
+        <button
+          className="mt-7 bg-primary flex items-center justify-center md:justify-start px-4 md:px-6 py-2 md:py-3 gap-2 md:gap-3 rounded-xl text-white"
+          onClick={() => (editBio ? handleUpdateBio() : setEditBio(true))}
+        >
+          {editBio ? "Update" : "Edit Bio"}
         </button>
-        {/* </a> */}
       </div>
       <ChatModal
         isOpen={chatModalisOpen}

@@ -59,15 +59,17 @@ function DashBoardPopup() {
           </button>
         </div>
         <div className="p-4 bg-white h-full">
-          <h4
-            className="text-[18px] text-gray-800 font-semibold text-center"
-            style={{ fontFamily: "'Dancing Script', cursive" }}
-          >
-            If you want to go fast, go alone. If you want to go far, go
-            together.
-          </h4>
+          <div className="w-[320px] m-auto">
+            <h4
+              className="text-[18px] text-gray-800 font-semibold text-center"
+              style={{ fontFamily: "'Dancing Script', cursive" }}
+            >
+              If you want to go fast, go alone. If you want to go far, go
+              together.
+            </h4>
+          </div>
 
-          <h4 className="text-[17px] text-blue-600 font-semibold text-center border-b pb-4">
+          <h4 className="text-[17px] text-blue-700 font-semibold text-center border-b pt-1 pb-4">
             - African Proverb
           </h4>
           <div className="max-h-[480px] custom-height overflow-y-auto">

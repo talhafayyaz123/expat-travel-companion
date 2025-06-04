@@ -74,6 +74,7 @@ export default function SearchResultCard({
           className="rounded-2xl" // Tailwind class to round the corners
         /> */}
         <LightBox image={profileImage ?? avatar} name={name} />
+
         <Button
           size="icon"
           variant="ghost"

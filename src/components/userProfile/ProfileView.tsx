@@ -15,7 +15,8 @@ import {
 import { ProfileViewLoder } from "./ProfileViewLoder";
 import { toast } from "sonner";
 import Link from "next/link";
-import { Edit } from "lucide-react";
+import { Edit, X } from "lucide-react";
+
 import { getCountryLabel } from "@/constants/countryOptions";
 import { getStateLabel } from "@/constants/stateOptions";
 import genderIcon from "@/assets/profile/gender.svg";
@@ -71,6 +72,7 @@ export const ProfileView = () => {
   //   useAllUserQuery(undefined);
   const [changePass] = useChangePasswordMutation();
   const currentUser = userData?.data || null;
+  console.log(currentUser);
 
   useEffect(() => {
     if (userData) {
@@ -375,6 +377,13 @@ export const ProfileView = () => {
                   <button className="flex items-center gap-2 px-4 py-2 md:px-3 md:py-1 bg-gray-300 rounded-xl text-black text-sm md:text-base font-normal">
                     <Edit className="w-4 h-4 md:w-5 md:h-5" />
                     Edit
+                  </button>
+                </Link>
+
+                <Link href="/user-profile">
+                  <button className="flex items-center gap-2 px-4 py-2 md:px-3 md:py-1 bg-gray-300 rounded-xl text-black text-sm md:text-base font-normal">
+                    <X className="w-4 h-4 md:w-5 md:h-5" />
+                    Cancel Membership
                   </button>
                 </Link>
                 <div>

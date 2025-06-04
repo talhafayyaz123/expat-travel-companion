@@ -22,7 +22,7 @@ import { useSubscriptionPlanMutation } from "@/redux/Api/membershipApi";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import logoPayments from "@/assets/expat-logo-pro.png";
+import logoPayments from "@/assets/expat-logo-transparent.png";
 import CredidIcon from "../icon/CredidIcon";
 import { toast } from "sonner";
 import { useState } from "react";
@@ -138,11 +138,12 @@ export default function Payments({
         <Dialog open={isOpen} onOpenChange={onClose}>
           <DialogContent className="sm:max-w-[500px]">
             <DialogTitle />
-            <div className="flex justify-center mb-6">
+            <div className="flex justify-center mb-2">
               <Image
                 src={logoPayments}
                 alt="Expat Group logo"
-                className="w-[80px] h-[80px] md:w-[108px] md:h-[108px] lg:w-[170px] lg:h-[140px] object-contain"
+                className="object-cover w-[270px] h-[170px]"
+                // className="w-[80px] h-[80px] md:w-[108px] md:h-[108px] lg:w-[170px] lg:h-[140px] object-cover"
               />
             </div>
 

@@ -3,7 +3,7 @@
 import { adminSidebarRoutes } from "@/constants/adminSidebarItems";
 import Image from "next/image";
 import SidebarRoutes from "./SidebarRoutes";
-import logo from "@/assets/expat-logo-pro.png";
+import logo from "@/assets/expat-logo-transparent.png";
 import { CiMenuFries } from "react-icons/ci";
 import logoutSvg from "@/assets/dashboard/logout.svg";
 import Link from "next/link";
@@ -52,7 +52,8 @@ const Sidebar = ({ expand, setExpand }: Props) => {
         <div className="logo py-5 md:flex justify-center hidden">
           <Link href={"/dashboard/admin"}>
             <Image
-              className="h-[68px] w-[92px] mx-auto object-fill"
+              className="object-cover w-[92] h-[70px]"
+              // className="h-[68px] w-[92px] mx-auto object-fill"
               src={logo}
               alt="Image Description"
               width={150}

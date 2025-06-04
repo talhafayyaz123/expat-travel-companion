@@ -138,8 +138,9 @@ export const WhyChooseCard = () => {
           <Image
             src={logo}
             alt="Expat Global Group Logo"
-            width={100}
-            className="lg:w-[150px] lg:h-[100px]  object-cover"
+            width={230}
+            height={100}
+            className="object-cover"
           />
         </div>
       </div>
