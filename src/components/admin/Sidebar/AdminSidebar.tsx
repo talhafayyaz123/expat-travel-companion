@@ -52,7 +52,7 @@ const Sidebar = ({ expand, setExpand }: Props) => {
         <div className="logo py-5 md:flex justify-center hidden">
           <Link href={"/dashboard/admin"}>
             <Image
-              className="object-cover w-[92] h-[70px]"
+              className="object-cover w-[150px] h-[70px]"
               // className="h-[68px] w-[92px] mx-auto object-fill"
               src={logo}
               alt="Image Description"
