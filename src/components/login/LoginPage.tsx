@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import LoginSchema, { LoginFormData } from "@/schema/LoginSchema";
 import loginimg from "@/assets/login/Rectangle 10333.png";
-import logo from "@/assets/expat-logo-pro.png";
+// import logo from "@/assets/expat-logo-pro.png";
 import { useLoginUserMutation } from "@/redux/Api/userApi";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -18,6 +18,7 @@ import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode"; // Ensure proper import for jwtDecode
 import { Eye, EyeOff } from "lucide-react";
+import logo from "@/assets/expat-logo-transparent.png";
 
 export default function LoginPage() {
   const [loginUser, { isLoading, isError, error }] = useLoginUserMutation();
@@ -109,13 +110,13 @@ export default function LoginPage() {
         />
       </div>
 
-      <div className="flex w-full items-center justify-center lg:w-1/2 p-6">
+      <div className="flex w-full items-center justify-center lg:w-1/2 p-4">
         <div className="w-full max-w-[524px] space-y-8">
-          <div className="flex justify-center mb-8">
+          <div className="flex justify-center">
             <Image
               src={logo}
               alt="Expat Logo"
-              className="w-24 h-auto object-contain lg:w-[9rem]"
+              className="object-cover max-w-[300px] max-h-[150px] w-full h-auto"
             />
           </div>
 

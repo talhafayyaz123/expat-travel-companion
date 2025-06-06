@@ -40,18 +40,21 @@ const HomeNavbar = () => {
   return (
     <div className="fixed top-6 left-0 right-0 z-[999]">
       <div className="container">
-        <div className="py-[14px] px-5 bg-[rgba(244,244,244,0.20)] backdrop-blur-[12px] rounded-2xl">
+        <div className="pt-[26px] pb-[26px] pr-5 bg-[rgba(244,244,244,0.20)] backdrop-blur-[12px] rounded-2xl">
           <div className="flex items-center justify-between">
-            <Link href="/">
-              <Image
-                src={logo}
-                alt="Expat Group logo"
-                className="lg:w-[150px] w-[65px] h-[auto] lg:h-[60px] object-cover"
-                style={{ marginLeft: "-1rem" }}
-              />
-            </Link>
-            <ul className="lg:flex hidden items-center gap-[56px]">
-              {/* {menuItems.map((item) => (
+            <div className="w-[220px] h-[50px] absolute -top-[48px] -left-[25px]">
+              <Link href="/">
+                <Image
+                  src={logo}
+                  alt="Expat Group logo"
+                  className="object-cover"
+                  style={{ marginLeft: "-1rem" }}
+                />
+              </Link>
+            </div>
+            <div>
+              <div className="lg:flex hidden items-center gap-[56px]">
+                {/* {menuItems.map((item) => (
                 <li key={item.label}>
                   <Link
                     href={item.href}
@@ -64,7 +67,8 @@ const HomeNavbar = () => {
                   </Link>
                 </li>
               ))} */}
-            </ul>
+              </div>
+            </div>
             <div className="flex items-center gap-3">
               <SideDrawer className="lg:hidden" />
 

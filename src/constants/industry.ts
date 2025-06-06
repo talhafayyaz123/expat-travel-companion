@@ -26,6 +26,9 @@ export const industryOptions = [
 ];
 
 export const getIndustryLabel = (industryValue: string) => {
-  const industry = industryOptions.find((option) => option.value === industryValue);
+  const industry = industryOptions.find(
+    (option) => option.value === industryValue
+  );
+
   return industry?.label ? industry.label : "N/A";
 };

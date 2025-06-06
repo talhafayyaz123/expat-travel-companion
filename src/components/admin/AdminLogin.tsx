@@ -1,6 +1,6 @@
 "use client";
 
-import logo from "@/assets/expat-logo-pro.png";
+import logo from "@/assets/expat-logo-transparent.png";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useLoginUserMutation } from "@/redux/Api/userApi";
@@ -95,11 +95,12 @@ export default function AdminLogin() {
   return (
     <div className="flex w-full items-center justify-center bg-gray-100 min-h-screen p-6">
       <div className="w-full max-w-[500px] bg-white rounded-lg shadow-lg p-8 space-y-8">
-        <div className="flex justify-center mb-6">
+        <div className="flex justify-center mb-5 max-h-[120px]">
           <Image
             src={logo}
             alt="Admin Logo"
-            className="w-24 h-auto object-contain lg:w-28"
+            className="object-cover w-[230px]"
+            // className="w-24 h-auto object-contain lg:w-28"
           />
         </div>
 

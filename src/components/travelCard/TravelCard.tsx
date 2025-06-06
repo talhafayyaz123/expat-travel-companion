@@ -27,6 +27,7 @@ interface TravelCardProps {
 
 const TravelCard: React.FC<TravelCardProps> = ({ result }) => {
   const { id, firstName, age, profileImage, destination } = result;
+
   const { destinationCountry, travelType, TravelBegins } = destination[0] || {}; // Access the first destination
   const [addFavorite, { isLoading }] = useMyfavAddMutation(); // API mutation
 

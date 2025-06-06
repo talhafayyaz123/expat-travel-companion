@@ -37,7 +37,10 @@ export const ProfMyTopView = () => {
   if (isError) return <div>Error loading data.</div>;
 
   const categories: Category[] = [
-    { title: "Personality", items: myTopData?.personality || [] },
+    {
+      title: "Personality",
+      items: myTopData?.personality || [],
+    },
     { title: "Philosophies", items: myTopData?.philosophies || [] },
     { title: "Goals", items: myTopData?.goals || [] },
     { title: "Hobbies", items: myTopData?.hobbies || [] },
@@ -57,16 +60,16 @@ export const ProfMyTopView = () => {
             {categories.map((category, index) => (
               <div
                 key={index}
-                className="border border-gray-300 rounded-lg p-4 bg-white shadow-sm mb-3"
+                className="border border-gray-300 rounded-lg p-4 bg-white shadow-sm mb-3 w-[35%] m-auto"
               >
-                <h3 className="text-[18px] sm:text-[20px] md:text-[22px] font-sans font-semibold mb-2">
+                <h3 className="text-[18px] sm:text-[20px] md:text-[22px] font-sans font-semibold mb-2 text-center">
                   {category.title}
                 </h3>
-                <ul className="flex justify-between text-gray-600">
+                <ul className="flex flex-wrap gap-1 text-gray-600">
                   {category.items.map((item, idx) => (
                     <li
                       key={idx}
-                      className="text-[16px] sm:text-[18px] md:text-[18px] text-[#475467] font-normal font-sans"
+                      className="text-center text-[16px] sm:text-[18px] md:text-[18px] text-[#475467] font-normal font-sans"
                     >
                       {item}
                     </li>
