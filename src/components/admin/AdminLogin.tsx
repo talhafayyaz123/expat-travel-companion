@@ -20,6 +20,7 @@ import { toast } from "sonner";
 
 export default function AdminLogin() {
   const [loginUser, { isLoading }] = useLoginUserMutation();
+
   const router = useRouter();
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -69,6 +70,7 @@ export default function AdminLogin() {
 
         // Decode the token to extract `isPayment`
         const decodedToken: { role: string } = jwtDecode(token);
+        console.log("Admin Token", decodedToken);
 
         // Prevent redirect if already on the target page
         if (!isLoading) {

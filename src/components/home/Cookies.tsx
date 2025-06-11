@@ -37,18 +37,13 @@ function Cookies() {
   }, []);
 
   const handleAccept = () => {
-    setCookie("cookieConsent", "accepted");
+    setCookie("cookieConsent", "accepted", 1);
     setShowBanner(false);
-    // Enable cookies or tracking scripts here
-    // console.log("Cookies accepted. Enabling tracking...");
   };
 
   const handleDecline = () => {
-    setCookie("cookieConsent", "declined");
-    // deleteCookie("cookieConsent");
+    setCookie("cookieConsent", "declined", 1);
     setShowBanner(false);
-    // Disable cookies or tracking scripts here
-    // console.log("Cookies declined. Disabling tracking...");
   };
 
   return (

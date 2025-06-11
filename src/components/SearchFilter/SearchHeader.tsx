@@ -30,6 +30,10 @@ import {
   setMembers,
 } from "@/redux/allSlice/travelSearchSlice";
 import {
+
+  useAllUserQuery,
+} from "@/redux/Api/userApi";
+import {
   combinedCountryData,
   countryOptions,
 } from "@/constants/countryOptions";
@@ -40,6 +44,9 @@ import { Required } from "../icon/Required";
 
 export default function SearchHeader() {
   const dispatch = useDispatch();
+
+    const { data: allUsers, isLoading: isAllUsersLoading } = useAllUserQuery();
+    
 
   //  const  { data, isLoading } = useLazyUserSearchQuery();
 

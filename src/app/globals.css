@@ -92,3 +92,7 @@ body {
     max-height: 250px !important;
   }
 }
+
+.nextjs-toast-errors-parent ,.nextjs-toast{
+  display: none !important;
+}

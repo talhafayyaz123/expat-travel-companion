@@ -27,6 +27,12 @@ import { FaExclamationCircle } from "react-icons/fa";
 import { formatDate2 } from "@/utilities/format";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { Image as AntImage } from "antd";
+import { membershipPlan } from "./../../types/membershipPlan";
+import {
+  useMembershipByIdQuery,
+  useMembershipCancelMutation,
+  useSubscriptionPlanMutation,
+} from "@/redux/Api/membershipApi";
 
 interface User {
   id: string;
@@ -68,11 +74,26 @@ export const ProfileView = () => {
     error,
     isLoading: isConversationsLoading,
   } = useGetAllConversationsQuery(undefined);
+
+  // cancel subscription
+  const [membershipCancel, { isLoading: isCancelLoading }] =
+    useMembershipCancelMutation();
   // const { data: allUsers, isLoading: isAllUsersLoading } =
   //   useAllUserQuery(undefined);
   const [changePass] = useChangePasswordMutation();
   const currentUser = userData?.data || null;
-  console.log(currentUser);
+
+  const handleCancelMember = async () => {
+    toast.loading("Processing...");
+    try {
+      const res = await membershipCancel().unwrap();
+
+      toast.dismiss();
+      toast.success("Cancel subscription successfully!");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     if (userData) {
@@ -221,6 +242,8 @@ export const ProfileView = () => {
     return <div>Error loading user data</div>;
   }
   const country = currentUser?.country;
+  const userPayment = currentUser?.isPayment;
+
   return (
     <>
       {currentUser && (
@@ -380,12 +403,17 @@ export const ProfileView = () => {
                   </button>
                 </Link>
 
-                <Link href="/user-profile">
-                  <button className="flex items-center gap-2 px-4 py-2 md:px-3 md:py-1 bg-gray-300 rounded-xl text-black text-sm md:text-base font-normal">
+                {userPayment && (
+                  <button
+                    disabled={isCancelLoading}
+                    onClick={handleCancelMember}
+                    className="flex items-center gap-2 px-4 py-2 md:px-3 md:py-1 bg-gray-300 rounded-xl text-black text-sm md:text-base font-normal"
+                  >
                     <X className="w-4 h-4 md:w-5 md:h-5" />
                     Cancel Membership
                   </button>
-                </Link>
+                )}
+
                 <div>
                   <button
                     onClick={() => setIsModalOpen(true)}

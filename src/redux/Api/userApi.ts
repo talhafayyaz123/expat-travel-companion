@@ -64,15 +64,10 @@ const userApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["AllDestination", "Destination", "AllDestination"],
     }),
-    allUser: build.query({
-      query: (data: any) => {
-        return {
-          url: "/users",
-          method: "GET",
-        };
-      },
-      providesTags: ["User", "AllDestination"],
-    }),
+   allUser: build.query({
+  query: () => "/active-bussines-type", 
+  providesTags: ["User", "AllDestination"],
+}),
     getUser: build.query({
       query: () => {
         return {
@@ -119,6 +114,7 @@ const userApi = baseApi.injectEndpoints({
       },
       providesTags: ["User", "AllDestination"],
     }),
+    
     updateUserBio: build.mutation({
       query: (data: any) => {
         return {
