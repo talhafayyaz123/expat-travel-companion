@@ -30,10 +30,6 @@ import {
   setMembers,
 } from "@/redux/allSlice/travelSearchSlice";
 import {
-
-  useAllUserQuery,
-} from "@/redux/Api/userApi";
-import {
   combinedCountryData,
   countryOptions,
 } from "@/constants/countryOptions";
@@ -41,12 +37,15 @@ import { SearchSelect } from "../ui/SearchSelect";
 import { industryOptions } from "@/constants/industry";
 import { stateOptions } from "@/constants/stateOptions";
 import { Required } from "../icon/Required";
+import { useAllUserQuery } from "@/redux/Api/userApi";
+import { error } from "console";
 
 export default function SearchHeader() {
   const dispatch = useDispatch();
 
-    const { data: allUsers, isLoading: isAllUsersLoading } = useAllUserQuery();
-    
+  const { data: allUsers, isLoading: isAllUsersLoading } = useAllUserQuery();
+
+  if (isAllUsersLoading) return <p>Loading...</p>;
 
   //  const  { data, isLoading } = useLazyUserSearchQuery();
 
@@ -184,7 +183,7 @@ export default function SearchHeader() {
                 <SelectItem key="default" value="all">
                   Select Business Type
                 </SelectItem>
-                {industryOptions.map((option) => (
+                {allUsers.map((option: any) => (
                   <SelectItem key={option.value} value={option.value}>
                     {option.label}
                   </SelectItem>

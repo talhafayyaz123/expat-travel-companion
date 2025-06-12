@@ -93,6 +93,13 @@ body {
   }
 }
 
-.nextjs-toast-errors-parent ,.nextjs-toast{
+.nextjs-toast-errors-parent,
+.nextjs-toast {
+  display: none !important;
+}
+
+.nextjs-toast,
+.nextjs-toast-errors-parent,
+.nextjs-error-with-static {
   display: none !important;
 }

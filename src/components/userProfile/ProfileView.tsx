@@ -11,11 +11,12 @@ import {
   useUpdateByUserMutation,
   useAllUserQuery,
   useUpdateUserBioMutation,
+  useEditUserBioMutation,
 } from "@/redux/Api/userApi";
 import { ProfileViewLoder } from "./ProfileViewLoder";
 import { toast } from "sonner";
 import Link from "next/link";
-import { Edit, X } from "lucide-react";
+import { AwardIcon, Edit, X } from "lucide-react";
 
 import { getCountryLabel } from "@/constants/countryOptions";
 import { getStateLabel } from "@/constants/stateOptions";
@@ -27,6 +28,7 @@ import { FaExclamationCircle } from "react-icons/fa";
 import { formatDate2 } from "@/utilities/format";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { Image as AntImage } from "antd";
+import { useParams } from "next/navigation";
 import { membershipPlan } from "./../../types/membershipPlan";
 import {
   useMembershipByIdQuery,
@@ -62,19 +64,25 @@ interface UserData {
 
 export const ProfileView = () => {
   const charLimit = 300;
+  const { id } = useParams();
   const [editBio, setEditBio] = useState(false);
   const [userBio, setUserBio] = useState("");
+  // const [editMode, setEditMode] = useState(false);
+  // const [bioDraft, setBioDraft] = useState("");
   const [currentUserData, setCurrentUserData] = useState<UserData | null>(null);
   const [chatModalisOpen, setChatModalIsOpen] = useState(false);
   const [floatingButtonIsDisplayed, setFloatingButtonIsDisplayed] =
     useState(false);
   const { data: userData, isLoading, isError } = useGetUserQuery(undefined);
+  console.log("User Data", userData);
+
   const {
     data: conversations,
     error,
     isLoading: isConversationsLoading,
   } = useGetAllConversationsQuery(undefined);
 
+  const [editUserBio] = useEditUserBioMutation();
   // cancel subscription
   const [membershipCancel, { isLoading: isCancelLoading }] =
     useMembershipCancelMutation();
@@ -194,30 +202,25 @@ export const ProfileView = () => {
     }
   };
 
+  // Update User Bio
+
   const handleUpdateBio = async () => {
     try {
-      // Show a loading indicator
       const loadingToastId = toast.loading("Updating bio...");
-
-      // Call the API to change the password
       const response = await updateUserBio({
         userBio,
       }).unwrap();
 
-      // Check the API response (if additional checks are needed)
       if (response?.success) {
         toast.success("Bio update successfully!");
         setEditBio(false);
       } else {
         toast.error(response?.message || "Failed to update the bio.");
       }
-
-      // Dismiss the loading toast
       if (!isLoading) {
         toast.dismiss(loadingToastId);
       }
     } catch (error: any) {
-      // Handle errors and show the appropriate message
       if (error?.data?.message) {
         toast.error(error.data.message);
       } else {
@@ -225,6 +228,38 @@ export const ProfileView = () => {
       }
     }
   };
+
+  // Edit User Bio
+
+  const handleEditBio = async () => {
+    if (!userData?.data?.id) return;
+
+    const toastId = toast.loading("Edit bio…");
+    try {
+      const res = await editUserBio({
+        id: userData.data.id,
+        bio: userBio,
+      }).unwrap();
+      console.log("Edit Bio", res);
+      if (res?.success) {
+        toast.success("Bio Edit Successsfully!");
+        setUserBio(res);
+      } else {
+        toast.error(res?.message || "Failed to edit the bio.");
+      }
+      if (!isLoading) {
+        toast.dismiss(toastId);
+      }
+    } catch (error: any) {
+      if (error?.data?.message) {
+        toast.error(error.data.message);
+      } else {
+        toast.error("An unexpected error occured. Please try again...");
+      }
+    }
+  };
+
+  if (!userData) return null;
 
   const triggerFileInput = () => {
     fileInputRef.current?.click();
@@ -516,6 +551,7 @@ export const ProfileView = () => {
             <h2 className="text-lg md:text-xl font-sans font-bold mt-10 md:mt-[65px]">
               About Me – Bio
             </h2>
+
             {!editBio ? (
               <p className="text-base md:text-[18px] font-normal font-sans mt-5 text-[#475467]">
                 {userBio}
@@ -524,6 +560,8 @@ export const ProfileView = () => {
               <textarea
                 value={userBio}
                 onChange={(e) => {
+                  // Optional: Add a character limit if needed
+                  const charLimit = 500;
                   if (e.target.value.length <= charLimit) {
                     setUserBio(e.target.value);
                   }
@@ -537,33 +575,15 @@ export const ProfileView = () => {
 
             <button
               className="mt-7 bg-primary flex items-center justify-center md:justify-start px-4 md:px-6 py-2 md:py-3 gap-2 md:gap-3 rounded-xl text-white"
-              onClick={() =>
-                editBio ? handleUpdateBio() : setEditBio(!editBio)
-              }
+              onClick={async () => {
+                if (editBio) {
+                  await handleUpdateBio();
+                } else {
+                  setEditBio(true);
+                  await handleEditBio();
+                }
+              }}
             >
-              {/* <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 28 28"
-                fill="none"
-              >
-                <g clipPath="url(#clip0_543_4997)">
-                  <path
-                    d="M28 14C28 20.988 22.8802 26.7799 16.1875 27.8299V18.0469H19.4496L20.0703 14H16.1875V11.3739C16.1875 10.2665 16.73 9.1875 18.4691 9.1875H20.2344V5.74219C20.2344 5.74219 18.632 5.46875 17.1002 5.46875C13.9027 5.46875 11.8125 7.40687 11.8125 10.9156V14H8.25781V18.0469H11.8125V27.8299C5.11984 26.7799 0 20.988 0 14C0 6.26828 6.26828 0 14 0C21.7317 0 28 6.26828 28 14Z"
-                    fill="#1877F2"
-                  />
-                  <path
-                    d="M19.4496 18.0469L20.0703 14H16.1875V11.3739C16.1875 10.2667 16.7299 9.1875 18.469 9.1875H20.2344V5.74219C20.2344 5.74219 18.6323 5.46875 17.1005 5.46875C13.9026 5.46875 11.8125 7.40688 11.8125 10.9156V14H8.25781V18.0469H11.8125Z"
-                    fill="white"
-                  />
-                </g>
-                <defs>
-                  <clipPath id="clip0_543_4997">
-                    <rect width="28" height="28" fill="white" />
-                  </clipPath>
-                </defs>
-              </svg> */}
               {editBio ? "Update" : "Edit Bio"}
             </button>
           </div>
