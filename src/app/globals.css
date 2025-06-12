@@ -93,13 +93,17 @@ body {
   }
 }
 
-.nextjs-toast-errors-parent,
+/* .nextjs-toast-errors-parent,
 .nextjs-toast {
   display: none !important;
-}
+} */
 
-.nextjs-toast,
+/* .nextjs-toast,
 .nextjs-toast-errors-parent,
 .nextjs-error-with-static {
+  display: none !important;
+} */
+
+.nextjs-toast-errors-parent {
   display: none !important;
 }
