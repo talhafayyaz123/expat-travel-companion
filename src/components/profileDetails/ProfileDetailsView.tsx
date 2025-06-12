@@ -5,7 +5,11 @@ import Image from "next/image";
 import { Image as AntImage } from "antd";
 import age from "@/assets/profile/fi_5670747.png";
 import zodiac from "@/assets/profile/fi_5796707.png";
-import { useGetUserByIdQuery, useGetUserQuery } from "@/redux/Api/userApi";
+import {
+  useEditUserBioMutation,
+  useGetUserByIdQuery,
+  useGetUserQuery,
+} from "@/redux/Api/userApi";
 import { useParams } from "next/navigation";
 import { ProfileViewLoder } from "../userProfile/ProfileViewLoder";
 import { useRef, useState, useEffect } from "react";
@@ -58,6 +62,7 @@ export const ProfileDetailsView = () => {
   const [userBio, setUserBio] = useState("");
   const [editBio, setEditBio] = useState(false);
   const [updateUserBio] = useUpdateUserBioMutation();
+  const [editUserBio] = useEditUserBioMutation();
   const [floatingButtonIsDisplayed, setFloatingButtonIsDisplayed] =
     useState(false);
   const [addFavorite, { data: res, isLoading: addProfile }] =
@@ -188,6 +193,33 @@ export const ProfileDetailsView = () => {
         toast.error(error.data.message);
       } else {
         toast.error("An unexpected error occurred. Please try again.");
+      }
+    }
+  };
+  const handleEditBio = async () => {
+    if (!userData?.data?.id) return;
+
+    const toastId = toast.loading("Edit bio…");
+    try {
+      const res = await editUserBio({
+        id: userData.data.id,
+        bio: userBio,
+      }).unwrap();
+      console.log("Edit Bio", res);
+      if (res?.success) {
+        toast.success("Bio Edit Successsfully!");
+        setUserBio(res);
+      } else {
+        toast.error(res?.message || "Failed to edit the bio.");
+      }
+      if (!isLoading) {
+        toast.dismiss(toastId);
+      }
+    } catch (error: any) {
+      if (error?.data?.message) {
+        toast.error(error.data.message);
+      } else {
+        toast.error("An unexpected error occured. Please try again...");
       }
     }
   };
@@ -388,7 +420,14 @@ export const ProfileDetailsView = () => {
 
         <button
           className="mt-7 bg-primary flex items-center justify-center md:justify-start px-4 md:px-6 py-2 md:py-3 gap-2 md:gap-3 rounded-xl text-white"
-          onClick={() => (editBio ? handleUpdateBio() : setEditBio(true))}
+          onClick={async () => {
+            if (editBio) {
+              await handleUpdateBio();
+            } else {
+              setEditBio(true);
+              await handleEditBio();
+            }
+          }}
         >
           {editBio ? "Update" : "Edit Bio"}
         </button>
