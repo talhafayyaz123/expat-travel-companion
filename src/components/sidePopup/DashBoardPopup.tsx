@@ -5,12 +5,14 @@ import { Notebook, X } from "lucide-react";
 import Cookies from "js-cookie";
 
 function DashBoardPopup() {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     const popupClosed = Cookies.get("popupClosed");
     if (popupClosed) {
       setIsOpen(false);
+    } else {
+      setIsOpen(true);
     }
   }, []);
 

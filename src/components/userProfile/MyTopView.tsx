@@ -67,7 +67,6 @@ export const MyTopView = () => {
     { title: "Foodie Fan", items: myTopData?.foodieFan || [] },
     { title: "Musical Tastes", items: myTopData?.musicalTastes || [] },
   ];
-  console.log(categories);
 
   return (
     <div>

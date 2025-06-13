@@ -53,11 +53,12 @@ const RegisterForm = () => {
   } = useForm<RegistrationFormData>({
     resolver: zodResolver(SignupSchema),
   });
-
+  
   const onSubmit = async (data: RegistrationFormData) => {
     try {
       const loadingToastId = toast.loading("Processing Register...");
-      const { promoCode, ...payload } = data;
+      const { promoCode,confirm_password, ...payload } = data;
+      
       // Step 1: Register the user
       await registerUser(payload).unwrap();
 
@@ -97,6 +98,8 @@ const RegisterForm = () => {
       toast.error(apiError);
     }
   };
+
+  const Token = Cookies.get("token");
 
   return (
     <>
@@ -250,12 +253,16 @@ const RegisterForm = () => {
               </Button>
               <div className="text-center text-[18px] text-zinc-400">
                 You are already member{" "}
-                <Link
-                  href="/login"
-                  className="text-blue-500 hover:text-blue-400"
-                >
-                  log in
-                </Link>
+                {Token ? (
+                  ""
+                ) : (
+                  <Link
+                    href="/login"
+                    className="text-blue-500 hover:text-blue-400"
+                  >
+                    log in
+                  </Link>
+                )}
               </div>
             </CardContent>
           </form>

@@ -42,7 +42,7 @@ const HomeNavbar = () => {
       <div className="container">
         <div className="pt-[26px] pb-[26px] pr-5 bg-[rgba(244,244,244,0.20)] backdrop-blur-[12px] rounded-2xl">
           <div className="flex items-center justify-between">
-            <div className="w-[220px] h-[50px] absolute -top-[48px] -left-[25px]">
+            <div className="w-[220px] h-[50px] absolute -top-[48px] -left-[15px]">
               <Link href="/">
                 <Image
                   src={logo}

@@ -58,6 +58,7 @@ export function SearchCard() {
   const searchItem = data?.data?.data || [];
 
   const totalResults = data?.data?.meta?.total || 0;
+
   const totalPages = Math.ceil(totalResults / itemsPerPage);
 
   const renderLoader = () => (

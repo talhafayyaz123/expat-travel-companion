@@ -11,7 +11,7 @@ export default function ProfileDetails() {
   return (
     <div className="container mx-auto mt-[130px] md:mt-[180px]">
       <ProfileDetailsView />
-      <Tabs.Root className="w-full mt-16" defaultValue="tab1">
+      <Tabs.Root className="w-full mt-16" defaultValue="destination">
         <Tabs.List className="flex justify-around border-b mb-10">
           <Tabs.Trigger
             className="text-[#1D2939] text-2xl lg:text-[32px] font-semibold p-2 px-4 border-b-2 data-[state=active]:border-blue-500"

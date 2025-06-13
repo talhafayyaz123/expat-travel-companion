@@ -37,9 +37,19 @@ import { SearchSelect } from "../ui/SearchSelect";
 import { industryOptions } from "@/constants/industry";
 import { stateOptions } from "@/constants/stateOptions";
 import { Required } from "../icon/Required";
+import { useAllUserQuery } from "@/redux/Api/userApi";
+import { error } from "console";
+import { useEffect, useState } from "react";
 
 export default function SearchHeader() {
   const dispatch = useDispatch();
+  const [bussinessType, setBussinessType] = useState<any[]>();
+
+  const {
+    data: allUsers,
+    isLoading: isAllUsersLoading,
+    isSuccess,
+  } = useAllUserQuery();
 
   //  const  { data, isLoading } = useLazyUserSearchQuery();
 
@@ -100,6 +110,22 @@ export default function SearchHeader() {
       </svg>
     );
   };
+
+  const bussinessOptions = (users: any) => {
+    const industry = users.map((user: any) => user.lifestyle.industry);
+    const industryOptionss: any = industryOptions.filter((curElem) =>
+      industry.includes(curElem.value)
+    );
+    setBussinessType(industryOptionss);
+  };
+
+  useEffect(() => {
+    if (isSuccess && allUsers.data && allUsers.data.length > 0) {
+      bussinessOptions(allUsers.data);
+    }
+  }, [allUsers, isSuccess]);
+
+  if (isAllUsersLoading) return <p>Loading...</p>;
 
   return (
     <div className="md:mt-[188px] mt-[120px] container">
@@ -177,7 +203,7 @@ export default function SearchHeader() {
                 <SelectItem key="default" value="all">
                   Select Business Type
                 </SelectItem>
-                {industryOptions.map((option) => (
+                {bussinessType?.map((option: any, index: any) => (
                   <SelectItem key={option.value} value={option.value}>
                     {option.label}
                   </SelectItem>
@@ -194,7 +220,7 @@ export default function SearchHeader() {
           </div>
         </div>
 
-        <div className="flex gap-4 mt-4">
+        <div className="flex gap-4 items-center mt-4">
           <Button
             onClick={handleRefresh}
             className="bg-[#0872BA] flex items-center gap-2 h-10 px-6"
@@ -202,6 +228,7 @@ export default function SearchHeader() {
             <RefreshCcw className="w-4 h-4" />
             Reset
           </Button>
+          <p>Note: Please click &quot;Reset&quot; after each search</p>
         </div>
       </div>
 
