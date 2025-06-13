@@ -9,6 +9,9 @@ import React from "react";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
+import { useMemo } from "react";
+import { results } from "./../../constants/results";
+import { useVerifySixQuery } from "@/redux/Api/userApi";
 
 interface TravelCardProps {
   result: {
@@ -28,7 +31,7 @@ interface TravelCardProps {
 const TravelCard: React.FC<TravelCardProps> = ({ result }) => {
   const { id, firstName, age, profileImage, destination } = result;
 
-  const { destinationCountry, travelType, TravelBegins } = destination[0] || {}; // Access the first destination
+  const { destinationCountry, travelType, TravelBegins } = destination[0] || {};
   const [addFavorite, { isLoading }] = useMyfavAddMutation(); // API mutation
 
   const router = useRouter();

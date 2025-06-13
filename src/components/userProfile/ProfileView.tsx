@@ -1,40 +1,31 @@
 "use client";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import Image from "next/image";
-import logo from "@/assets/profile/tabler_edit.png";
 import age from "@/assets/profile/fi_5670747.png";
 import zodiac from "@/assets/profile/fi_5796707.png";
-import { useEffect, useRef, useState } from "react";
+import logo from "@/assets/profile/tabler_edit.png";
 import {
   useChangePasswordMutation,
   useGetUserQuery,
   useUpdateByUserMutation,
-  useAllUserQuery,
   useUpdateUserBioMutation,
-  useEditUserBioMutation,
 } from "@/redux/Api/userApi";
-import { ProfileViewLoder } from "./ProfileViewLoder";
-import { toast } from "sonner";
+import { Edit, X } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
-import { AwardIcon, Edit, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
+import { ProfileViewLoder } from "./ProfileViewLoder";
 
-import { getCountryLabel } from "@/constants/countryOptions";
-import { getStateLabel } from "@/constants/stateOptions";
 import genderIcon from "@/assets/profile/gender.svg";
 import seekingIcon from "@/assets/profile/seeking.svg";
-import MessagesModal from "../chatModal/messages";
+import { getCountryLabel } from "@/constants/countryOptions";
+import { getStateLabel } from "@/constants/stateOptions";
+import { useMembershipCancelMutation } from "@/redux/Api/membershipApi";
 import { useGetAllConversationsQuery } from "@/redux/Api/messagesApi";
-import { FaExclamationCircle } from "react-icons/fa";
 import { formatDate2 } from "@/utilities/format";
-import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { Image as AntImage } from "antd";
-import { useParams } from "next/navigation";
-import { membershipPlan } from "./../../types/membershipPlan";
-import {
-  useMembershipByIdQuery,
-  useMembershipCancelMutation,
-  useSubscriptionPlanMutation,
-} from "@/redux/Api/membershipApi";
+import { FaExclamationCircle } from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
+import MessagesModal from "../chatModal/messages";
 
 interface User {
   id: string;
@@ -64,25 +55,19 @@ interface UserData {
 
 export const ProfileView = () => {
   const charLimit = 300;
-  const { id } = useParams();
   const [editBio, setEditBio] = useState(false);
   const [userBio, setUserBio] = useState("");
-  // const [editMode, setEditMode] = useState(false);
-  // const [bioDraft, setBioDraft] = useState("");
   const [currentUserData, setCurrentUserData] = useState<UserData | null>(null);
   const [chatModalisOpen, setChatModalIsOpen] = useState(false);
   const [floatingButtonIsDisplayed, setFloatingButtonIsDisplayed] =
     useState(false);
   const { data: userData, isLoading, isError } = useGetUserQuery(undefined);
-  console.log("User Data", userData);
 
   const {
     data: conversations,
     error,
     isLoading: isConversationsLoading,
   } = useGetAllConversationsQuery(undefined);
-
-  const [editUserBio] = useEditUserBioMutation();
   // cancel subscription
   const [membershipCancel, { isLoading: isCancelLoading }] =
     useMembershipCancelMutation();
@@ -112,7 +97,8 @@ export const ProfileView = () => {
 
   const [avatarSrc, setAvatarSrc] = useState(currentUser?.profileImage);
   const [profileUpUser] = useUpdateByUserMutation();
-  const [updateUserBio] = useUpdateUserBioMutation();
+  const [updateUserBio, { isLoading: isEditBioLoading }] =
+    useUpdateUserBioMutation();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [oldPassword, setOldPassword] = useState("");
@@ -208,7 +194,8 @@ export const ProfileView = () => {
     try {
       const loadingToastId = toast.loading("Updating bio...");
       const response = await updateUserBio({
-        userBio,
+        id: userData.data.id,
+        bio: userBio,
       }).unwrap();
 
       if (response?.success) {
@@ -221,6 +208,7 @@ export const ProfileView = () => {
         toast.dismiss(loadingToastId);
       }
     } catch (error: any) {
+      toast.dismiss();
       if (error?.data?.message) {
         toast.error(error.data.message);
       } else {
@@ -229,35 +217,33 @@ export const ProfileView = () => {
     }
   };
 
-  // Edit User Bio
+  // const handleEditBio = async () => {
+  //   if (!userData?.data?.id) return;
 
-  const handleEditBio = async () => {
-    if (!userData?.data?.id) return;
-
-    const toastId = toast.loading("Edit bio…");
-    try {
-      const res = await editUserBio({
-        id: userData.data.id,
-        bio: userBio,
-      }).unwrap();
-      console.log("Edit Bio", res);
-      if (res?.success) {
-        toast.success("Bio Edit Successsfully!");
-        setUserBio(res);
-      } else {
-        toast.error(res?.message || "Failed to edit the bio.");
-      }
-      if (!isLoading) {
-        toast.dismiss(toastId);
-      }
-    } catch (error: any) {
-      if (error?.data?.message) {
-        toast.error(error.data.message);
-      } else {
-        toast.error("An unexpected error occured. Please try again...");
-      }
-    }
-  };
+  //   const toastId = toast.loading("Edit bio…");
+  //   try {
+  //     const res = await editUserBio({
+  //       id: userData.data.id,
+  //       bio: userBio,
+  //     }).unwrap();
+  //     console.log("Edit Bio", res);
+  //     if (res?.success) {
+  //       toast.success("Bio Edit Successsfully!");
+  //       setUserBio(res);
+  //     } else {
+  //       toast.error(res?.message || "Failed to edit the bio.");
+  //     }
+  //     if (!isLoading) {
+  //       toast.dismiss(toastId);
+  //     }
+  //   } catch (error: any) {
+  //     if (error?.data?.message) {
+  //       toast.error(error.data.message);
+  //     } else {
+  //       toast.error("An unexpected error occured. Please try again...");
+  //     }
+  //   }
+  // };
 
   if (!userData) return null;
 
@@ -445,7 +431,9 @@ export const ProfileView = () => {
                     className="flex items-center gap-2 px-4 py-2 md:px-3 md:py-1 bg-gray-300 rounded-xl text-black text-sm md:text-base font-normal"
                   >
                     <X className="w-4 h-4 md:w-5 md:h-5" />
-                    Cancel Membership
+                    <span className="whitespace-nowrap">
+                      Cancel Membership
+                    </span>{" "}
                   </button>
                 )}
 
@@ -454,7 +442,7 @@ export const ProfileView = () => {
                     onClick={() => setIsModalOpen(true)}
                     className="bg-gray-300 rounded-xl px-2 py-1 text-black"
                   >
-                    Change Password
+                    <span className="whitespace-nowrap">Change Password</span>
                   </button>
                 </div>
               </div>
@@ -575,14 +563,8 @@ export const ProfileView = () => {
 
             <button
               className="mt-7 bg-primary flex items-center justify-center md:justify-start px-4 md:px-6 py-2 md:py-3 gap-2 md:gap-3 rounded-xl text-white"
-              onClick={async () => {
-                if (editBio) {
-                  await handleUpdateBio();
-                } else {
-                  setEditBio(true);
-                  await handleEditBio();
-                }
-              }}
+              onClick={() => (editBio ? handleUpdateBio() : setEditBio(true))}
+              disabled={isEditBioLoading}
             >
               {editBio ? "Update" : "Edit Bio"}
             </button>

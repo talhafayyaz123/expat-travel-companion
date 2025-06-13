@@ -5,11 +5,7 @@ import Image from "next/image";
 import { Image as AntImage } from "antd";
 import age from "@/assets/profile/fi_5670747.png";
 import zodiac from "@/assets/profile/fi_5796707.png";
-import {
-  useEditUserBioMutation,
-  useGetUserByIdQuery,
-  useGetUserQuery,
-} from "@/redux/Api/userApi";
+import { useGetUserByIdQuery, useGetUserQuery } from "@/redux/Api/userApi";
 import { useParams } from "next/navigation";
 import { ProfileViewLoder } from "../userProfile/ProfileViewLoder";
 import { useRef, useState, useEffect } from "react";
@@ -61,8 +57,8 @@ export const ProfileDetailsView = () => {
   const [chatModalisOpen, setChatModalIsOpen] = useState(false);
   const [userBio, setUserBio] = useState("");
   const [editBio, setEditBio] = useState(false);
-  const [updateUserBio] = useUpdateUserBioMutation();
-  const [editUserBio] = useEditUserBioMutation();
+  const [updateUserBio, { isLoading: isEditBioLoading }] =
+    useUpdateUserBioMutation();
   const [floatingButtonIsDisplayed, setFloatingButtonIsDisplayed] =
     useState(false);
   const [addFavorite, { data: res, isLoading: addProfile }] =
@@ -104,7 +100,7 @@ export const ProfileDetailsView = () => {
     }
   };
 
-  const { data, isLoading, isError } = useGetUserByIdQuery(id);
+  const { data, isLoading, isError, isSuccess } = useGetUserByIdQuery(id);
 
   const {
     data: userData,
@@ -113,7 +109,15 @@ export const ProfileDetailsView = () => {
   } = useGetUserQuery({});
 
   useEffect(() => {
-    setCurrentUserData(userData?.data);
+    if (isSuccess && data.data) {
+      setUserBio(data?.data?.bio || "");
+    }
+  }, [data, isSuccess]);
+
+  useEffect(() => {
+    if (userData) {
+      setCurrentUserData(userData?.data);
+    }
   }, [userData]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -167,59 +171,27 @@ export const ProfileDetailsView = () => {
   // Update Bio
   const handleUpdateBio = async () => {
     try {
-      // Show a loading indicator
       const loadingToastId = toast.loading("Updating bio...");
 
-      // Call the API to change the password
       const response = await updateUserBio({
-        userBio,
+        id,
+        bio: userBio,
       }).unwrap();
 
-      // Check the API response (if additional checks are needed)
       if (response?.success) {
         toast.success("Bio update successfully!");
         setEditBio(false);
       } else {
         toast.error(response?.message || "Failed to update the bio.");
       }
-
-      // Dismiss the loading toast
       if (!isLoading) {
         toast.dismiss(loadingToastId);
       }
     } catch (error: any) {
-      // Handle errors and show the appropriate message
       if (error?.data?.message) {
         toast.error(error.data.message);
       } else {
         toast.error("An unexpected error occurred. Please try again.");
-      }
-    }
-  };
-  const handleEditBio = async () => {
-    if (!userData?.data?.id) return;
-
-    const toastId = toast.loading("Edit bio…");
-    try {
-      const res = await editUserBio({
-        id: userData.data.id,
-        bio: userBio,
-      }).unwrap();
-      console.log("Edit Bio", res);
-      if (res?.success) {
-        toast.success("Bio Edit Successsfully!");
-        setUserBio(res);
-      } else {
-        toast.error(res?.message || "Failed to edit the bio.");
-      }
-      if (!isLoading) {
-        toast.dismiss(toastId);
-      }
-    } catch (error: any) {
-      if (error?.data?.message) {
-        toast.error(error.data.message);
-      } else {
-        toast.error("An unexpected error occured. Please try again...");
       }
     }
   };
@@ -417,20 +389,14 @@ export const ProfileDetailsView = () => {
             className="w-full p-2 text-base border-none focus:outline-none"
           />
         )}
-
+        {/* 
         <button
           className="mt-7 bg-primary flex items-center justify-center md:justify-start px-4 md:px-6 py-2 md:py-3 gap-2 md:gap-3 rounded-xl text-white"
-          onClick={async () => {
-            if (editBio) {
-              await handleUpdateBio();
-            } else {
-              setEditBio(true);
-              await handleEditBio();
-            }
-          }}
+          onClick={() => (editBio ? handleUpdateBio() : setEditBio(true))}
+          disabled={isEditBioLoading}
         >
           {editBio ? "Update" : "Edit Bio"}
-        </button>
+        </button> */}
       </div>
       <ChatModal
         isOpen={chatModalisOpen}

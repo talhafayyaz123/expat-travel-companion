@@ -76,7 +76,7 @@ const TravelBody = () => {
 
       <div className="mx-auto my-8  rounded-md grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
         {transformedData?.length > 0 ? (
-          transformedData.map((result: Result) => (
+          transformedData.slice(0, 6).map((result: Result) => (
             <div key={result.id} className="">
               <TravelCard result={result} />
             </div>

@@ -49,6 +49,8 @@ export const ProfMyTopView = () => {
     { title: "Musical Tastes", items: myTopData?.musicalTastes || [] },
   ];
 
+  console.log(categories);
+
   return (
     <div>
       <section>
@@ -60,16 +62,16 @@ export const ProfMyTopView = () => {
             {categories.map((category, index) => (
               <div
                 key={index}
-                className="border border-gray-300 rounded-lg p-4 bg-white shadow-sm mb-3 w-[35%] m-auto"
+                className="border border-gray-300 rounded-lg mt-5 mb-5 p-4 bg-white shadow-sm w-[35%] m-auto"
               >
-                <h3 className="text-[18px] sm:text-[20px] md:text-[22px] font-sans font-semibold mb-2 text-center">
+                <h3 className="text-[18px] sm:text-[20px] md:text-[22px] font-sans font-semibold mb-2 text-center underline text-[#aca4a6] uppercase">
                   {category.title}
                 </h3>
-                <ul className="flex flex-wrap gap-1 text-gray-600">
+                <ul className="flex justify-center flex-wrap gap-3 text-gray-600">
                   {category.items.map((item, idx) => (
                     <li
                       key={idx}
-                      className="text-center text-[16px] sm:text-[18px] md:text-[18px] text-[#475467] font-normal font-sans"
+                      className="text-[16px] sm:text-[18px] md:text-[18px] text-[#475467] font-normal font-sans"
                     >
                       {item}
                     </li>

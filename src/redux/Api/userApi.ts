@@ -66,12 +66,10 @@ const userApi = baseApi.injectEndpoints({
     }),
 
     // Active Bussiness Type
-    allUser: build.query({
+    allUser: build.query<any, void>({
       query: () => "/users/active-bussines-type",
-
-      providesTags: ["User", "AllDestination"],
+      providesTags: ["User", "Destination"],
     }),
-
     getUser: build.query({
       query: () => {
         return {
@@ -122,17 +120,9 @@ const userApi = baseApi.injectEndpoints({
     updateUserBio: build.mutation({
       query: (data: any) => {
         return {
-          url: "/users/profile",
+          url: `/users/edit-bio/${data.id}`,
           method: "PUT",
-          body: data,
-        };
-      },
-    }),
-    editUserBio: build.mutation({
-      query: (id) => {
-        return {
-          url: `/users/edit-bio/${id}`,
-          method: "POST",
+          body: { bio: data.bio },
         };
       },
     }),
@@ -154,5 +144,4 @@ export const {
   useContactMutation,
   useVerifySixQuery,
   useUpdateUserBioMutation,
-  useEditUserBioMutation,
 } = userApi;
