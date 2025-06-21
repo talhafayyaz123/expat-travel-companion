@@ -190,11 +190,11 @@ export default function SearchHeader() {
               </div>
             </label>
           </div>
-          <div className="text-center text-2xl font-[500] text-gray-600">
+          {/* <div className="text-center text-2xl font-[500] text-gray-600">
             <p>And/Or</p>
-          </div>
+          </div> */}
 
-          <div className="relative ">
+          {/* <div className="relative ">
             <SearchSelect onValueChange={handleIndustryChange}>
               <SelectTrigger className="peer h-[65px] px-4 rounded-xl">
                 <SelectValue placeholder="Select Business Type " />
@@ -217,7 +217,7 @@ export default function SearchHeader() {
             >
               Business Type
             </label>
-          </div>
+          </div> */}
         </div>
 
         <div className="flex gap-4 items-center mt-4">

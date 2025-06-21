@@ -75,8 +75,8 @@ function HomePopup() {
               **Launch Party Promotion**
             </h3>
             <h4 className="text-sm text-black font-bold text-center mt-3 ps-2">
-              Earn a 50% commission for each invitee that joins by May 31, 2025,
-              when they use your personal referral code!
+              Earn a 50% commission for each invitee that joins by August 31,
+              2025, when they use your personal referral code!
             </h4>
             {/* <h3 className="text-sm text-black font-medium text-start mt-3 ps-2">
               Simply:

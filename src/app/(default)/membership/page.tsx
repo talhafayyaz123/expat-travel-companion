@@ -61,9 +61,11 @@ export default function Membership() {
             </p>
 
             <div className="space-y-6">
-              {data?.data?.map((plan: membershipPlan) => (
-                <MembershipCard key={plan.id} plan={plan} />
-              ))}
+              {data?.data?.map((plan: membershipPlan) => {
+                console.log("MEMBER SHIP", plan);
+
+                return <MembershipCard key={plan.id} plan={plan} />;
+              })}
             </div>
           </div>
         </div>
