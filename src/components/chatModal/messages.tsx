@@ -313,7 +313,6 @@ export default function MessagesModal({
                         checked={selectedMessages.includes(msg.id)}
                         onChange={(e) => handleSelect(msg.id, e.target.checked)}
                       />
-                      {msg.id}
                     </div>
                   ))
                 ) : (
