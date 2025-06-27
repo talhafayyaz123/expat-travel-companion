@@ -62,11 +62,11 @@ const Navbar = () => {
                     >
                       {item.label}
                     </Link>
-                    {item.label == "My Profile" && messages?.length > 0 && (
+                    {/* {item.label == "My Profile" && messages?.length > 0 && (
                       <span className="absolute -top-2  -right-2 bg-red-500 text-white text-xs font-medium px-1 py-0 rounded-full">
                         {messages.length > 9 ? "9+" : messages.length}
                       </span>
-                    )}
+                    )} */}
                   </li>
                 ))}
             </ul>

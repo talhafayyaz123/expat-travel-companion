@@ -98,7 +98,7 @@ export default function HomeFaq() {
             </div>
           </AccordionTrigger>
           <AccordionContent className="pt-4 text-[18px] text-[#949494] font-[400] leading-[1.75]">
-            <p>We offer two flexible membership plans:</p>
+            {/* <p>We offer two flexible membership plans:</p> */}
 
             <ul className=" list-disc md:pl-6 pl-2 mt-2">
               <li className="text-black">

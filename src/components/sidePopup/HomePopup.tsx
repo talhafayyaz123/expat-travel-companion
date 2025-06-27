@@ -7,13 +7,12 @@ import Image from "next/image";
 import addImage from "../../../public/add.jpg";
 
 function HomePopup() {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [isSecondOpen, setIsSecondOpen] = useState(false);
 
   useEffect(() => {
     const popupClosed = Cookies.get("homePopupClosed");
     if (popupClosed) {
-      setIsOpen(false);
     }
   }, []);
 
