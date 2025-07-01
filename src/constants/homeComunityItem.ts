@@ -1,5 +1,5 @@
 import { homeCommuntiyItem } from "@/types/homeComunityItem";
-import image1 from "@/assets/expat-logo-pro.png";
+import image1 from "@/assets/expat-logo-transparent.png";
 
 const homeComunityItem: homeCommuntiyItem[] = [
   {

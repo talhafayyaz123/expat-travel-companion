@@ -41,7 +41,10 @@ export const ProfMyTopView = () => {
   }
 
   const categories: Category[] = [
-    { title: "Personality", items: myTopData?.personality || [] },
+    {
+      title: "Personality",
+      items: myTopData?.personality || [],
+    },
     { title: "Philosophies", items: myTopData?.philosophies || [] },
     { title: "Goals", items: myTopData?.goals || [] },
     { title: "Hobbies", items: myTopData?.hobbies || [] },

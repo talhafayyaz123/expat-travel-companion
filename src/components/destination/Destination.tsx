@@ -16,13 +16,12 @@ import { useDestinationAddMutation } from "@/redux/Api/destinationApi";
 import { saveDestinationData } from "@/redux/allSlice/formslice";
 import { toast } from "sonner";
 import Link from "next/link";
-import {
-  combinedCountryData,
-} from "@/constants/countryOptions";
+import { combinedCountryData } from "@/constants/countryOptions";
 import { travelOption } from "@/constants/traveType";
 import { CountrySelect } from "../CountrySelect";
 import { InputField } from "../form/InputField";
 import { TravelSelect } from "../TravelSelect";
+import { SquareRadioButton } from "../SquareRadioButton";
 
 const formSchema = z.object({
   destinations: z.array(
@@ -166,14 +165,14 @@ export default function Destination() {
                       value: co.value, // Replace spaces with underscores for value
                     }))}
                   />
- <InputField
-              name={`destinations.${index}.destinationCity`}
-              label="Destination City"
-              placeholder="example1,example2"
-              form={form}
-              required={true} // Show the Required icon
 
-            />
+                  <InputField
+                    name={`destinations.${index}.destinationCity`}
+                    label="Destination City"
+                    placeholder="example1,example2"
+                    form={form}
+                    required={true} // Show the Required icon
+                  />
 
                   {/* <SelectField
                     name={`destinations.${index}.destinationCity`}

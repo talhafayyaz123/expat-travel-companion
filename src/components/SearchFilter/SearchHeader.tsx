@@ -1,6 +1,6 @@
 "use client";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import FilterPanel from "./FilterPanel";
 import { SearchCard } from "../searchResultCard/SearchCard";
@@ -25,9 +25,10 @@ import {
   setSummitVerify,
   setFromAge,
   setToAge,
-  setHaveRoom,
   setGenders,
   setMembers,
+  setHaveRoom,
+  setPage,
 } from "@/redux/allSlice/travelSearchSlice";
 import {
   combinedCountryData,
@@ -37,9 +38,25 @@ import { SearchSelect } from "../ui/SearchSelect";
 import { industryOptions } from "@/constants/industry";
 import { stateOptions } from "@/constants/stateOptions";
 import { Required } from "../icon/Required";
+import { useAllUserQuery } from "@/redux/Api/userApi";
+import { error } from "console";
+import { useEffect, useState } from "react";
+import { SquareRadioButton } from "../SquareRadioButton";
 
 export default function SearchHeader() {
   const dispatch = useDispatch();
+  const [bussinessType, setBussinessType] = useState<any[]>();
+  const { destinationCountry, haveRoom, page, limit } = useSelector(
+    (state: RootState) => state.travelSearch
+  );
+
+  const {
+    data: allUsers,
+    isLoading: isAllUsersLoading,
+    isSuccess,
+  } = useAllUserQuery();
+
+  //  const  { data, isLoading } = useLazyUserSearchQuery();
 
   const handleCountryChange = (value: string) => {
     dispatch(setCountry(value === "all" ? "" : value));
@@ -51,6 +68,11 @@ export default function SearchHeader() {
 
   const handleIndustryChange = (value: string) => {
     dispatch(setIndustry(value === "all" ? "" : value));
+  };
+
+  const handleRoomChanged = (checked: boolean) => {
+    dispatch(setHaveRoom(checked));
+    dispatch(setPage(1));
   };
 
   // const handleRefresh = () => {
@@ -75,6 +97,8 @@ export default function SearchHeader() {
     // dispatch({ type: "RESET_STORE" });
 
     // Reload the page
+    dispatch(setHaveRoom(false));
+    dispatch(setPage(1));
     window.location.reload();
   };
 
@@ -98,6 +122,22 @@ export default function SearchHeader() {
       </svg>
     );
   };
+
+  const bussinessOptions = (users: any) => {
+    const industry = users.map((user: any) => user.lifestyle.industry);
+    const industryOptionss: any = industryOptions.filter((curElem) =>
+      industry.includes(curElem.value)
+    );
+    setBussinessType(industryOptionss);
+  };
+
+  useEffect(() => {
+    if (isSuccess && allUsers.data && allUsers.data.length > 0) {
+      bussinessOptions(allUsers.data);
+    }
+  }, [allUsers, isSuccess]);
+
+  if (isAllUsersLoading) return <p>Loading...</p>;
 
   return (
     <div className="md:mt-[188px] mt-[120px] container">
@@ -162,11 +202,11 @@ export default function SearchHeader() {
               </div>
             </label>
           </div>
-          <div className="text-center text-2xl font-[500] text-gray-600">
+          {/* <div className="text-center text-2xl font-[500] text-gray-600">
             <p>And/Or</p>
-          </div>
+          </div> */}
 
-          <div className="relative ">
+          {/* <div className="relative ">
             <SearchSelect onValueChange={handleIndustryChange}>
               <SelectTrigger className="peer h-[65px] px-4 rounded-xl">
                 <SelectValue placeholder="Select Business Type " />
@@ -175,7 +215,7 @@ export default function SearchHeader() {
                 <SelectItem key="default" value="all">
                   Select Business Type
                 </SelectItem>
-                {industryOptions.map((option) => (
+                {bussinessType?.map((option: any, index: any) => (
                   <SelectItem key={option.value} value={option.value}>
                     {option.label}
                   </SelectItem>
@@ -189,10 +229,20 @@ export default function SearchHeader() {
             >
               Business Type
             </label>
-          </div>
+          </div> */}
         </div>
 
-        <div className="flex gap-4 mt-4">
+        {/* Member has a room checkbox */}
+        <div className="space-y-2 w-[200px] mb-6">
+          <SquareRadioButton
+            label="Member has a room"
+            name="room"
+            checked={haveRoom}
+            onChange={(e) => handleRoomChanged(e.target.checked)}
+          />
+        </div>
+
+        <div className="flex gap-4 items-center mt-4">
           <Button
             onClick={handleRefresh}
             className="bg-[#0872BA] flex items-center gap-2 h-10 px-6"
@@ -200,6 +250,7 @@ export default function SearchHeader() {
             <RefreshCcw className="w-4 h-4" />
             Reset
           </Button>
+          <p>Note: Please click &quot;Reset&quot; after each search</p>
         </div>
       </div>
 

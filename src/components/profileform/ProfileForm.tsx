@@ -23,6 +23,7 @@ import { Required } from "../icon/Required";
 import { currentCountries } from "@/constants/currentCountries";
 import { stateOptions } from "@/constants/stateOptions";
 import { StateSelect } from "../userProfile/StateSelect";
+import { SquareRadioButton } from "../SquareRadioButton";
 // import Select from "react-select";
 // import { Controller } from "react-hook-form";
 
@@ -378,6 +379,20 @@ export default function ProfileForm() {
               }))}
             /> */}
           </div>
+
+          <div className="space-y-2 w-[200px]">
+            {/* {travelOption.map((option) => ( */}
+            <SquareRadioButton
+              // key={option.value}
+              // label={option.label}
+              label="I have a room here"
+              name="room"
+              // checked={room === option.value}
+              // onChange={() => handleRoomChanged(option.value)}
+            />
+            {/* ))} */}
+          </div>
+
           {/* <StateSelect
               name="city"
               label="Current city"

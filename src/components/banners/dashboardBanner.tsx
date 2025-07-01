@@ -26,10 +26,10 @@ function DashboardBanner() {
   return (
     <>
       {show && (
-        <div className="flex flex-wrap items-center justify-between gap-4 w-4/5 mx-auto px-[30px] py-[10px] bg-violet-200 border border-[#7860d7] rounded-lg mb-5 overflow-hidden">
+        <div className="flex flex-wrap  items-center justify-between gap-2 w-[83%] mx-auto px-[8px] py-[10px] bg-violet-200 border border-[#7860d7] rounded-lg mb-5 overflow-hidden">
           <FaExclamationCircle className="me-2 flex-shrink-0" color="#4b3d82" />
 
-          <span className="text-[#4b3d82] select-none min-w-0 flex-1 text-[11px] overflow-hidden text-ellipsis whitespace-nowrap">
+          <span className="text-[#4b3d82] select-none min-w-0 flex-1 text-[13px] overflow-hidden text-ellipsis whitespace-nowrap">
             New here? Welcome! Set up your profile under{" "}
             <Link href="/user-profile" className="text-[blue] underline">
               ‘My Profile’
@@ -37,7 +37,7 @@ function DashboardBanner() {
             and connect with others once your photo is approved!
           </span>
 
-          <label className="flex items-center text-[#4b3d82] text-[11px] whitespace-nowrap me-2">
+          <label className="flex items-center text-[#4b3d82] text-[13px] whitespace-nowrap me-2">
             <input
               type="checkbox"
               className="me-1"

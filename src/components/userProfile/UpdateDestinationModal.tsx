@@ -36,6 +36,7 @@ import {
 import { TravelSelect } from "../TravelSelect";
 import { travelOption } from "@/constants/traveType";
 import { InputField } from "../form/InputField";
+import { SquareRadioButton } from "../SquareRadioButton";
 
 const formSchema = z.object({
   travelType: z.string(),
@@ -321,6 +322,19 @@ export const UpdateDestinationModal: React.FC<UpdateDestinationModalProps> = ({
                   Lyon, Nice)
                 </p>
               </div>
+            </div>
+
+            <div className="space-y-2 w-[200px]">
+              {/* {travelOption.map((option) => ( */}
+              <SquareRadioButton
+                // key={option.value}
+                // label={option.label}
+                label="I have a room here"
+                name="room"
+                // checked={room === option.value}
+                // onChange={() => handleRoomChanged(option.value)}
+              />
+              {/* ))} */}
             </div>
 
             <Button type="submit" disabled={isUpdating}>

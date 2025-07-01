@@ -5,9 +5,7 @@ import { useForm, Controller, SubmitHandler } from "react-hook-form";
 
 import {
   Dialog,
-
   DialogContent,
-
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -23,7 +21,13 @@ import {
 } from "@/schema/MembershipPlanSchema";
 import { toast } from "sonner";
 import { useUpdatePlanMutation } from "@/redux/Api/membershipPlansApi";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface UpdateDataDialogProps {
   isOpen: boolean;
@@ -91,7 +95,6 @@ const UpdateDataDialog = ({
       id: initialData.id, // Make sure to include the id
       interval: initialData.billingInterval || "monthly", // Keep the interval
     };
-
 
     try {
       const response = await updateNewPlan(mPandata).unwrap(); // .unwrap() to handle response properly

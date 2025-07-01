@@ -7,13 +7,12 @@ import Image from "next/image";
 import addImage from "../../../public/add.jpg";
 
 function HomePopup() {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [isSecondOpen, setIsSecondOpen] = useState(false);
 
   useEffect(() => {
     const popupClosed = Cookies.get("homePopupClosed");
     if (popupClosed) {
-      setIsOpen(false);
     }
   }, []);
 
@@ -50,7 +49,7 @@ function HomePopup() {
         </div>
       </div>
       <div
-        className={`fixed top-1/2 -translate-y-1/2 right-0 z-[999] w-[600px] custom-width bg-white shadow-lg transform custom-popup-height transition-transform duration-300 ${
+        className={`fixed top-1/2 -translate-y-1/2 right-0 z-[999] w-[600px] custom-width bg-white shadow-lg transform  transition-transform duration-300 ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -70,13 +69,13 @@ function HomePopup() {
             anyone you think would benefit from being part of our community. We
             want to grow our membership organically and would love your help!
           </h4>
-          <div className="max-h-[400px] overflow-y-auto">
+          <div className="max-h-[400px] custom-popup-height overflow-y-auto">
             <h3 className="text-sm text-black font-bold text-center mt-3 ps-2">
               **Launch Party Promotion**
             </h3>
             <h4 className="text-sm text-black font-bold text-center mt-3 ps-2">
-              Earn a 50% commission for each invitee that joins by May 31, 2025,
-              when they use your personal referral code!
+              Earn a 50% commission for each invitee that joins by August 31,
+              2025, when they use your personal referral code!
             </h4>
             {/* <h3 className="text-sm text-black font-medium text-start mt-3 ps-2">
               Simply:
@@ -117,7 +116,7 @@ function HomePopup() {
       </div>
 
       <div
-        className={`fixed top-1/2 -translate-y-1/2 right-0 z-[999] w-[600px] bg-white shadow-lg transform transition-transform duration-300 ${
+        className={`fixed top-1/2 -translate-y-1/2 right-0 z-[999] promos-width promos-height w-[600px] bg-white shadow-lg transform transition-transform duration-300 ${
           isSecondOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >

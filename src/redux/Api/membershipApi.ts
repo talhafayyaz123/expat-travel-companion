@@ -21,6 +21,13 @@ const membershipApi = baseApi.injectEndpoints({
       },
       providesTags: ["Payments"],
     }),
+    membershipCancel: build.mutation<any, void>({
+      query: () => ({
+        url: `payment/cancel-subscription`,
+        method: "POST",
+      }),
+      invalidatesTags: ["Payments"],
+    }),
     subscriptionPlan: build.mutation({
       query: (data) => {
         // id parameter here
@@ -40,4 +47,5 @@ export const {
   useMembershipQuery,
   useMembershipByIdQuery,
   useSubscriptionPlanMutation,
+  useMembershipCancelMutation,
 } = membershipApi;

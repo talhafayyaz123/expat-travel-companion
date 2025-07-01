@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import TravelCard from "../travelCard/TravelCard";
+// import TravelCard from "../travelCard/TravelCard";
 import { useAllUserQuery, useVerifySixQuery } from "@/redux/Api/userApi";
 import { useGetMyfavQuery } from "@/redux/Api/favariteApi";
 
@@ -60,7 +60,7 @@ const TravelBody = () => {
 
   return (
     <div className="container mt-20">
-      <div className="w-12 h-2 bg-[#0872BA] mx-auto lg:mx-0"></div>
+      {/* <div className="w-12 h-2 bg-[#0872BA] mx-auto lg:mx-0"></div>
       <div className="font-sans text-5xl font-semibold mt-2 text-[#1D2939]">
         <h1>Some of our verified members</h1>
         <p className="font-sans text-xl font-medium mt-4 text-[#344054]">
@@ -72,13 +72,13 @@ const TravelBody = () => {
           safety and camaraderie that helps you stay motivated and focused on
           your goals.
         </p>
-      </div>
+      </div> */}
 
       <div className="mx-auto my-8  rounded-md grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
         {transformedData?.length > 0 ? (
-          transformedData.map((result: Result) => (
+          transformedData.slice(0, 6).map((result: Result) => (
             <div key={result.id} className="">
-              <TravelCard result={result} />
+              {/* <TravelCard result={result} /> */}
             </div>
           ))
         ) : (

@@ -22,6 +22,8 @@ function SearchResultCard({
   destination,
   imageUrl,
 }: SearchResultProps) {
+  console.log(businessType);
+
   return (
     <div className="flex gap-4 rounded-lg border bg-white p-4">
       <div className="relative h-32 w-32 flex-shrink-0">

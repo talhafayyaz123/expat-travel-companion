@@ -103,7 +103,6 @@ const NewMembershipPlanDialog = ({
 
       const res = await createNewPlan(membershipPlanData).unwrap();
 
-
       toast.success("Membership plan created successfully!");
 
       reset();
@@ -113,7 +112,6 @@ const NewMembershipPlanDialog = ({
       toast.error("An unexpected error occurred.");
     }
   };
-
 
   return (
     <Dialog open={isOpen} onOpenChange={onCloseHandler}>

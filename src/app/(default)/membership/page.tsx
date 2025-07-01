@@ -2,9 +2,17 @@
 import MembershipCard from "@/components/membership/MembershipCard";
 import { useMembershipQuery } from "@/redux/Api/membershipApi";
 import { membershipPlan } from "@/types/membershipPlan";
+import { useEffect, useState } from "react";
 
 export default function Membership() {
-  const { data, isLoading, error } = useMembershipQuery(undefined);
+  const { data, isLoading, isSuccess } = useMembershipQuery(undefined);
+  const [membership, setMembership] = useState<any>([]);
+
+  useEffect(() => {
+    if (isSuccess && data?.data?.length > 0) {
+      setMembership([data.data[0]]);
+    }
+  }, [data, isSuccess]);
 
   if (isLoading) {
     return (
@@ -56,14 +64,15 @@ export default function Membership() {
 
             <p className="text-[#000] text-[18px] mb-10">
               We want to make sure that our platform is accessible for travelers
-              at every stage of their journey. That&#39;s why we offer two
-              flexible membership plans:
+              at every stage of their journey.
+              {/* That&#39;s why we offer two
+              flexible membership plans: */}
             </p>
 
             <div className="space-y-6">
-              {data?.data?.map((plan: membershipPlan) => (
-                <MembershipCard key={plan.id} plan={plan} />
-              ))}
+              {membership?.map((plan: membershipPlan) => {
+                return <MembershipCard key={plan.id} plan={plan} />;
+              })}
             </div>
           </div>
         </div>

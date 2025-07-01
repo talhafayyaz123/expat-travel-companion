@@ -74,6 +74,7 @@ export default function SearchResultCard({
           className="rounded-2xl" // Tailwind class to round the corners
         /> */}
         <LightBox image={profileImage ?? avatar} name={name} />
+
         <Button
           size="icon"
           variant="ghost"
@@ -111,11 +112,11 @@ export default function SearchResultCard({
           </div>
 
           <div className="text-sm text-gray-600">
-            <p className="font-sans mt-2 md:mt-4 font-normal text-[14px] md:text-[16px] text-[#263238]">
+            {/* <p className="font-sans mt-2 md:mt-4 font-normal text-[14px] md:text-[16px] text-[#263238]">
               <span className="font-sans font-medium">Business type: </span>
-              {getIndustryLabel(industry)}
-              {/* {industry || "N/A"} */}
-            </p>
+              {getIndustryLabel(industry)} */}
+            {/* {industry || "N/A"} */}
+            {/* </p> */}
             {/* <p className="font-sans mt-2 md:mt-3 font-normal text-[14px] md:text-[16px] text-[#263238]">
               <span className="font-sans font-medium">Travel type: </span>
               {getTravelTypeLabel(travelType)}

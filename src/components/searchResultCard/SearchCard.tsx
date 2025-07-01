@@ -39,6 +39,11 @@ export function SearchCard() {
   const [triggerUserSearch, { data, isLoading }] = useLazyUserSearchQuery();
   const [loadingParams, setLoadingParams] = useState(false);
 
+  // Scroll To Top When Page Changes
+  useEffect(() => {
+    window.scroll({ top: 0, behavior: "smooth" });
+  }, [currentPage]);
+
   useEffect(() => {
     if (travelForm) {
       const params = Object.entries(travelForm).reduce((acc, [key, value]) => {
@@ -58,6 +63,7 @@ export function SearchCard() {
   const searchItem = data?.data?.data || [];
 
   const totalResults = data?.data?.meta?.total || 0;
+
   const totalPages = Math.ceil(totalResults / itemsPerPage);
 
   const renderLoader = () => (
