@@ -53,12 +53,12 @@ const RegisterForm = () => {
   } = useForm<RegistrationFormData>({
     resolver: zodResolver(SignupSchema),
   });
-  
+
   const onSubmit = async (data: RegistrationFormData) => {
     try {
       const loadingToastId = toast.loading("Processing Register...");
-      const { promoCode,confirm_password, ...payload } = data;
-      
+      const { promoCode, confirm_password, ...payload } = data;
+
       // Step 1: Register the user
       await registerUser(payload).unwrap();
 
@@ -167,7 +167,7 @@ const RegisterForm = () => {
                 )}
               </div>
 
-              <div className="space-y-2">
+              {/* <div className="space-y-2">
                 <Label htmlFor="promoCode" className="text-white text-[16px]">
                   Promo Code
                 </Label>
@@ -177,13 +177,13 @@ const RegisterForm = () => {
                   placeholder="Enter your promo code"
                   className="bg-transparent border-white text-white placeholder:text-white"
                   {...register("promoCode")}
-                />
-                {/* {errors.email?.message && (
+                /> */}
+              {/* {errors.email?.message && (
                   <p className="text-white text-sm mt-1">
                     {errors.email.message as string}
                   </p>
                 )} */}
-              </div>
+              {/* </div> */}
 
               <div className="space-y-2 ">
                 <Label htmlFor="password" className="text-white text-[16px]">

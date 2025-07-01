@@ -192,6 +192,7 @@ export default function ChatModal({
               You can send Zoom or Google Meet
               <br /> invites through the message system
             </span>
+
             {/* Close Button (Minimizes chat) */}
             <button
               onClick={() => {

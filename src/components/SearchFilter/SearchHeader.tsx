@@ -1,6 +1,6 @@
 "use client";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import FilterPanel from "./FilterPanel";
 import { SearchCard } from "../searchResultCard/SearchCard";
@@ -25,9 +25,10 @@ import {
   setSummitVerify,
   setFromAge,
   setToAge,
-  setHaveRoom,
   setGenders,
   setMembers,
+  setHaveRoom,
+  setPage,
 } from "@/redux/allSlice/travelSearchSlice";
 import {
   combinedCountryData,
@@ -40,10 +41,14 @@ import { Required } from "../icon/Required";
 import { useAllUserQuery } from "@/redux/Api/userApi";
 import { error } from "console";
 import { useEffect, useState } from "react";
+import { SquareRadioButton } from "../SquareRadioButton";
 
 export default function SearchHeader() {
   const dispatch = useDispatch();
   const [bussinessType, setBussinessType] = useState<any[]>();
+  const { destinationCountry, haveRoom, page, limit } = useSelector(
+    (state: RootState) => state.travelSearch
+  );
 
   const {
     data: allUsers,
@@ -63,6 +68,11 @@ export default function SearchHeader() {
 
   const handleIndustryChange = (value: string) => {
     dispatch(setIndustry(value === "all" ? "" : value));
+  };
+
+  const handleRoomChanged = (checked: boolean) => {
+    dispatch(setHaveRoom(checked));
+    dispatch(setPage(1));
   };
 
   // const handleRefresh = () => {
@@ -87,6 +97,8 @@ export default function SearchHeader() {
     // dispatch({ type: "RESET_STORE" });
 
     // Reload the page
+    dispatch(setHaveRoom(false));
+    dispatch(setPage(1));
     window.location.reload();
   };
 
@@ -190,11 +202,11 @@ export default function SearchHeader() {
               </div>
             </label>
           </div>
-          <div className="text-center text-2xl font-[500] text-gray-600">
+          {/* <div className="text-center text-2xl font-[500] text-gray-600">
             <p>And/Or</p>
-          </div>
+          </div> */}
 
-          <div className="relative ">
+          {/* <div className="relative ">
             <SearchSelect onValueChange={handleIndustryChange}>
               <SelectTrigger className="peer h-[65px] px-4 rounded-xl">
                 <SelectValue placeholder="Select Business Type " />
@@ -217,7 +229,17 @@ export default function SearchHeader() {
             >
               Business Type
             </label>
-          </div>
+          </div> */}
+        </div>
+
+        {/* Member has a room checkbox */}
+        <div className="space-y-2 w-[200px] mb-6">
+          <SquareRadioButton
+            label="Member has a room"
+            name="room"
+            checked={haveRoom}
+            onChange={(e) => handleRoomChanged(e.target.checked)}
+          />
         </div>
 
         <div className="flex gap-4 items-center mt-4">

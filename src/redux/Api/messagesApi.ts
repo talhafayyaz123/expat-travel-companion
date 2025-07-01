@@ -32,6 +32,16 @@ const messagesApi = messagesBaseApi.injectEndpoints({
       }),
       invalidatesTags: ["Conversation"],
     }),
+
+     deleteMessages: build.mutation<void, { messageIds: string[] }>({
+      query: ({ messageIds }) => ({
+        url: "/conversations/messages/delete-all",
+        method: "POST",
+        body: { messageIds },  
+      }),
+      invalidatesTags: ["Conversation"],
+    }),
+
     getMessageByConvo: build.query({
       query: (conversationId) => ({
         url: `/conversations/${conversationId}/messages`,
@@ -48,4 +58,5 @@ export const {
   useGetConversationQuery,
   useSendMessageMutation,
   useGetMessageByConvoQuery,
+  useDeleteMessagesMutation,
 } = messagesApi;

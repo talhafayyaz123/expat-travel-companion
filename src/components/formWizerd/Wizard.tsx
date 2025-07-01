@@ -14,18 +14,33 @@ export default function Wizard() {
 
   const steps = [
     { id: "basics", label: "Basics", route: "/basic", isCompleted: true },
-    
+
     // ...(isDest ? [] : [
-    //   { 
-    //     id: "destinations", 
-    //     label: "Destinations", 
-    //     route: "/destination", 
-    //     isCompleted: !!formState.destination 
+    //   {
+    //     id: "destinations",
+    //     label: "Destinations",
+    //     route: "/destination",
+    //     isCompleted: !!formState.destination
     //   }
     // ]),
-    { id: "lifestyle", label: "Lifestyle", route: "/lifestyle", isCompleted: !!formState.lifecicle },
-    { id: "mytop3", label: "My top 3’s", route: "/mytop", isCompleted: !!formState.mytop },
-    { id: "talking Points", label: "Talking Points", route: "/talking-points",isCompleted:!!formState.talkingUp },
+    {
+      id: "lifestyle",
+      label: "Lifestyle",
+      route: "/lifestyle",
+      isCompleted: !!formState.lifecicle,
+    },
+    {
+      id: "mytop3",
+      label: "My top 3’s",
+      route: "/mytop",
+      isCompleted: !!formState.mytop,
+    },
+    {
+      id: "talking Points",
+      label: "Talking Points",
+      route: "/talking-points",
+      isCompleted: !!formState.talkingUp,
+    },
     // Add more steps here...
   ];
 

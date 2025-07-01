@@ -26,6 +26,7 @@ import { Image as AntImage } from "antd";
 import { FaExclamationCircle } from "react-icons/fa";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import MessagesModal from "../chatModal/messages";
+import { useRouter } from "next/navigation";
 
 interface User {
   id: string;
@@ -54,6 +55,7 @@ interface UserData {
 }
 
 export const ProfileView = () => {
+  const router = useRouter();
   const charLimit = 300;
   const [editBio, setEditBio] = useState(false);
   const [userBio, setUserBio] = useState("");
@@ -83,6 +85,7 @@ export const ProfileView = () => {
 
       toast.dismiss();
       toast.success("Cancel subscription successfully!");
+      router.push("/");
     } catch (error) {
       console.log(error);
     }
@@ -569,6 +572,17 @@ export const ProfileView = () => {
               {editBio ? "Update" : "Edit Bio"}
             </button>
           </div>
+
+          {/* NOTE ! */}
+
+          <div className="mt-5">
+            <p>
+              {" "}
+              NOTE: If you have a room available in a country, please share
+              details in your Bio.
+            </p>
+          </div>
+
           <MessagesModal
             isOpen={chatModalisOpen}
             setOpen={setChatModalIsOpen}

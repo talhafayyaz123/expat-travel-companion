@@ -1,21 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { MessageCircle, X, PlusCircle, Trash2 } from "lucide-react";
+import { MessageCircle, X } from "lucide-react";
 import { DialogTitle } from "@radix-ui/react-dialog";
+import { PlusCircle } from "lucide-react";
 import { motion } from "framer-motion";
-
 import {
   useGetUserQuery,
   useLazyGetUserByIdQuery,
   useAllUserQuery,
 } from "@/redux/Api/userApi";
-
 import {
   useSendMessageMutation,
   useGetMessageByConvoQuery,
   useCreateConversationMutation,
   useGetAllConversationsQuery,
-  useDeleteMessagesMutation,
+  useDeleteMessageMutation,
 } from "@/redux/Api/messagesApi";
 
 interface MessageProps {
@@ -53,18 +52,14 @@ export default function MessagesModal({
     useState<ConversationProps[]>(allConversations);
   const [selectedConversation, setSelectedConversation] =
     useState<ConversationProps | null>(null);
-
   const [participants, setParticipants] = useState<Record<string, string>>({});
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [selectedMessages, setSelectedMessages] = useState<any[]>([]);
-
-  const [deleteErrorMsg, setDeleteErrorMsg] = useState<string | null>(null);
+  const [selectedMessages, setSelectedMessages] = useState<string[]>([]);
 
   const { data: userData, isLoading, isError } = useGetUserQuery(undefined);
   const [sendMessage] = useSendMessageMutation();
   const [createConversation] = useCreateConversationMutation();
-  const [deleteMessages, { isLoading: isDeleting }] =
-    useDeleteMessagesMutation();
+  const [deleteMessage] = useDeleteMessageMutation();
 
   const pollInterval = isOpen ? 10000 : 0;
   const { data: convResp, refetch } = useGetAllConversationsQuery(undefined, {
@@ -84,26 +79,29 @@ export default function MessagesModal({
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  // sync convs
+  // Sync conversations
   useEffect(() => {
     if (convResp?.data) setConversations(convResp.data);
   }, [convResp]);
 
-  // pick default conv + fetch names
+  // Default conversation + fetch names
   useEffect(() => {
     if (conversations.length && !selectedConversation) {
-      const c = conversations[0];
-      const other = c.participants.find((id) => id !== userData?.data?.id)!;
-      setSelectedConversation({ ...c, participants: [other] });
+      const defaultC = conversations[0];
+      const other = defaultC.participants.find(
+        (id) => id !== userData?.data?.id
+      )!;
+      setSelectedConversation({ ...defaultC, participants: [other] });
     }
     fetchNames();
   }, [conversations, userData]);
 
-  // scroll on messages change
+  // Scroll down on messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [selectedConversation?.messages]);
 
+  // Fetch participant display names
   const fetchNames = async () => {
     const pairs = await Promise.all(
       conversations.map(async (c) => {
@@ -119,14 +117,13 @@ export default function MessagesModal({
     setParticipants(Object.assign({}, ...pairs));
   };
 
-  const handleSelect = (msgId: string, checked: boolean) => {
-    console.log(msgId);
-
+  const handleSelect = (msgId: string, yes: boolean) => {
     setSelectedMessages((prev) =>
-      checked ? [...prev, msgId] : prev.filter((id) => id !== msgId)
+      yes ? [...prev, msgId] : prev.filter((id) => id !== msgId)
     );
   };
 
+  // **Replace** old message with the new one
   const handleSend = async () => {
     if (!input.trim() || !selectedConversation) return;
 
@@ -139,48 +136,42 @@ export default function MessagesModal({
     };
 
     try {
-      const res = await sendMessage({
+      await sendMessage({
         conversationId: selectedConversation.id,
         text: input,
       }).unwrap();
-      if (res.statusCode === 201) {
-        setSelectedConversation((conv) =>
-          conv && conv.id === selectedConversation.id
-            ? { ...conv, messages: [...conv.messages, res.data] }
-            : conv
-        );
-        setInput("");
-      }
     } catch (err) {
-      console.error(err);
+      console.error("Send failed", err);
     }
+
+    // Keep only the newly sent message in state
+    setSelectedConversation((conv) =>
+      conv && conv.id === selectedConversation.id
+        ? { ...conv, messages: [newMsg] }
+        : conv
+    );
+    setInput("");
   };
 
-  const handleDelete = async (ids: string[]) => {
-    if (!ids.length || !selectedConversation) return;
+  const handleDelete = async () => {
+    if (!selectedConversation || !selectedMessages.length) return;
     try {
-      await deleteMessages({ messageIds: ids }).unwrap();
+      await Promise.all(
+        selectedMessages.map((id) => deleteMessage({ messageId: id }).unwrap())
+      );
       setSelectedConversation((conv) =>
         conv
           ? {
               ...conv,
-              messages: conv.messages.filter((m) => !ids.includes(m.id)),
+              messages: conv.messages.filter(
+                (m) => !selectedMessages.includes(m.id)
+              ),
             }
           : conv
       );
-      setSelectedMessages((prev) => prev.filter((x) => !ids.includes(x)));
-    } catch (err: any) {
-      console.error("Delete error:", err);
-      setDeleteErrorMsg("Failed to delete message(s).");
-    }
-  };
-  const handleNewConversationClick = async (id: string) => {
-    try {
-      await createConversation([id, userData?.data?.id]).unwrap();
-      setDropdownOpen(false);
-      refetch();
-    } catch (error) {
-      console.error("Failed to create conversation:", error);
+      setSelectedMessages([]);
+    } catch (err) {
+      console.error("Delete failed", err);
     }
   };
 
@@ -205,12 +196,12 @@ export default function MessagesModal({
           setFloatingButtonDisplay(!open);
         }}
       >
-        <DialogContent className="w-full max-w-2xl p-4 bg-white rounded-lg shadow-lg z-50">
+        <DialogContent className="w-full max-w-2xl p-4 bg-white rounded-lg shadow-lg">
           <span className="hidden">
             <DialogTitle>Chat</DialogTitle>
           </span>
           <div className="flex h-96">
-            {/* Conversations list */}
+            {/* Left: Conversations */}
             <div className="w-1/3 border-r p-2 overflow-y-auto">
               <div className="flex justify-between items-center border-b pb-2 mb-2 relative">
                 <h3 className="text-lg font-bold">Conversations</h3>
@@ -220,7 +211,7 @@ export default function MessagesModal({
                 <motion.div
                   initial={{ height: 0, opacity: 0 }}
                   animate={
-                    dropdownOpen
+                    isOpen && dropdownOpen
                       ? { height: "250px", opacity: 1 }
                       : { height: 0, opacity: 0 }
                   }
@@ -230,13 +221,20 @@ export default function MessagesModal({
                     Users
                   </h3>
                   <div className="py-2 max-h-[200px] overflow-y-auto">
-                    {allUsers?.data?.data?.map((user: any) => (
+                    {allUsers?.data?.data?.map((u: any) => (
                       <button
-                        key={user?.id}
-                        className="p-2 cursor-pointer w-[75%] block mx-auto rounded-lg text-center bg-gray-200 text-blue-500 hover:bg-blue-500 hover:text-white first:mt-0 mt-2"
-                        onClick={() => handleNewConversationClick(user?.id)}
+                        key={u.id}
+                        onClick={async () => {
+                          await createConversation([
+                            u.id,
+                            userData?.data?.id!,
+                          ]).unwrap();
+                          refetch();
+                          setDropdownOpen(false);
+                        }}
+                        className="p-2 block mx-auto w-3/4 rounded-lg bg-gray-200 text-blue-500 hover:bg-blue-500 hover:text-white mt-2"
                       >
-                        {user?.firstName + " " + user?.lastName}
+                        {u.firstName} {u.lastName}
                       </button>
                     ))}
                   </div>
@@ -265,7 +263,7 @@ export default function MessagesModal({
               })}
             </div>
 
-            {/* Chat panel */}
+            {/* Right: Chat */}
             <div className="w-2/3 flex flex-col">
               <div className="flex justify-between items-center p-2 border-b">
                 <h3 className="text-lg font-bold">
@@ -300,9 +298,7 @@ export default function MessagesModal({
                             : "bg-gray-300 text-black"
                         }`}
                       >
-                        <div className="flex items-center space-x-2">
-                          <span className="block leading-4">{msg.text}</span>
-                        </div>
+                        <span className="block leading-4">{msg.text}</span>
                         <span className="block ms-auto text-[10px]">
                           {new Date(msg.createdAt).toLocaleTimeString()}
                         </span>
@@ -316,7 +312,9 @@ export default function MessagesModal({
                     </div>
                   ))
                 ) : (
-                  <p className="text-gray-500">No messages.</p>
+                  <p className="text-gray-500">
+                    No messages in this conversation.
+                  </p>
                 )}
                 <div ref={messagesEndRef} />
               </div>
@@ -339,14 +337,10 @@ export default function MessagesModal({
                   </button>
                   {selectedMessages.length > 0 && (
                     <button
-                      onClick={() => handleDelete(selectedMessages)}
-                      className="ml-2 px-4 py-2 bg-red-600 text-white rounded-lg flex items-center space-x-2"
-                      disabled={isDeleting}
+                      onClick={handleDelete}
+                      className="ml-2 px-4 py-2 bg-red-600 text-white rounded-lg"
                     >
-                      <Trash2 className="w-4 h-4" />
-                      <span className="whitespace-nowrap">
-                        {selectedMessages.length}
-                      </span>
+                      Delete ({selectedMessages.length})
                     </button>
                   )}
                 </div>

@@ -98,7 +98,7 @@ export default function HomeFaq() {
             </div>
           </AccordionTrigger>
           <AccordionContent className="pt-4 text-[18px] text-[#949494] font-[400] leading-[1.75]">
-            <p>We offer two flexible membership plans:</p>
+            {/* <p>We offer two flexible membership plans:</p> */}
 
             <ul className=" list-disc md:pl-6 pl-2 mt-2">
               <li className="text-black">
@@ -116,7 +116,7 @@ export default function HomeFaq() {
                 </li>
               </ul>
             </ul>
-            <ul className=" list-disc md:pl-6 pl-2 mt-2">
+            {/* <ul className=" list-disc md:pl-6 pl-2 mt-2">
               <li className="text-black">
                 <span className="text-black font-[600]">
                   Business Membership{" "}
@@ -142,7 +142,7 @@ export default function HomeFaq() {
                 Note: Business listings require an active membership to be
                 visible to the community
               </span>
-            </ul>
+            </ul> */}
             <p className="pt-10">
               {/* Both memberships are powered by Stripe for secure, hassle-free
               payments, and you can cancel at any time. Join today and start

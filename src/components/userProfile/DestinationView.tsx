@@ -17,6 +17,7 @@ import { CreateDestinationModal } from "./CreateDestinationModal";
 import { DestinationLoader } from "./DestinationLoader";
 import { UpdateDestinationModal } from "./UpdateDestinationModal";
 import { travelOption } from "@/constants/traveType";
+import { SquareRadioButton } from "../SquareRadioButton";
 
 interface User {
   id: string;
@@ -212,6 +213,7 @@ export const DestinationView: React.FC = () => {
                     {destination?.destinationCity || "N/A"}
                   </span>
                 </p>
+
                 {/* <p className="font-sans text-[#344054] font-medium text-[16px] sm:text-[18px] mt-4">
                 Have a room:{" "}
                 <span className="text-[#475467] font-normal">

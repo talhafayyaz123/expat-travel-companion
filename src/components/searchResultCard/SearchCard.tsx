@@ -39,6 +39,11 @@ export function SearchCard() {
   const [triggerUserSearch, { data, isLoading }] = useLazyUserSearchQuery();
   const [loadingParams, setLoadingParams] = useState(false);
 
+  // Scroll To Top When Page Changes
+  useEffect(() => {
+    window.scroll({ top: 0, behavior: "smooth" });
+  }, [currentPage]);
+
   useEffect(() => {
     if (travelForm) {
       const params = Object.entries(travelForm).reduce((acc, [key, value]) => {

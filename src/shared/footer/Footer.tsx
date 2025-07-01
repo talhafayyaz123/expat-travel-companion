@@ -60,7 +60,7 @@ export default function Footer() {
           </div> */}
 
           {/* Social Media Icons */}
-          <div className="flex justify-center gap-6">
+          {/* <div className="flex justify-center gap-6">
             <Link
               href="https://www.instagram.com/expatglobalgroup/"
               className="hover:text-gray-500"
@@ -77,7 +77,7 @@ export default function Footer() {
               <FaFacebookF className="h-6 w-6" />
               <span className="sr-only">Facebook</span>
             </Link>
-          </div>
+          </div> */}
 
           {/* Copyright */}
           {/* <div className="text-center text-sm text-gray-400">
