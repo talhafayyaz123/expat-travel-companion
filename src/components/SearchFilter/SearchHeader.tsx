@@ -237,7 +237,7 @@ export default function SearchHeader() {
           <SquareRadioButton
             label="Member has a room"
             name="room"
-            checked={haveRoom}
+            checked={haveRoom || ""}
             onChange={(e) => handleRoomChanged(e.target.checked)}
           />
         </div>

@@ -13,6 +13,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { X } from "lucide-react";
 import { getCountryLabel } from "@/constants/countryOptions";
 import { string } from "zod";
+import { FaCheck, FaEye, FaEyeSlash } from "react-icons/fa6";
 
 interface FilterDialogProps {
   isOpen: boolean;
@@ -119,8 +120,12 @@ const FilterDialog: React.FC<FilterDialogProps> = ({
                   checked={verification === veri.key} // Strict comparison
                 />
                 <label htmlFor={veri.status} className="text-sm">
-                  {veri.status}
+                  {veri.status}{" "}
                 </label>
+                {}
+                {veri.status === "Verified" && (
+                  <FaCheck style={{ color: "green" }} />
+                )}
               </div>
             ))}
           </div>
@@ -142,6 +147,8 @@ const FilterDialog: React.FC<FilterDialogProps> = ({
                 <label htmlFor={activeStat.status} className="text-sm">
                   {activeStat.status}
                 </label>
+                {activeStat.status === "Active" && <FaEye />}
+                {activeStat.status === "Inactive" && <FaEyeSlash />}
               </div>
             ))}
           </div>

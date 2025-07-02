@@ -381,16 +381,12 @@ export default function ProfileForm() {
           </div>
 
           <div className="space-y-2 w-[200px]">
-            {/* {travelOption.map((option) => ( */}
-            <SquareRadioButton
-              // key={option.value}
-              // label={option.label}
+            <CheckboxField
+              name="haveRoom"
               label="I have a room here"
-              name="room"
-              // checked={room === option.value}
-              // onChange={() => handleRoomChanged(option.value)}
+              form={form}
+              checked={form.getValues("haveRoom")} // Ensure checkbox is set to true/false correctly
             />
-            {/* ))} */}
           </div>
 
           {/* <StateSelect
@@ -409,12 +405,6 @@ export default function ProfileForm() {
             placeholder="Type here"
             form={form}
           />
-          {/* <CheckboxField
-            name="haveRoom"
-            label="I have a room available"
-            form={form}
-            checked={form.getValues("haveRoom")} // Ensure checkbox is set to true/false correctly
-          /> */}
 
           <Button
             type="submit"

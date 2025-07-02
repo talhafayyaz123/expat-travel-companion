@@ -37,6 +37,7 @@ import { TravelSelect } from "../TravelSelect";
 import { travelOption } from "@/constants/traveType";
 import { InputField } from "../form/InputField";
 import { SquareRadioButton } from "../SquareRadioButton";
+import { CheckboxField } from "../form/CheckboxField";
 
 const formSchema = z.object({
   travelType: z.string(),
@@ -44,18 +45,21 @@ const formSchema = z.object({
   year: z.string(),
   destinationCountry: z.string(),
   destinationCity: z.string(),
+  haveRoom: z.boolean().default(false),
 });
 
 interface UpdateDestinationModalProps {
   destinationId: string;
   onClose: () => void;
   destinationById: any;
+  refetch: any;
 }
 
 export const UpdateDestinationModal: React.FC<UpdateDestinationModalProps> = ({
   destinationId,
   onClose,
   destinationById,
+  refetch,
 }) => {
   const [updateDestination, { isLoading: isUpdating }] =
     useUpdateDestMutation();
@@ -74,6 +78,7 @@ export const UpdateDestinationModal: React.FC<UpdateDestinationModalProps> = ({
         : "",
       destinationCountry: destinationById?.destinationCountry || "",
       destinationCity: destinationById?.destinationCity || "",
+      haveRoom: destinationById?.haveRoom || false,
     },
   });
 
@@ -93,6 +98,7 @@ export const UpdateDestinationModal: React.FC<UpdateDestinationModalProps> = ({
           : "",
         destinationCountry: destinationById.destinationCountry,
         destinationCity: destinationById.destinationCity,
+        haveRoom: destinationById?.haveRoom || false,
       });
     }
   }, [destinationById, reset]);
@@ -151,10 +157,11 @@ export const UpdateDestinationModal: React.FC<UpdateDestinationModalProps> = ({
         TravelBegins: TravelBeginsPrev,
         destinationCountry: values.destinationCountry,
         destinationCity: values.destinationCity,
+        haveRoom: values.haveRoom,
       }).unwrap();
-
+      refetch();
       onClose();
-      window.location.reload();
+      // window.location.reload();
     } catch (error) {
       console.error("Error updating destination:", error);
     }
@@ -317,24 +324,20 @@ export const UpdateDestinationModal: React.FC<UpdateDestinationModalProps> = ({
                   form={form}
                   mt="!mt-[8px]"
                 />
-                <p className="text-xs mt-1">
+                <div className="text-xs mt-1">
                   <p>List all cities of interest with commas</p> (ex: Paris,
                   Lyon, Nice)
-                </p>
+                </div>
               </div>
             </div>
 
             <div className="space-y-2 w-[200px]">
-              {/* {travelOption.map((option) => ( */}
-              <SquareRadioButton
-                // key={option.value}
-                // label={option.label}
+              <CheckboxField
+                name="haveRoom"
                 label="I have a room here"
-                name="room"
-                // checked={room === option.value}
-                // onChange={() => handleRoomChanged(option.value)}
+                form={form}
+                checked={form.getValues("haveRoom")} // Ensure checkbox is set to true/false correctly
               />
-              {/* ))} */}
             </div>
 
             <Button type="submit" disabled={isUpdating}>

@@ -79,7 +79,7 @@ const RegisterForm = () => {
               email: data.email,
             })
           );
-          localStorage.setItem("promotekit_referral", data.promoCode);
+          localStorage.setItem("promotekit_referral", data.promoCode ?? "");
 
           toast.success("Register successful!");
           router.push("/membership");
