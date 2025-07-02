@@ -64,8 +64,9 @@ export default function Membership() {
 
             <p className="text-[#000] text-[18px] mb-10">
               We want to make sure that our platform is accessible for travelers
-              at every stage of their journey. That&#39;s why we offer two
-              flexible membership plans:
+              at every stage of their journey.
+              {/* That&#39;s why we offer two
+              flexible membership plans: */}
             </p>
 
             <div className="space-y-6">

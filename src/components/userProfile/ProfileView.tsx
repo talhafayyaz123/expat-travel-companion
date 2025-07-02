@@ -572,6 +572,17 @@ export const ProfileView = () => {
               {editBio ? "Update" : "Edit Bio"}
             </button>
           </div>
+
+          {/* NOTE ! */}
+
+          <div className="mt-5">
+            <p>
+              {" "}
+              NOTE: If you have a room available in a country, please share
+              details in your Bio.
+            </p>
+          </div>
+
           <MessagesModal
             isOpen={chatModalisOpen}
             setOpen={setChatModalIsOpen}

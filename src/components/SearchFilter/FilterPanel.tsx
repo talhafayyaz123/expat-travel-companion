@@ -487,7 +487,7 @@ export default function FilterPanel() {
         </div>
         <div className="space-y-4 p-4 sm:p-6 lg:p-0">
           <h3 className="font-medium lg:mt-10 text-[18px] text-[#263238]">
-            What are you seeking?
+            Member is seeking?
           </h3>
           <div className="space-y-2">
             <ReactSelect

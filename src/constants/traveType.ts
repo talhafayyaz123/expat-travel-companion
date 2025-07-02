@@ -23,14 +23,14 @@ export const travelOption = [
     value: "Cruise",
   },
   {
+    label: "Scouting Trip (1-8 wks)",
+    value: "ScoutingTrip",
+  },
+  {
     label: "Slow Travel 2 - 6 mo",
     value: "SlowTravel",
   },
 
-  {
-    label: "Scouting Trip (1-8 wks)",
-    value: "ScoutingTrip",
-  },
   {
     label: "Long Term 6 mo - 1 yr",
     value: "LongTerm",

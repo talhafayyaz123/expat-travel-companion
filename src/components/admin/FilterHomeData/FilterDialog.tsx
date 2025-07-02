@@ -110,6 +110,42 @@ const FilterDialog: React.FC<FilterDialogProps> = ({
 
         <div className="space-y-4">
           <div>
+            <h4 className="text-lg font-semibold">Verification Status</h4>
+            {verificationStatus.map((veri) => (
+              <div key={veri.status} className="flex items-center space-x-2">
+                <Checkbox
+                  id={veri.status}
+                  onCheckedChange={() => handleLastCheckboxChange(veri.key)}
+                  checked={verification === veri.key} // Strict comparison
+                />
+                <label htmlFor={veri.status} className="text-sm">
+                  {veri.status}
+                </label>
+              </div>
+            ))}
+          </div>
+
+          <div>
+            <h4 className="text-lg font-semibold">Activity Status</h4>
+            {activeStatus.map((activeStat) => (
+              <div
+                key={activeStat.status}
+                className="flex items-center space-x-2"
+              >
+                <Checkbox
+                  id={activeStat.status}
+                  onCheckedChange={() =>
+                    handleActivityCheckboxChange(activeStat.key)
+                  }
+                  checked={activation == activeStat.key}
+                />
+                <label htmlFor={activeStat.status} className="text-sm">
+                  {activeStat.status}
+                </label>
+              </div>
+            ))}
+          </div>
+          <div>
             <h4 className="text-lg font-semibold">Country</h4>
             {countries.map((country) => (
               <div key={country} className="flex items-center space-x-2">
@@ -151,43 +187,6 @@ const FilterDialog: React.FC<FilterDialogProps> = ({
                 />
                 <label htmlFor={membership} className="text-sm">
                   {membership}
-                </label>
-              </div>
-            ))}
-          </div>
-
-          <div>
-            <h4 className="text-lg font-semibold">Verification Status</h4>
-            {verificationStatus.map((veri) => (
-              <div key={veri.status} className="flex items-center space-x-2">
-                <Checkbox
-                  id={veri.status}
-                  onCheckedChange={() => handleLastCheckboxChange(veri.key)}
-                  checked={verification === veri.key} // Strict comparison
-                />
-                <label htmlFor={veri.status} className="text-sm">
-                  {veri.status}
-                </label>
-              </div>
-            ))}
-          </div>
-
-          <div>
-            <h4 className="text-lg font-semibold">Activity Status</h4>
-            {activeStatus.map((activeStat) => (
-              <div
-                key={activeStat.status}
-                className="flex items-center space-x-2"
-              >
-                <Checkbox
-                  id={activeStat.status}
-                  onCheckedChange={() =>
-                    handleActivityCheckboxChange(activeStat.key)
-                  }
-                  checked={activation == activeStat.key}
-                />
-                <label htmlFor={activeStat.status} className="text-sm">
-                  {activeStat.status}
                 </label>
               </div>
             ))}

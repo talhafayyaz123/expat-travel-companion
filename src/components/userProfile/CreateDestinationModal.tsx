@@ -32,6 +32,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { SquareRadioButton } from "../SquareRadioButton";
 
 const formSchema = z.object({
   travelType: z.string().min(2, "Please select a travel type"),
@@ -177,6 +178,19 @@ export const CreateDestinationModal: React.FC<{ onClose: () => void }> = ({
                   Lyon, Nice)
                 </p>
               </div>
+            </div>
+
+            <div className="space-y-2 w-[200px]">
+              {/* {travelOption.map((option) => ( */}
+              <SquareRadioButton
+                // key={option.value}
+                // label={option.label}
+                label="I have a room here"
+                name="room"
+                // checked={room === option.value}
+                // onChange={() => handleRoomChanged(option.value)}
+              />
+              {/* ))} */}
             </div>
 
             <Button
