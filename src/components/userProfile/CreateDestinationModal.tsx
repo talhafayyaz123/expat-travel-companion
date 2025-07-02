@@ -15,7 +15,7 @@ import { CountrySelect } from "../CountrySelect";
 import { TravelSelect } from "../TravelSelect";
 import { travelOption } from "@/constants/traveType";
 import { combinedCountryData } from "@/constants/countryOptions";
-import { DialogContent } from "@radix-ui/react-dialog";
+import { DialogContent, DialogTitle } from "@radix-ui/react-dialog";
 
 import {
   Select,
@@ -33,6 +33,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { SquareRadioButton } from "../SquareRadioButton";
+import { CheckboxField } from "../form/CheckboxField";
 
 const formSchema = z.object({
   travelType: z.string().min(2, "Please select a travel type"),
@@ -40,6 +41,7 @@ const formSchema = z.object({
   year: z.string().min(2, "Year is required"),
   destinationCountry: z.string().min(1, "Destination country is required"),
   destinationCity: z.string().min(1, "Destination city is required"),
+  haveRoom: z.boolean().default(false),
 });
 
 export const CreateDestinationModal: React.FC<{ onClose: () => void }> = ({
@@ -54,6 +56,7 @@ export const CreateDestinationModal: React.FC<{ onClose: () => void }> = ({
       year: "",
       destinationCountry: "",
       destinationCity: "",
+      haveRoom: false,
     },
   });
 
@@ -93,7 +96,9 @@ export const CreateDestinationModal: React.FC<{ onClose: () => void }> = ({
     <DialogContent className="fixed inset-0 flex items-center justify-center p-6 bg-black/30 z-50 ">
       <div className="w-full lg:w-[600px]  rounded-lg bg-white shadow-lg p-4 z-[64]">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold text-center">Create Destination</h2>
+          <DialogTitle className="text-xl font-bold text-center">
+            Create Destination
+          </DialogTitle>
           <button
             onClick={onClose}
             className="text-gray-600 hover:text-gray-800"
@@ -173,24 +178,20 @@ export const CreateDestinationModal: React.FC<{ onClose: () => void }> = ({
                   form={form}
                   mt="!mt-[8px]"
                 />
-                <p className="text-xs mt-1">
-                  <p>List all cities of interest with commas</p> (ex: Paris,
-                  Lyon, Nice)
-                </p>
+                <div className="text-xs mt-1">
+                  <p>List all cities of interest with commas</p>
+                  <span>(ex: Paris, Lyon, Nice)</span>
+                </div>
               </div>
             </div>
 
             <div className="space-y-2 w-[200px]">
-              {/* {travelOption.map((option) => ( */}
-              <SquareRadioButton
-                // key={option.value}
-                // label={option.label}
+              <CheckboxField
+                name="haveRoom"
                 label="I have a room here"
-                name="room"
-                // checked={room === option.value}
-                // onChange={() => handleRoomChanged(option.value)}
+                form={form}
+                checked={form.getValues("haveRoom")} // Ensure checkbox is set to true/false correctly
               />
-              {/* ))} */}
             </div>
 
             <Button

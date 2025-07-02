@@ -8,7 +8,7 @@ const SignupSchema = z
       .string()
       .min(1, { message: "Email is required" })
       .email({ message: "Enter a valid email" }),
-    promoCode: z.string(),
+    promoCode: z.string().optional(),
     password: z
       .string()
       .min(8, { message: "Password must be at least 8 characters" }),

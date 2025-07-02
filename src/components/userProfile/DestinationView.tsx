@@ -9,7 +9,7 @@ import {
   useGetDestinationQuery,
   useGetSingleDesQuery,
 } from "@/redux/Api/destinationApi";
-import { DialogContent } from "@radix-ui/react-dialog";
+import { DialogContent, DialogTitle } from "@radix-ui/react-dialog";
 import { DeleteIcon } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -18,6 +18,7 @@ import { DestinationLoader } from "./DestinationLoader";
 import { UpdateDestinationModal } from "./UpdateDestinationModal";
 import { travelOption } from "@/constants/traveType";
 import { SquareRadioButton } from "../SquareRadioButton";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 interface User {
   id: string;
@@ -52,10 +53,13 @@ export const DestinationView: React.FC = () => {
     null
   ); // State to hold the id of the destination to delete
 
-  const { data, isLoading, isError } = useGetDestinationQuery(undefined);
+  const { data, isLoading, isError, refetch } =
+    useGetDestinationQuery(undefined);
   const { data: singleDestination } = useGetSingleDesQuery(
-    selectedDestinationId
+    selectedDestinationId,
+    { skip: !selectedDestinationId }
   );
+
   const destinationById = singleDestination?.data;
 
   useEffect(() => {
@@ -175,6 +179,7 @@ export const DestinationView: React.FC = () => {
                         destinationId={selectedDestinationId}
                         destinationById={destinationById as any}
                         onClose={handleCloseDialog}
+                        refetch={refetch}
                       />
                     )}
                   </Dialog>
@@ -233,6 +238,9 @@ export const DestinationView: React.FC = () => {
       >
         <DialogContent className="fixed inset-0 flex items-center justify-center p-6 bg-black/30 z-50 ">
           <div className="p-5 bg-white ">
+            <VisuallyHidden>
+              <DialogTitle>Delete Confirmation</DialogTitle>
+            </VisuallyHidden>
             <p className="text-xl">
               Are you sure you want to delete this destination?
             </p>

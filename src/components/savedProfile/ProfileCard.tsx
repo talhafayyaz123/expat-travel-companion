@@ -64,10 +64,10 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
 
           <div className="text-sm text-gray-600">
             <div className="flex flex-col md:flex-row md:justify-between md:gap-2">
-              <p className="mt-2 md:mt-4 font-normal text-[14px] md:text-[16px] text-[#263238]">
+              {/* <p className="mt-2 md:mt-4 font-normal text-[14px] md:text-[16px] text-[#263238]">
                 <span className="font-medium">Business type: </span>
                 {getIndustryLabel(transformedProfile.businessType || "N/A")}
-              </p>
+              </p> */}
               <p className="mt-2 md:mt-4 font-normal text-[14px] md:text-[16px] text-[#263238]">
                 <span className="font-medium">Age: </span>
                 {transformedProfile.age || "N/A"}
