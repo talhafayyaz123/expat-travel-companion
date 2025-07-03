@@ -84,7 +84,7 @@ function HomePopup() {
               <li className="text-sm text-gray-800 font-normal text-start mt-3">
                 <p>Grab your own personal referral code here:</p>
                 <a
-                  href="xpatglobalgroup.promotekit.com"
+                  href="https://expatglobalgroup.promotekit.com/"
                   className="text-blue-600"
                   target="_blank"
                 >

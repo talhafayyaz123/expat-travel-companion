@@ -147,8 +147,8 @@ const FilterDialog: React.FC<FilterDialogProps> = ({
                 <label htmlFor={activeStat.status} className="text-sm">
                   {activeStat.status}
                 </label>
-                {activeStat.status === "Active" && <FaEye />}
-                {activeStat.status === "Inactive" && <FaEyeSlash />}
+                {activeStat.status === "Active" && <FaEyeSlash />}
+                {activeStat.status === "Inactive" && <FaEye />}
               </div>
             ))}
           </div>
