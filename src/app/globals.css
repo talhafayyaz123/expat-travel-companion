@@ -97,3 +97,7 @@ body {
 .nextjs-error-with-static {
   display: none !important;
 }
+
+:where(.css-dev-only-do-not-override-1m2bkf9).ant-dropdown {
+  z-index: 9999999999999999999999999999;
+}

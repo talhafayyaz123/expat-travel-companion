@@ -4,8 +4,6 @@ import { MessageCircle, X } from "lucide-react";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { PlusCircle } from "lucide-react";
 import { motion } from "framer-motion";
-import { Trash2 } from "lucide-react";
-
 import {
   useGetUserQuery,
   useLazyGetUserByIdQuery,
@@ -16,7 +14,6 @@ import {
   useGetMessageByConvoQuery,
   useCreateConversationMutation,
   useGetAllConversationsQuery,
-  useDeleteMessageMutation,
 } from "@/redux/Api/messagesApi";
 
 interface ChatModalProps {
@@ -61,7 +58,6 @@ export default function MessagesModal({
   const [participants, setParticipants] = useState<Record<string, string>>({});
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [refreshConversations, setRefreashConversations] = useState(10);
-  const [selectedMessages, setSelectedMessages] = useState<string[]>([]);
 
   const { data: userData, isLoading, isError } = useGetUserQuery(undefined);
 
@@ -74,11 +70,6 @@ export default function MessagesModal({
     createConversation,
     { isLoading: createConversationLoading, isError: createConversationError },
   ] = useCreateConversationMutation();
-
-  const [
-    deleteMessage,
-    { isLoading: deleteMessageLoading, isError: deleteMessageError },
-  ] = useDeleteMessageMutation();
 
   const isPolling = isOpen ? 10000 : 0;
 
@@ -154,12 +145,6 @@ export default function MessagesModal({
     return names;
   };
 
-  const handleSelect = (msgId: string, yes: boolean) => {
-    setSelectedMessages((prev) =>
-      yes ? [...prev, msgId] : prev.filter((id) => id !== msgId)
-    );
-  };
-
   const handleFetchUserName = async (id: string | undefined) => {
     if (!id) return "";
 
@@ -232,8 +217,6 @@ export default function MessagesModal({
     }
   };
 
-  const handleDelete = () => {};
-
   return (
     <>
       {/* Floating Chat Button */}
@@ -288,7 +271,7 @@ export default function MessagesModal({
                     Users
                   </h3>
                   <div className="py-2 max-h-[200px] overflow-y-auto">
-                    {allUsers?.data?.data?.map((user: any) => (
+                    {allUsers?.data?.map((user: any) => (
                       <button
                         key={user?.id}
                         className="p-2 cursor-pointer w-[75%] block mx-auto rounded-lg text-center bg-gray-200 text-blue-500 hover:bg-blue-500 hover:text-white first:mt-0 mt-2"
@@ -351,32 +334,19 @@ export default function MessagesModal({
                 {messagesLoading ? (
                   <p className="text-gray-500">Loading...</p>
                 ) : messagesData?.data?.length ? (
-                  messagesData.data.map((msg: MessageProps) => (
+                  messagesData?.data.map((msg: MessageProps) => (
                     <div
                       key={msg.id}
-                      className="flex items-start justify-between mb-2"
+                      className={`p-2 my-2 rounded-lg max-w-[75%] ${
+                        msg.senderId === userData?.data?.id
+                          ? "bg-blue-500 text-white self-end ml-auto"
+                          : "bg-gray-300 text-black"
+                      }`}
                     >
-                      {/* Message bubble */}
-                      <div
-                        className={`p-2 rounded-lg max-w-[75%] ${
-                          msg.senderId === userData?.data?.id
-                            ? "bg-blue-500 text-white self-end ml-auto"
-                            : "bg-gray-300 text-black"
-                        }`}
-                      >
-                        <span className="block leading-4">{msg.text}</span>
-                        <span className="block ms-auto text-[10px] max-w-max">
-                          {new Date(msg.createdAt).toLocaleTimeString()}
-                        </span>
-                      </div>
-
-                      {/* Checkbox on the right, aligned with the top of the bubble */}
-                      <input
-                        type="checkbox"
-                        className="mt-1 ml-2"
-                        checked={selectedMessages.includes(msg.id)}
-                        onChange={(e) => handleSelect(msg.id, e.target.checked)}
-                      />
+                      <span className="block leading-4">{msg.text}</span>
+                      <span className="block ms-auto text-[10px] max-w-max">
+                        {new Date(msg.createdAt).toLocaleTimeString()}
+                      </span>
                     </div>
                   ))
                 ) : (
@@ -404,20 +374,8 @@ export default function MessagesModal({
                   >
                     Send
                   </button>
-                  {selectedMessages.length > 0 && (
-                    <button
-                      onClick={handleDelete}
-                      className="ml-2 px-4 py-2 bg-red-600 text-white rounded-lg flex items-center space-x-2"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                      <span className="whitespace-nowrap">
-                        ({selectedMessages.length})
-                      </span>
-                    </button>
-                  )}
                 </div>
               )}
-              {/* Delete Messages */}
             </div>
           </div>
         </DialogContent>

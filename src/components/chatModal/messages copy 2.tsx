@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { MessageCircle, X } from "lucide-react";
+import { MessageCircle, Trash2, X } from "lucide-react";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { PlusCircle } from "lucide-react";
 import { motion } from "framer-motion";
@@ -14,8 +14,12 @@ import {
   useGetMessageByConvoQuery,
   useCreateConversationMutation,
   useGetAllConversationsQuery,
-  useDeleteMessageMutation,
+  useDeleteMessagesMutation,
 } from "@/redux/Api/messagesApi";
+import { FaAngleDown, FaArrowDown, FaTrash } from "react-icons/fa6";
+import { Dropdown, Menu, Space } from "antd";
+import type { MenuProps } from "antd";
+import { set } from "zod";
 
 interface ChatModalProps {
   isOpen: boolean;
@@ -59,7 +63,15 @@ export default function MessagesModal({
   const [participants, setParticipants] = useState<Record<string, string>>({});
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [refreshConversations, setRefreashConversations] = useState(10);
+  const [dropdownVisible, setDropdownVisible] = useState<string | null>(null);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const [showCheckbox, setShowCheckbox] = useState(false);
+  const [deleteMessages, { isLoading: isDeleting }] =
+    useDeleteMessagesMutation();
 
+  const [selectedMessages, setSelectedMessages] = useState<any[]>([]);
+
+  // Fetch user data
   const { data: userData, isLoading, isError } = useGetUserQuery(undefined);
 
   const [
@@ -71,11 +83,6 @@ export default function MessagesModal({
     createConversation,
     { isLoading: createConversationLoading, isError: createConversationError },
   ] = useCreateConversationMutation();
-
-  const [
-    deleteMessage,
-    { isLoading: deleteMessageLoading, isError: deleteMessageError },
-  ] = useDeleteMessageMutation();
 
   const isPolling = isOpen ? 10000 : 0;
 
@@ -223,7 +230,68 @@ export default function MessagesModal({
     }
   };
 
-  const handleDelete = () => {};
+  const handleDeleteMessage = (messageId: any) => {
+    setSelectedMessages([messageId]);
+    setDropdownVisible(null);
+  };
+
+  // Toggle dropdown visibility
+  const toggleDropdown = (id: string) => {
+    setDropdownVisible(dropdownVisible === id ? null : id);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setDropdownVisible(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Handle checkbox state change
+  const handleCheckboxChange = (id: any) => {
+    setSelectedMessages((prevSelectedMessages) => {
+      // If id exists in the selectedMessages, remove it
+      if (prevSelectedMessages.includes(id)) {
+        return prevSelectedMessages.filter((messageId) => messageId !== id);
+      }
+      // Otherwise, add the id
+      else {
+        return [...prevSelectedMessages, id];
+      }
+    });
+  };
+
+  const handleDelete = async () => {
+    if (!selectedMessages.length) return;
+
+    try {
+      await deleteMessages({ messageIds: selectedMessages }).unwrap();
+
+      setSelectedConversation((conv) =>
+        conv
+          ? {
+              ...conv,
+              messages: conv.messages.filter(
+                (m) => !selectedMessages.includes(m.id)
+              ),
+            }
+          : conv
+      );
+
+      setSelectedMessages([]);
+    } catch (err) {
+      console.error("Delete error:", err);
+    }
+  };
 
   return (
     <>
@@ -246,6 +314,8 @@ export default function MessagesModal({
         onOpenChange={(state) => {
           setOpen(state);
           setFloatingButtonDisplay(!state);
+          setSelectedMessages([]);
+          setShowCheckbox(false);
         }}
       >
         <DialogContent className="w-full max-w-2xl p-4 bg-white rounded-lg shadow-lg z-[9991]">
@@ -279,7 +349,7 @@ export default function MessagesModal({
                     Users
                   </h3>
                   <div className="py-2 max-h-[200px] overflow-y-auto">
-                    {allUsers?.data?.data?.map((user: any) => (
+                    {allUsers?.data?.map((user: any) => (
                       <button
                         key={user?.id}
                         className="p-2 cursor-pointer w-[75%] block mx-auto rounded-lg text-center bg-gray-200 text-blue-500 hover:bg-blue-500 hover:text-white first:mt-0 mt-2"
@@ -326,10 +396,21 @@ export default function MessagesModal({
                     ? participants[selectedConversation.participants[0]]
                     : "Select a conversation"}
                 </h3>
+                {selectedMessages.length > 0 && (
+                  <button
+                    className="ml-auto mr-3"
+                    disabled={isDeleting}
+                    onClick={handleDelete}
+                  >
+                    <Trash2 height={25} width={25} />
+                  </button>
+                )}
                 <button
                   onClick={() => {
                     setOpen(false);
                     setFloatingButtonDisplay(true);
+                    setSelectedMessages([]);
+                    setShowCheckbox(false);
                   }}
                   className="p-1 rounded-full bg-gray-200"
                 >
@@ -342,32 +423,71 @@ export default function MessagesModal({
                 {messagesLoading ? (
                   <p className="text-gray-500">Loading...</p>
                 ) : messagesData?.data?.length ? (
-                  messagesData.data.map((msg: MessageProps) => (
-                    <div
-                      key={msg.id}
-                      className="flex items-start justify-between mb-2"
-                    >
+                  messagesData?.data.map((msg: any) => (
+                    <div key={msg.id} className="flex items-center my-2">
+                      {/* Checkbox on the left side */}
+                      {showCheckbox && (
+                        <div className="mr-2">
+                          <input
+                            type="checkbox"
+                            checked={selectedMessages.includes(msg.id)}
+                            onChange={() => handleCheckboxChange(msg.id)}
+                            className="cursor-pointer"
+                          />
+                        </div>
+                      )}
+
                       {/* Message bubble */}
                       <div
                         className={`p-2 rounded-lg max-w-[75%] ${
                           msg.senderId === userData?.data?.id
                             ? "bg-blue-500 text-white self-end ml-auto"
                             : "bg-gray-300 text-black"
-                        }`}
+                        } relative flex-1`}
                       >
+                        {/* Custom Dropdown Trigger */}
+                        {!showCheckbox && (
+                          <div className="absolute bottom-[19px] right-[15px] z-50">
+                            <button
+                              className="text-white"
+                              onClick={() => toggleDropdown(msg.id)}
+                            >
+                              <FaAngleDown />
+                            </button>
+
+                            {/* Custom Dropdown Menu */}
+                            {dropdownVisible === msg.id && (
+                              <div
+                                ref={dropdownRef}
+                                className="absolute right-0 bg-white text-black rounded w-20 shadow-lg"
+                              >
+                                <ul>
+                                  <li>
+                                    <a
+                                      href="#"
+                                      className="block px-4 py-2 text-sm cursor-pointer rounded hover:text-red-600"
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        handleDeleteMessage(msg.id);
+                                        setShowCheckbox(true);
+                                      }}
+                                    >
+                                      Delete
+                                    </a>
+                                  </li>
+                                </ul>
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {/* Message Text */}
                         <span className="block leading-4">{msg.text}</span>
+
+                        {/* Message Time */}
                         <span className="block ms-auto text-[10px] max-w-max">
                           {new Date(msg.createdAt).toLocaleTimeString()}
                         </span>
-                      </div>
-
-                      {/* Checkbox on the right, aligned with the top of the bubble */}
-                      <div className="flex items-start ml-2">
-                        <input
-                          type="checkbox"
-                          className="mt-1"
-                          /* onChange={(e) => handleSelect(msg.id, e.target.checked)} */
-                        />
                       </div>
                     </div>
                   ))
@@ -376,7 +496,6 @@ export default function MessagesModal({
                     No messages in this conversation.
                   </p>
                 )}
-                <div ref={messagesEndRef} />
               </div>
 
               {/* Chat Input */}
@@ -396,15 +515,8 @@ export default function MessagesModal({
                   >
                     Send
                   </button>
-                  <button
-                    onClick={handleDelete}
-                    className="ml-2 px-4 py-2 bg-primary text-white rounded-lg"
-                  >
-                    Delete
-                  </button>
                 </div>
               )}
-              {/* Delete Messages */}
             </div>
           </div>
         </DialogContent>

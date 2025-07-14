@@ -15,7 +15,7 @@ import {
   useGetMessageByConvoQuery,
   useCreateConversationMutation,
   useGetAllConversationsQuery,
-  useDeleteMessageMutation,
+  useDeleteMessagesMutation,
 } from "@/redux/Api/messagesApi";
 
 interface MessageProps {
@@ -53,14 +53,18 @@ export default function MessagesModal({
     useState<ConversationProps[]>(allConversations);
   const [selectedConversation, setSelectedConversation] =
     useState<ConversationProps | null>(null);
+
   const [participants, setParticipants] = useState<Record<string, string>>({});
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectedMessages, setSelectedMessages] = useState<any[]>([]);
 
+  const [deleteErrorMsg, setDeleteErrorMsg] = useState<string | null>(null);
+
   const { data: userData, isLoading, isError } = useGetUserQuery(undefined);
   const [sendMessage] = useSendMessageMutation();
   const [createConversation] = useCreateConversationMutation();
-  const [deleteMessage] = useDeleteMessageMutation();
+  const [deleteMessages, { isLoading: isDeleting }] =
+    useDeleteMessagesMutation();
 
   const pollInterval = isOpen ? 10000 : 0;
   const { data: convResp, refetch } = useGetAllConversationsQuery(undefined, {
@@ -116,6 +120,8 @@ export default function MessagesModal({
   };
 
   const handleSelect = (msgId: string, checked: boolean) => {
+    console.log(msgId);
+
     setSelectedMessages((prev) =>
       checked ? [...prev, msgId] : prev.filter((id) => id !== msgId)
     );
@@ -133,26 +139,27 @@ export default function MessagesModal({
     };
 
     try {
-      await sendMessage({
+      const res = await sendMessage({
         conversationId: selectedConversation.id,
         text: input,
       }).unwrap();
+      if (res.statusCode === 201) {
+        setSelectedConversation((conv) =>
+          conv && conv.id === selectedConversation.id
+            ? { ...conv, messages: [...conv.messages, res.data] }
+            : conv
+        );
+        setInput("");
+      }
     } catch (err) {
       console.error(err);
     }
-
-    setSelectedConversation((conv) =>
-      conv && conv.id === selectedConversation.id
-        ? { ...conv, messages: [...conv.messages, newMsg] }
-        : conv
-    );
-    setInput("");
   };
 
   const handleDelete = async (ids: string[]) => {
     if (!ids.length || !selectedConversation) return;
     try {
-      await deleteMessage({ messageIds: ids }).unwrap();
+      await deleteMessages({ messageIds: ids }).unwrap();
       setSelectedConversation((conv) =>
         conv
           ? {
@@ -161,9 +168,19 @@ export default function MessagesModal({
             }
           : conv
       );
-      setSelectedMessages((prev) => prev.filter((id) => !ids.includes(id)));
-    } catch (err) {
-      console.error(err);
+      setSelectedMessages((prev) => prev.filter((x) => !ids.includes(x)));
+    } catch (err: any) {
+      console.error("Delete error:", err);
+      setDeleteErrorMsg("Failed to delete message(s).");
+    }
+  };
+  const handleNewConversationClick = async (id: string) => {
+    try {
+      await createConversation([id, userData?.data?.id]).unwrap();
+      setDropdownOpen(false);
+      refetch();
+    } catch (error) {
+      console.error("Failed to create conversation:", error);
     }
   };
 
@@ -285,13 +302,6 @@ export default function MessagesModal({
                       >
                         <div className="flex items-center space-x-2">
                           <span className="block leading-4">{msg.text}</span>
-                          <button
-                            onClick={() => handleDelete([msg.id])}
-                            className="p-1 hover:bg-gray-200 rounded"
-                            title="Delete this message"
-                          >
-                            <Trash2 className="w-4 h-4 text-gray-600" />
-                          </button>
                         </div>
                         <span className="block ms-auto text-[10px]">
                           {new Date(msg.createdAt).toLocaleTimeString()}
@@ -331,10 +341,11 @@ export default function MessagesModal({
                     <button
                       onClick={() => handleDelete(selectedMessages)}
                       className="ml-2 px-4 py-2 bg-red-600 text-white rounded-lg flex items-center space-x-2"
+                      disabled={isDeleting}
                     >
                       <Trash2 className="w-4 h-4" />
                       <span className="whitespace-nowrap">
-                        Delete ({selectedMessages.length})
+                        {selectedMessages.length}
                       </span>
                     </button>
                   )}

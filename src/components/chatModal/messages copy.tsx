@@ -14,8 +14,10 @@ import {
   useGetMessageByConvoQuery,
   useCreateConversationMutation,
   useGetAllConversationsQuery,
-  useDeleteMessageMutation,
 } from "@/redux/Api/messagesApi";
+import { FaAngleDown, FaArrowDown, FaTrash } from "react-icons/fa6";
+import { Dropdown, Menu, Space } from "antd";
+import type { MenuProps } from "antd";
 
 interface ChatModalProps {
   isOpen: boolean;
@@ -59,9 +61,24 @@ export default function MessagesModal({
   const [participants, setParticipants] = useState<Record<string, string>>({});
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [refreshConversations, setRefreashConversations] = useState(10);
+  const [dropdownVisible, setDropdownVisible] = useState<string | null>(null);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-   const [delete,{isLoading : deleteMessageLoading,isError: deleteMessageError}] = useDeleteMessageMutation();
+  const [selectedMessages, setSelectedMessages] = useState<Set<string>>(
+    new Set()
+  );
 
+  const handleCheckboxChange = (id: string) => {
+    const newSelectedMessages = new Set(selectedMessages);
+    if (newSelectedMessages.has(id)) {
+      newSelectedMessages.delete(id);
+    } else {
+      newSelectedMessages.add(id);
+    }
+    setSelectedMessages(newSelectedMessages);
+  };
+
+  // Fetch user data
   const { data: userData, isLoading, isError } = useGetUserQuery(undefined);
 
   const [
@@ -220,6 +237,31 @@ export default function MessagesModal({
     }
   };
 
+  const handleDeleteMessage = (messageId: string) => {
+    console.log("Delete message with id:", messageId);
+  };
+
+  // Toggle dropdown visibility
+  const toggleDropdown = (id: string) => {
+    setDropdownVisible(dropdownVisible === id ? null : id);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setDropdownVisible(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <>
       {/* Floating Chat Button */}
@@ -274,7 +316,7 @@ export default function MessagesModal({
                     Users
                   </h3>
                   <div className="py-2 max-h-[200px] overflow-y-auto">
-                    {allUsers?.data?.data?.map((user: any) => (
+                    {allUsers?.data?.map((user: any) => (
                       <button
                         key={user?.id}
                         className="p-2 cursor-pointer w-[75%] block mx-auto rounded-lg text-center bg-gray-200 text-blue-500 hover:bg-blue-500 hover:text-white first:mt-0 mt-2"
@@ -337,16 +379,50 @@ export default function MessagesModal({
                 {messagesLoading ? (
                   <p className="text-gray-500">Loading...</p>
                 ) : messagesData?.data?.length ? (
-                  messagesData?.data.map((msg: MessageProps) => (
+                  messagesData?.data.map((msg: any) => (
                     <div
                       key={msg.id}
                       className={`p-2 my-2 rounded-lg max-w-[75%] ${
                         msg.senderId === userData?.data?.id
                           ? "bg-blue-500 text-white self-end ml-auto"
                           : "bg-gray-300 text-black"
-                      }`}
+                      } relative`}
                     >
+                      {/* Custom Dropdown Trigger */}
+                      <div className="absolute bottom-[19px] right-[15px] z-50">
+                        <button
+                          className="text-white"
+                          onClick={() => toggleDropdown(msg.id)}
+                        >
+                          <FaAngleDown />
+                        </button>
+
+                        {/* Custom Dropdown Menu */}
+                        {dropdownVisible === msg.id && (
+                          <div
+                            ref={dropdownRef}
+                            className="absolute right-0 bg-white text-black rounded w-20"
+                          >
+                            <ul>
+                              <li>
+                                <a
+                                  href="#"
+                                  className="block px-4 py-2 text-sm cursor-pointer rounded hover:text-red-600"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    handleDeleteMessage(msg.id);
+                                  }}
+                                >
+                                  Delete
+                                </a>
+                              </li>
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+
                       <span className="block leading-4">{msg.text}</span>
+
                       <span className="block ms-auto text-[10px] max-w-max">
                         {new Date(msg.createdAt).toLocaleTimeString()}
                       </span>
@@ -357,7 +433,6 @@ export default function MessagesModal({
                     No messages in this conversation.
                   </p>
                 )}
-                <div ref={messagesEndRef} />
               </div>
 
               {/* Chat Input */}
@@ -377,15 +452,8 @@ export default function MessagesModal({
                   >
                     Send
                   </button>
-                  <button
-                    onClick={handleSend}
-                    className="ml-2 px-4 py-2 bg-primary text-white rounded-lg"
-                  >
-                    Delete
-                  </button>
                 </div>
               )}
-              {/* Delete Messages */}
             </div>
           </div>
         </DialogContent>

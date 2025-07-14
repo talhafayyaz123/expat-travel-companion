@@ -76,7 +76,8 @@ function DashBoardPopup() {
           </h4>
           <div className="max-h-[480px] custom-height overflow-y-auto">
             <h3 className="text-[17px] text-gray-800 font-semibold text-center mt-3 ps-2">
-              💡 Top 5 reasons to share lodgings on your next solo adventure:
+              💡 Top 5 Reasons <br />
+              to share lodgings on your next solo adventure:
             </h3>
             <ul className="pb-5 pt-2 px-9">
               <li className="text-[17px] text-gray-800 font-normal text-start mt-3">
