@@ -20,6 +20,7 @@ import { FaAngleDown, FaArrowDown, FaTrash } from "react-icons/fa6";
 import { Dropdown, Menu, Space } from "antd";
 import type { MenuProps } from "antd";
 import { set } from "zod";
+import { toast } from "sonner";
 
 interface ChatModalProps {
   isOpen: boolean;
@@ -46,6 +47,10 @@ interface ConversationProps {
 
 interface User {
   id: string;
+}
+
+interface DeleteResponse {
+  message: string;
 }
 
 export default function MessagesModal({
@@ -274,8 +279,10 @@ export default function MessagesModal({
     if (!selectedMessages.length) return;
 
     try {
-      await deleteMessages({ messageIds: selectedMessages }).unwrap();
-
+      const response = await deleteMessages({
+        messageIds: selectedMessages,
+      }).unwrap();
+      toast.success(response?.message || "Messages deleted successfully!");
       setSelectedConversation((conv) =>
         conv
           ? {
@@ -286,10 +293,10 @@ export default function MessagesModal({
             }
           : conv
       );
-
       setSelectedMessages([]);
     } catch (err) {
       console.error("Delete error:", err);
+      toast.error(err?.message || "Failed to delete messages.");
     }
   };
 
@@ -398,11 +405,11 @@ export default function MessagesModal({
                 </h3>
                 {selectedMessages.length > 0 && (
                   <button
-                    className="ml-auto mr-3"
+                    className="ml-auto mr-3 rounded-full bg-gray-200 p-1"
                     disabled={isDeleting}
                     onClick={handleDelete}
                   >
-                    <Trash2 height={25} width={25} />
+                    <Trash2 className="text-red-700" height={20} width={20} />
                   </button>
                 )}
                 <button
