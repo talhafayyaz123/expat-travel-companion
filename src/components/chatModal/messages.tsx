@@ -21,7 +21,7 @@ import { Dropdown, Menu, Space } from "antd";
 import type { MenuProps } from "antd";
 import { set } from "zod";
 import { toast } from "sonner";
-
+import { connectSocketWithUserId, socket } from "../../utilities/socket.js";
 interface ChatModalProps {
   isOpen: boolean;
   setOpen: (val: boolean) => void;
@@ -163,6 +163,25 @@ export default function MessagesModal({
     return names;
   };
 
+  useEffect(() => {
+      if (userData && (userData.data.id)) {
+        connectSocketWithUserId(userData.data.id);
+        const onConnect = () => {
+          console.log("Socket ID:", socket.id, "Connected:", socket.connected);
+        };
+    
+        socket.on("connect", onConnect);
+        // If already connected (hot reload), call handler immediately
+        if (socket.connected) {
+          onConnect();
+        }
+        // Cleanup: remove connect listener and any others
+        return () => {
+          socket.off("connect", onConnect);
+        };
+      }
+    }, [socket, userData]); 
+
   const handleFetchUserName = async (id: string | undefined) => {
     if (!id) return "";
 
@@ -197,6 +216,21 @@ export default function MessagesModal({
         conversationId: selectedConversation.id,
         text: input,
       });
+
+      // Find the recipient (other participant)
+        const to_user_id = selectedConversation.participants.find(
+          (id) => id !== userData?.data?.id
+        );
+      
+        if (socket.connected && to_user_id) {
+          socket.emit("message_sent", {
+            to_user_id,
+            conversation_id: selectedConversation.id,
+            from_user_id: userData?.data?.id,
+            text: input,
+          });
+        }
+
     } catch (error) {
       console.error("Error sending message:", error);
     }
