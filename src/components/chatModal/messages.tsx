@@ -423,80 +423,103 @@ export default function MessagesModal({
               </div>
               <div className="max-h-[320px] overflow-y-auto">
                 {conversations?.length ? (
-                  conversations.map((conv) => {
-                    const senderId =
-                      conv.participants.find(
-                        (id) => id !== userData?.data?.id
-                      ) || "Unknown";
+                  conversations
+                    .filter((conv) => {
+                      const otherParticipantIds = conv.participants.filter(
+                        (id: string) => id !== userData?.data?.id
+                      );
+                      const uniqueOtherParticipantIds: string[] = Array.from(new Set(otherParticipantIds));
+                      return uniqueOtherParticipantIds.length > 0;
+                    })
+                    .map((conv) => {
+                      // Get all other participant IDs except the current user
+                      const otherParticipantIds = conv.participants.filter(
+                        (id: string) => id !== userData?.data?.id
+                      );
+                      // Remove duplicates
+                      const uniqueOtherParticipantIds: string[] = Array.from(new Set(otherParticipantIds));
+                      // Only show names if there is at least one other participant
+                      const displayNames =
+                        uniqueOtherParticipantIds.length > 0
+                          ? uniqueOtherParticipantIds.map((id: string) => {
+                              const name = typeof participants[id] === 'string' ? participants[id] : "Unknown";
+                              return `${name}`;
+                            }).join(", ")
+                          : "(No other participant)";
 
-                    const isSelected = selectedConversation?.id === conv.id;
+                      const senderId =
+                        conv.participants.find(
+                          (id) => id !== userData?.data?.id
+                        ) || "Unknown";
 
-                    return (
-                      <div
-                        key={conv.id}
-                        className={`relative p-2 cursor-pointer rounded-lg flex items-center justify-between ${
-                          isSelected
-                            ? "bg-blue-500 text-white"
-                            : "hover:bg-gray-200"
-                        }`}
-                        onClick={() => handleSelectedConversation(conv)}
-                      >
-                        {/* Left Checkbox */}
-                        <div className="flex items-center">
-                          {showCheckbox && (
-                            <input
-                              type="checkbox"
-                              checked={selectedMessages.includes(conv.id)}
-                              onChange={() => handleCheckboxChange(conv.id)}
-                              className="mr-2 cursor-pointer"
-                            />
-                          )}
-                          <span>{participants[senderId]}</span>
-                        </div>
+                      const isSelected = selectedConversation && selectedConversation.id === conv.id;
 
-                        {/* Right: Dropdown button */}
-                        {!showCheckbox && (
-                          <div className="relative z-50">
-                            <button
-                              className={`${
-                                isSelected ? "text-white" : "text-black"
-                              }`}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                toggleDropdown(conv.id);
-                              }}
-                            >
-                              <FaAngleDown />
-                            </button>
-
-                            {dropdownVisible === conv.id && (
-                              <div
-                                ref={dropdownRef}
-                                className="absolute right-0 mt-2 bg-white text-black rounded w-20 shadow-lg"
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                <ul>
-                                  <li>
-                                    <a
-                                      href="#"
-                                      className="block px-4 py-2 text-sm cursor-pointer rounded hover:text-red-600"
-                                      onClick={(e) => {
-                                        e.preventDefault();
-                                        handleDeleteMessage(conv.id);
-                                        setShowCheckbox(true);
-                                      }}
-                                    >
-                                      Delete
-                                    </a>
-                                  </li>
-                                </ul>
-                              </div>
+                      return (
+                        <div
+                          key={conv.id}
+                          className={`relative p-2 cursor-pointer rounded-lg flex items-center justify-between ${
+                            isSelected
+                              ? "bg-blue-500 text-white"
+                              : "hover:bg-gray-200"
+                          }`}
+                          onClick={() => handleSelectedConversation(conv)}
+                        >
+                          {/* Left Checkbox */}
+                          <div className="flex items-center">
+                            {showCheckbox && (
+                              <input
+                                type="checkbox"
+                                checked={selectedMessages.includes(conv.id)}
+                                onChange={() => handleCheckboxChange(conv.id)}
+                                className="mr-2 cursor-pointer"
+                              />
                             )}
+                            <span>{displayNames}</span>
                           </div>
-                        )}
-                      </div>
-                    );
-                  })
+
+                          {/* Right: Dropdown button */}
+                          {!showCheckbox && (
+                            <div className="relative z-50">
+                              <button
+                                className={`${
+                                  isSelected ? "text-white" : "text-black"
+                                }`}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  toggleDropdown(conv.id);
+                                }}
+                              >
+                                <FaAngleDown />
+                              </button>
+
+                              {dropdownVisible === conv.id && (
+                                <div
+                                  ref={dropdownRef}
+                                  className="absolute right-0 mt-2 bg-white text-black rounded w-20 shadow-lg"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <ul>
+                                    <li>
+                                      <a
+                                        href="#"
+                                        className="block px-4 py-2 text-sm cursor-pointer rounded hover:text-red-600"
+                                        onClick={(e) => {
+                                          e.preventDefault();
+                                          handleDeleteMessage(conv.id);
+                                          setShowCheckbox(true);
+                                        }}
+                                      >
+                                        Delete
+                                      </a>
+                                    </li>
+                                  </ul>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })
                 ) : (
                   <p className="text-gray-500">No conversations available.</p>
                 )}
