@@ -149,6 +149,23 @@ export default function MessagesModal({
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [selectedConversation?.messages]);
 
+  // When a conversation is selected, update selectedConversation with full messages from messagesData
+  useEffect(() => {
+    if (!selectedConversation || !messagesData?.data) return;
+    if (
+      selectedConversation.id === messagesData.data[0]?.conversationId &&
+      (
+        !selectedConversation.messages ||
+        selectedConversation.messages.length !== messagesData.data.length ||
+        selectedConversation.messages[0]?.id !== messagesData.data[0]?.id // quick check
+      )
+    ) {
+      setSelectedConversation((conv) =>
+        conv ? { ...conv, messages: messagesData.data } : conv
+      );
+    }
+  }, [messagesData, selectedConversation]);
+
   const fetchParticipantNames = async () => {
     if (!conversations) return [];
 
@@ -157,6 +174,7 @@ export default function MessagesModal({
         const participantId = conv.participants.find(
           (participant) => participant !== userData?.data?.id
         );
+       
         return handleFetchUserName(participantId);
       })
     );
@@ -186,8 +204,6 @@ export default function MessagesModal({
   useEffect(() => {
     const handleNewMessage = ({ from_user_id, conversation_id }: { from_user_id: string; conversation_id: string; }) => {
       // If the notification is for the currently open conversation, refetch messages
-      console.log("New message received:", from_user_id, conversation_id);
-      console.log('selectedConversation.id', selectedConversation.id);
       if (selectedConversation && conversation_id === selectedConversation.id) {
         if (typeof refetch === "function") refetch();
       }
@@ -270,12 +286,8 @@ export default function MessagesModal({
   };
 
   const handleSelectedConversation = (conversation: ConversationProps) => {
-    const senderId =
-      conversation.participants.find((id) => id !== userData?.data?.id) ||
-      "Unknown";
-
-    const convObj = { ...conversation, participants: [senderId] };
-    setSelectedConversation(convObj);
+    setSelectedConversation(conversation);
+    // selectedMessages will be set after messagesData loads
   };
 
   const handleNewConversationClick = async (id: string) => {
@@ -329,28 +341,45 @@ export default function MessagesModal({
   };
 
   const handleDelete = async () => {
-    if (!selectedMessages.length) return;
-
-    try {
+    if (!selectedConversation) return;
+    const allMessageIds = selectedConversation.messages.map((msg) => msg.id);
+    if (!allMessageIds.length) return;
+   
+    
+     try {
       const response = await deleteMessages({
-        messageIds: selectedMessages,
+        messageIds: allMessageIds,
       }).unwrap();
       toast.success(response?.message || "Messages deleted successfully!");
-      setSelectedConversation((conv) =>
-        conv
-          ? {
-              ...conv,
-              messages: conv.messages.filter(
-                (m) => !selectedMessages.includes(m.id)
-              ),
-            }
-          : conv
+
+      // Remove messages from selectedConversation
+      setSelectedConversation((conv) => {
+        if (!conv) return conv;
+        const updatedMessages = conv.messages.filter(
+          (m) => !allMessageIds.includes(m.id)
+        );
+        // If no messages left, clear selectedConversation
+        if (updatedMessages.length === 0) return null;
+        return { ...conv, messages: updatedMessages };
+      });
+
+      // Remove conversation from list if no messages left
+      setConversations((prevConvs) =>
+        prevConvs.filter((conv) => {
+          if (conv.id !== selectedConversation?.id) return true;
+          // Only keep if there are messages left after deletion
+          const updatedMessages = conv.messages.filter(
+            (m) => !allMessageIds.includes(m.id)
+          );
+          return updatedMessages.length > 0;
+        })
       );
+
       setSelectedMessages([]);
     } catch (err) {
       console.error("Delete error:", err);
       toast.error(err?.message || "Failed to delete messages.");
-    }
+    } 
   };
 
   return (
@@ -524,7 +553,7 @@ export default function MessagesModal({
                   <p className="text-gray-500">No conversations available.</p>
                 )}
 
-                {selectedMessages.length > 0 && (
+                   {selectedConversation && selectedConversation.messages.length > 0 && (
                   <button
                     className="ml-auto float-right rounded mr-3 bg-gray-200 p-1 mt-3"
                     disabled={isDeleting}
@@ -534,9 +563,9 @@ export default function MessagesModal({
                   </button>
                 )}
                 {/* Conversation Count */}
-                {selectedMessages.length > 0 && (
+                {selectedConversation && selectedConversation.messages.length > 0 && (
                   <div className="mt-3">
-                    <span className="text-[15px] font-semibold">{`Selected (${selectedMessages.length})`}</span>
+                    <span className="text-[15px] font-semibold">{`Selected (${selectedConversation.messages.length})`}</span>
                   </div>
                 )}
               </div>
