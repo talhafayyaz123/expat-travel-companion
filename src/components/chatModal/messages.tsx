@@ -127,6 +127,7 @@ export default function MessagesModal({
   }, [getConversations]);
 
   useEffect(() => {
+    
     const defaultConv = conversations?.length ? conversations[0] : null;
     if (defaultConv) {
       const senderId =
@@ -181,6 +182,24 @@ export default function MessagesModal({
         };
       }
     }, [socket, userData]); 
+
+  useEffect(() => {
+    const handleNewMessage = ({ from_user_id, conversation_id }: { from_user_id: string; conversation_id: string; }) => {
+      // If the notification is for the currently open conversation, refetch messages
+      console.log("New message received:", from_user_id, conversation_id);
+      console.log('selectedConversation.id', selectedConversation.id);
+      if (selectedConversation && conversation_id === selectedConversation.id) {
+        if (typeof refetch === "function") refetch();
+      }
+      // Optionally, you can refetch other data here if needed
+    };
+
+    socket.on("message_received_notification", handleNewMessage);
+
+    return () => {
+      socket.off("message_received_notification", handleNewMessage);
+    };
+  }, [selectedConversation, refetch]);
 
   const handleFetchUserName = async (id: string | undefined) => {
     if (!id) return "";
