@@ -300,7 +300,7 @@ export default function MessagesModal({
     try {
       await createConversation([id, userData?.data?.id]).unwrap();
       setDropdownOpen(false);
-      setConversationQuery({ is_user: id }); // This will trigger GET with query string
+      setConversationQuery({ is_user: id });
     } catch (error) {
       console.error("Failed to create conversation:", error);
     }
@@ -381,6 +381,7 @@ export default function MessagesModal({
 
       setSelectedMessages([]);
       setSelectedConversation(null);
+      setConversationQuery({});
     } catch (error: any) {
       toast.error(error.message || "Failed to delete messages.");
     }
