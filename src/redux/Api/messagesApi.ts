@@ -55,11 +55,22 @@ const messagesApi = messagesBaseApi.injectEndpoints({
       }),
       providesTags: ["Conversation"],
     }),
+     getUnreadMessagesCount: build.query({
+      query: () => {
+        let url = "/conversations/unread";
+        return {
+          url,
+          method: "GET",
+        };
+      },
+      providesTags: ["Conversations"],
+    }),
   }),
 });
 
 export const {
   useGetAllConversationsQuery,
+  useGetUnreadMessagesCountQuery,
   useCreateConversationMutation,
   useGetConversationQuery,
   useSendMessageMutation,

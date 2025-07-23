@@ -20,13 +20,14 @@ import seekingIcon from "@/assets/profile/seeking.svg";
 import { getCountryLabel } from "@/constants/countryOptions";
 import { getStateLabel } from "@/constants/stateOptions";
 import { useMembershipCancelMutation } from "@/redux/Api/membershipApi";
-import { useGetAllConversationsQuery } from "@/redux/Api/messagesApi";
+import { useGetAllConversationsQuery,useGetUnreadMessagesCountQuery } from "@/redux/Api/messagesApi";
 import { formatDate2 } from "@/utilities/format";
 import { Image as AntImage } from "antd";
 import { FaExclamationCircle } from "react-icons/fa";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import MessagesModal from "../chatModal/messages";
 import { useRouter } from "next/navigation";
+
 
 interface User {
   id: string;
@@ -70,6 +71,13 @@ export const ProfileView = () => {
     error,
     isLoading: isConversationsLoading,
   } = useGetAllConversationsQuery(undefined);
+
+  const {
+    data: conversationCounter,
+    isLoading: isConversationCounterLoading,
+  } = useGetUnreadMessagesCountQuery(undefined);
+
+
   // cancel subscription
   const [membershipCancel, { isLoading: isCancelLoading }] =
     useMembershipCancelMutation();
@@ -458,7 +466,7 @@ export const ProfileView = () => {
                 onClick={() => setChatModalIsOpen(true)}
                 disabled={!currentUserData?.summitVerify}
               >
-                <i className="fa-solid fa-comment me-2"></i>Chat
+                <i className="fa-solid fa-comment me-2"></i>Chat ({conversationCounter?.data})
               </button>
               {!currentUserData?.summitVerify && (
                 <div className="flex justify-center items-center px-[10px] py-[2px] bg-gray-400 rounded-lg mt-5">
