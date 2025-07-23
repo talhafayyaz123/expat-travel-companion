@@ -291,6 +291,8 @@ export default function MessagesModal({
 
   const handleSelectedConversation = (conversation: ConversationProps) => {
     setSelectedConversation(conversation);
+    console.log(conversation);
+
     // selectedMessages will be set after messagesData loads
   };
 
@@ -513,7 +515,7 @@ export default function MessagesModal({
                               <button
                                 className="ml-auto rounded p-1"
                                 disabled={isDeleting}
-                                onClick={handleDelete}
+                                onClick={isSelected ? handleDelete : undefined}
                               >
                                 <Trash2
                                   className={`${
