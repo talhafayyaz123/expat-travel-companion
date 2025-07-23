@@ -75,6 +75,7 @@ export default function MessagesModal({
     useDeleteMessagesMutation();
 
   const [selectedMessages, setSelectedMessages] = useState<any[]>([]);
+  const [conversationQuery, setConversationQuery] = useState({});
 
   // Fetch user data
   const { data: userData, isLoading, isError } = useGetUserQuery(undefined);
@@ -96,7 +97,7 @@ export default function MessagesModal({
     error,
     isLoading: isConversationsLoading,
     refetch,
-  } = useGetAllConversationsQuery(undefined, { pollingInterval: isPolling });
+  } = useGetAllConversationsQuery(conversationQuery, { pollingInterval: isPolling });
 
   const [
     fetchUser,
@@ -294,7 +295,7 @@ export default function MessagesModal({
     try {
       await createConversation([id, userData?.data?.id]).unwrap();
       setDropdownOpen(false);
-      refetch();
+      setConversationQuery({ is_user: id }); // This will trigger GET with query string
     } catch (error) {
       console.error("Failed to create conversation:", error);
     }
@@ -351,7 +352,7 @@ export default function MessagesModal({
         messageIds: allMessageIds,
         conversationId: selectedConversation.id,
       }).unwrap();
-      toast.success(response?.message || "Messages deleted successfully!");
+      toast.success("Messages deleted successfully!");
 
       // Remove messages from selectedConversation
       setSelectedConversation((conv) => {
@@ -379,7 +380,7 @@ export default function MessagesModal({
       setSelectedMessages([]);
     } catch (err) {
       console.error("Delete error:", err);
-      toast.error(err?.message || "Failed to delete messages.");
+      toast.error("Failed to delete messages.");
     } 
   };
 

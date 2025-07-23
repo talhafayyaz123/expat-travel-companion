@@ -3,10 +3,16 @@ import messagesBaseApi from "./messagesBaseApi";
 const messagesApi = messagesBaseApi.injectEndpoints({
   endpoints: (build) => ({
     getAllConversations: build.query({
-      query: () => ({
-        url: "/conversations",
-        method: "GET",
-      }),
+      query: (params) => {
+        let url = "/conversations";
+        if (params?.is_user) {
+          url += `?is_user=${params.is_user}`;
+        }
+        return {
+          url,
+          method: "GET",
+        };
+      },
       providesTags: ["Conversations"],
     }),
     createConversation: build.mutation({
