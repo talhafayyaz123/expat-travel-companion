@@ -22,7 +22,6 @@ import type { MenuProps } from "antd";
 import { set } from "zod";
 import { toast } from "sonner";
 import { connectSocketWithUserId, socket } from "../../utilities/socket.js";
-import { FaSpinner } from "react-icons/fa";
 interface ChatModalProps {
   isOpen: boolean;
   setOpen: (val: boolean) => void;
@@ -71,8 +70,7 @@ export default function MessagesModal({
   const [refreshConversations, setRefreashConversations] = useState(10);
   const [dropdownVisible, setDropdownVisible] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
-
-  // Delete Conversation Mutation
+  const [showCheckbox, setShowCheckbox] = useState(false);
   const [deleteMessages, { isLoading: isDeleting }] =
     useDeleteMessagesMutation();
 
@@ -213,6 +211,7 @@ export default function MessagesModal({
       if (selectedConversation && conversation_id === selectedConversation.id) {
         if (typeof refetch === "function") refetch();
       }
+      // Optionally, you can refetch other data here if needed
     };
 
     socket.on("message_received_notification", handleNewMessage);
@@ -291,8 +290,6 @@ export default function MessagesModal({
 
   const handleSelectedConversation = (conversation: ConversationProps) => {
     setSelectedConversation(conversation);
-    console.log(conversation);
-
     // selectedMessages will be set after messagesData loads
   };
 
@@ -348,7 +345,6 @@ export default function MessagesModal({
 
   const handleDelete = async () => {
     if (!selectedConversation) return;
-
     const allMessageIds = selectedConversation.messages.map((msg) => msg.id);
     if (!allMessageIds.length) return;
 
@@ -357,21 +353,24 @@ export default function MessagesModal({
         messageIds: allMessageIds,
         conversationId: selectedConversation.id,
       }).unwrap();
+      toast.success("Messages deleted successfully!");
 
-      toast.success(response.message || "Messages deleted successfully!");
-
+      // Remove messages from selectedConversation
       setSelectedConversation((conv) => {
         if (!conv) return conv;
         const updatedMessages = conv.messages.filter(
           (m) => !allMessageIds.includes(m.id)
         );
+        // If no messages left, clear selectedConversation
         if (updatedMessages.length === 0) return null;
         return { ...conv, messages: updatedMessages };
       });
 
+      // Remove conversation from list if no messages left
       setConversations((prevConvs) =>
         prevConvs.filter((conv) => {
           if (conv.id !== selectedConversation?.id) return true;
+          // Only keep if there are messages left after deletion
           const updatedMessages = conv.messages.filter(
             (m) => !allMessageIds.includes(m.id)
           );
@@ -380,9 +379,9 @@ export default function MessagesModal({
       );
 
       setSelectedMessages([]);
-      setSelectedConversation(null);
-    } catch (error: any) {
-      toast.error(error.message || "Failed to delete messages.");
+    } catch (err) {
+      console.error("Delete error:", err);
+      toast.error("Failed to delete messages.");
     }
   };
 
@@ -407,6 +406,8 @@ export default function MessagesModal({
         onOpenChange={(state) => {
           setOpen(state);
           setFloatingButtonDisplay(!state);
+          setSelectedMessages([]);
+          setShowCheckbox(false);
         }}
       >
         <DialogContent className="w-full max-w-2xl p-4 bg-white rounded-lg shadow-lg z-[9991]">
@@ -434,7 +435,7 @@ export default function MessagesModal({
                   }
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.3, ease: "easeInOut" }}
-                  className="users-dropdown absolute top-7 pb-5 pt-2 right-0 mt-2 w-full bg-white border rounded shadow overflow-hidden z-50"
+                  className="users-dropdown absolute top-7 pb-5 pt-2 right-0 mt-2 w-full bg-white border rounded shadow overflow-hidden"
                 >
                   <h3 className="text-base font-bold border-b pb-2 text-center">
                     Users
@@ -452,8 +453,6 @@ export default function MessagesModal({
                   </div>
                 </motion.div>
               </div>
-              {/* Conversation */}
-
               <div className="max-h-[320px] overflow-y-auto">
                 {conversations?.length ? (
                   conversations
@@ -508,24 +507,59 @@ export default function MessagesModal({
                           }`}
                           onClick={() => handleSelectedConversation(conv)}
                         >
-                          <span>{displayNames}</span>
-
-                          {selectedConversation &&
-                            selectedConversation.messages && (
-                              <button
-                                className="ml-auto rounded p-1"
-                                disabled={isDeleting}
-                                onClick={isSelected ? handleDelete : undefined}
-                              >
-                                <Trash2
-                                  className={`${
-                                    isSelected ? "text-white" : "text-red-700"
-                                  }`}
-                                  height={20}
-                                  width={20}
-                                />
-                              </button>
+                          {/* Left Checkbox */}
+                          <div className="flex items-center">
+                            {showCheckbox && (
+                              <input
+                                type="checkbox"
+                                checked={selectedMessages.includes(conv.id)}
+                                onChange={() => handleCheckboxChange(conv.id)}
+                                className="mr-2 cursor-pointer"
+                              />
                             )}
+                            <span>{displayNames}</span>
+                          </div>
+
+                          {/* Right: Dropdown button */}
+                          {!showCheckbox && (
+                            <div className="relative z-50">
+                              <button
+                                className={`${
+                                  isSelected ? "text-white" : "text-black"
+                                }`}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  toggleDropdown(conv.id);
+                                }}
+                              >
+                                <FaAngleDown />
+                              </button>
+
+                              {dropdownVisible === conv.id && (
+                                <div
+                                  ref={dropdownRef}
+                                  className="absolute right-0 mt-2 bg-white text-black rounded w-20 shadow-lg"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <ul>
+                                    <li>
+                                      <a
+                                        href="#"
+                                        className="block px-4 py-2 text-sm cursor-pointer rounded hover:text-red-600"
+                                        onClick={(e) => {
+                                          e.preventDefault();
+                                          handleDeleteMessage(conv.id);
+                                          setShowCheckbox(true);
+                                        }}
+                                      >
+                                        Delete
+                                      </a>
+                                    </li>
+                                  </ul>
+                                </div>
+                              )}
+                            </div>
+                          )}
                         </div>
                       );
                     })
@@ -533,13 +567,23 @@ export default function MessagesModal({
                   <p className="text-gray-500">No conversations available.</p>
                 )}
 
+                {selectedConversation &&
+                  selectedConversation.messages.length > 0 && (
+                    <button
+                      className="ml-auto float-right rounded mr-3 bg-gray-200 p-1 mt-3"
+                      disabled={isDeleting}
+                      onClick={handleDelete}
+                    >
+                      <Trash2 className="text-red-700" height={20} width={20} />
+                    </button>
+                  )}
                 {/* Conversation Count */}
-                {/* {selectedConversation &&
+                {selectedConversation &&
                   selectedConversation.messages.length > 0 && (
                     <div className="mt-3">
                       <span className="text-[15px] font-semibold">{`Selected (${selectedConversation.messages.length})`}</span>
                     </div>
-                  )} */}
+                  )}
               </div>
             </div>
 
@@ -556,6 +600,8 @@ export default function MessagesModal({
                   onClick={() => {
                     setOpen(false);
                     setFloatingButtonDisplay(true);
+                    setSelectedMessages([]);
+                    setShowCheckbox(false);
                   }}
                   className="p-1 rounded-full bg-gray-200"
                 >

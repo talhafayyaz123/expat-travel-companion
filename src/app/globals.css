@@ -101,3 +101,29 @@ body {
 :where(.css-dev-only-do-not-override-1m2bkf9).ant-dropdown {
   z-index: 9999999999999999999999999999;
 }
+
+.loading-spinner {
+  display: inline-flex;
+  align-items: center;
+}
+
+.loading-spinner::before {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top-color: #3498db; /* Blue color */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 8px; /* Space between spinner and text */
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
