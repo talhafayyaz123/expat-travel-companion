@@ -128,23 +128,20 @@ export default function MessagesModal({
   }, [getConversations]);
 
   useEffect(() => {
-    
-    const defaultConv = conversations?.length ? conversations[0] : null;
-    if (defaultConv) {
+    // Only select the first conversation if none is currently selected
+    if (!selectedConversation && conversations?.length) {
+      const defaultConv = conversations[0];
       const senderId =
         defaultConv.participants.find((id) => id !== userData?.data?.id) ||
         "Unknown";
-
       const defaultConvObj = { ...defaultConv, participants: [senderId] };
-
       setSelectedConversation(defaultConvObj);
     }
-
     fetchParticipantNames().then((names) => {
       const pairs = Object.assign({}, ...names);
       setParticipants(pairs);
     });
-  }, [allConversations, conversations]);
+  }, [allConversations, conversations, selectedConversation]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
