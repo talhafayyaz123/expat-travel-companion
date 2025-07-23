@@ -349,6 +349,7 @@ export default function MessagesModal({
      try {
       const response = await deleteMessages({
         messageIds: allMessageIds,
+        conversationId: selectedConversation.id,
       }).unwrap();
       toast.success(response?.message || "Messages deleted successfully!");
 
