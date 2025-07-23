@@ -22,7 +22,6 @@ import type { MenuProps } from "antd";
 import { set } from "zod";
 import { toast } from "sonner";
 import { connectSocketWithUserId, socket } from "../../utilities/socket.js";
-import { FaSpinner } from "react-icons/fa";
 interface ChatModalProps {
   isOpen: boolean;
   setOpen: (val: boolean) => void;
@@ -71,8 +70,7 @@ export default function MessagesModal({
   const [refreshConversations, setRefreashConversations] = useState(10);
   const [dropdownVisible, setDropdownVisible] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
-
-  // Delete Conversation Mutation
+  // const [showCheckbox, setShowCheckbox] = useState(false);
   const [deleteMessages, { isLoading: isDeleting }] =
     useDeleteMessagesMutation();
 
@@ -213,6 +211,7 @@ export default function MessagesModal({
       if (selectedConversation && conversation_id === selectedConversation.id) {
         if (typeof refetch === "function") refetch();
       }
+      // Optionally, you can refetch other data here if needed
     };
 
     socket.on("message_received_notification", handleNewMessage);
@@ -351,13 +350,15 @@ export default function MessagesModal({
     if (!allMessageIds.length) return;
 
     try {
+      // Pass both messageIds and conversationId
       const response = await deleteMessages({
         messageIds: allMessageIds,
-        conversationId: selectedConversation.id,
+        conversationId: selectedConversation.id, // Pass the conversationId here
       }).unwrap();
 
-      toast.success(response.message || "Messages deleted successfully!");
+      toast.success("Messages deleted successfully!");
 
+      // Remove messages from selectedConversation
       setSelectedConversation((conv) => {
         if (!conv) return conv;
         const updatedMessages = conv.messages.filter(
@@ -378,9 +379,9 @@ export default function MessagesModal({
       );
 
       setSelectedMessages([]);
-      setSelectedConversation(null);
-    } catch (error: any) {
-      toast.error(error.message || "Failed to delete messages.");
+    } catch (err) {
+      console.error("Delete error:", err);
+      toast.error("Failed to delete messages.");
     }
   };
 
