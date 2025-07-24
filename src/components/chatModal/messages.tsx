@@ -116,6 +116,9 @@ export default function MessagesModal({
     isError: allUsersError,
   } = useAllUserQuery(undefined);
 
+  
+  const filteredUser=allUsers?.data?.filter((user:any)=>user?.id !== userData?.data?.id);
+
   const shouldPoll = isOpen && !!selectedConversation?.id;
 
   const {
@@ -458,7 +461,7 @@ const [markConversationMessagesAsSeen, { isLoading:isMarkSeenLoading, error: mar
                     Users
                   </h3>
                   <div className="py-2 max-h-[200px] overflow-y-auto">
-                    {allUsers?.data?.map((user: any) => (
+                    {filteredUser?.map((user: any) => (
                       <button
                         key={user?.id}
                         className="p-2 cursor-pointer w-[75%] block mx-auto rounded-lg text-center bg-gray-200 text-blue-500 hover:bg-blue-500 hover:text-white first:mt-0 mt-2"
