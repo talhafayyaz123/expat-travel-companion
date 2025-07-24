@@ -133,14 +133,14 @@ export default function MessagesModal({
 
   useEffect(() => {
     // Only select the first conversation if none is currently selected
-    if (!selectedConversation && conversations?.length) {
+  /*   if (!selectedConversation && conversations?.length) {
       const defaultConv = conversations[0];
       const senderId =
         defaultConv.participants.find((id) => id !== userData?.data?.id) ||
         "Unknown";
       const defaultConvObj = { ...defaultConv, participants: [senderId] };
       setSelectedConversation(defaultConvObj);
-    }
+    } */
     fetchParticipantNames().then((names) => {
       const pairs = Object.assign({}, ...names);
       setParticipants(pairs);
@@ -211,7 +211,10 @@ export default function MessagesModal({
     }) => {
       // If the notification is for the currently open conversation, refetch messages
       if (selectedConversation && conversation_id === selectedConversation.id) {
-        if (typeof refetch === "function") refetch();
+        if (typeof refetch === "function"){
+             setConversationQuery({});
+             refetch();
+        } 
       }
     };
 
@@ -511,6 +514,10 @@ export default function MessagesModal({
                         >
                           <span>{displayNames}</span>
 
+                          {/* Show unread count badge if > 0 */}
+                            {conv.unreadCount >0 && (
+                              <span className="unread-badge">  ({conv.unreadCount})</span>
+                            )}
                           {selectedConversation &&
                             selectedConversation.messages && (
                               <button
