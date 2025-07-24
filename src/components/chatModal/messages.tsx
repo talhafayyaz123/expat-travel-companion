@@ -73,6 +73,7 @@ export default function MessagesModal({
   const [refreshConversations, setRefreashConversations] = useState(10);
   const [dropdownVisible, setDropdownVisible] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+  //const [pendingQueryReset, setPendingQueryReset] = useState(false);
 
   // Delete Conversation Mutation
   const [deleteMessages, { isLoading: isDeleting }] =
@@ -321,6 +322,8 @@ const [markConversationMessagesAsSeen, { isLoading:isMarkSeenLoading, error: mar
       await createConversation([id, userData?.data?.id]).unwrap();
       setDropdownOpen(false);
       setConversationQuery({ is_user: id });
+    //  console.log('pendingQueryReset',id)
+      //setPendingQueryReset(true);
     } catch (error) {
       console.error("Failed to create conversation:", error);
     }
@@ -368,9 +371,8 @@ const [markConversationMessagesAsSeen, { isLoading:isMarkSeenLoading, error: mar
 
   const handleDelete = async () => {
     if (!selectedConversation) return;
-
+ 
     const allMessageIds = selectedConversation.messages.map((msg) => msg.id);
-    if (!allMessageIds.length) return;
 
     try {
       const response = await deleteMessages({
@@ -378,7 +380,7 @@ const [markConversationMessagesAsSeen, { isLoading:isMarkSeenLoading, error: mar
         conversationId: selectedConversation.id,
       }).unwrap();
 
-      toast.success(response.message || "Messages deleted successfully!");
+      toast.success(response?.message || "Messages deleted successfully!");
 
       setSelectedConversation((conv) => {
         if (!conv) return conv;
@@ -406,6 +408,17 @@ const [markConversationMessagesAsSeen, { isLoading:isMarkSeenLoading, error: mar
       toast.error(error.message || "Failed to delete messages.");
     }
   };
+
+ /*  useEffect(() => {
+    if (pendingQueryReset && getConversations) {
+       setTimeout(() => {
+        setConversationQuery({});
+      console.log('...setConversationQuery.',getConversations)
+      setPendingQueryReset(false);
+    }, 13000);
+    
+    }
+  }, [getConversations, pendingQueryReset]); */
 
   return (
     <>
@@ -540,7 +553,10 @@ const [markConversationMessagesAsSeen, { isLoading:isMarkSeenLoading, error: mar
                               <button
                                 className="ml-auto rounded p-1"
                                 disabled={isDeleting}
-                                onClick={isSelected ? handleDelete : undefined}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDelete();
+                                }}
                               >
                                 <Trash2
                                   className={`${
