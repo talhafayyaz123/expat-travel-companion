@@ -15,6 +15,8 @@ import {
   useCreateConversationMutation,
   useGetAllConversationsQuery,
   useDeleteMessagesMutation,
+  useMarkConversationMessagesAsSeenQuery,
+  useMarkConversationMessagesAsSeenMutation
 } from "@/redux/Api/messagesApi";
 import { FaAngleDown, FaArrowDown, FaTrash } from "react-icons/fa6";
 import { Dropdown, Menu, Space } from "antd";
@@ -120,10 +122,13 @@ export default function MessagesModal({
     data: messagesData,
     isLoading: messagesLoading,
     isError: messagesError,
+    refetch: refetchMessages,
   } = useGetMessageByConvoQuery(selectedConversation?.id, {
     skip: !selectedConversation?.id,
     pollingInterval: shouldPoll ? 10000 : 0,
   });
+  
+const [markConversationMessagesAsSeen, { isLoading:isMarkSeenLoading, error: markSeenError }] = useMarkConversationMessagesAsSeenMutation();
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
@@ -210,12 +215,18 @@ export default function MessagesModal({
       conversation_id: string;
     }) => {
       // If the notification is for the currently open conversation, refetch messages
-      if (selectedConversation && conversation_id === selectedConversation.id) {
+     // if (selectedConversation && conversation_id === selectedConversation.id) {
+    
         if (typeof refetch === "function"){
              setConversationQuery({});
+              if (selectedConversation?.id) {
+              // Trigger the mutation to mark the messages as seen
+              markConversationMessagesAsSeen(selectedConversation.id);
+            }
              refetch();
+             refetchMessages();
         } 
-      }
+     // }
     };
 
     socket.on("message_received_notification", handleNewMessage);
@@ -295,8 +306,11 @@ export default function MessagesModal({
   const handleSelectedConversation = (conversation: ConversationProps) => {
     setSelectedConversation(conversation);
     console.log(conversation);
-
-    // selectedMessages will be set after messagesData loads
+     if (selectedConversation?.id) {
+      // Trigger the mutation to mark the messages as seen
+      markConversationMessagesAsSeen(selectedConversation.id);
+    }
+   refetch();
   };
 
   const handleNewConversationClick = async (id: string) => {
@@ -513,7 +527,7 @@ export default function MessagesModal({
                           onClick={() => handleSelectedConversation(conv)}
                         >
                           <span>{displayNames}</span>
-
+                          
                           {/* Show unread count badge if > 0 */}
                             {conv.unreadCount >0 && (
                               <span className="unread-badge">  ({conv.unreadCount})</span>

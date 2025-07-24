@@ -55,6 +55,14 @@ const messagesApi = messagesBaseApi.injectEndpoints({
       }),
       providesTags: ["Conversation"],
     }),
+    // Mutation for marking messages as seen
+    markConversationMessagesAsSeen: build.mutation({
+      query: (conversationId) => ({
+        url: `/conversations/${conversationId}/mark-seen`,
+        method: 'GET',
+      }),
+      invalidatesTags: ['Conversation'],
+    }),
      getUnreadMessagesCount: build.query({
       query: () => {
         let url = "/conversations/unread";
@@ -76,4 +84,5 @@ export const {
   useSendMessageMutation,
   useGetMessageByConvoQuery,
   useDeleteMessagesMutation,
+  useMarkConversationMessagesAsSeenMutation
 } = messagesApi;
