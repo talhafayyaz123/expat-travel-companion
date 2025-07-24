@@ -73,7 +73,7 @@ export default function MessagesModal({
   const [refreshConversations, setRefreashConversations] = useState(10);
   const [dropdownVisible, setDropdownVisible] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
-  //const [pendingQueryReset, setPendingQueryReset] = useState(false);
+  const [pendingQueryReset, setPendingQueryReset] = useState(false);
 
   // Delete Conversation Mutation
   const [deleteMessages, { isLoading: isDeleting }] =
@@ -95,7 +95,8 @@ export default function MessagesModal({
     { isLoading: createConversationLoading, isError: createConversationError },
   ] = useCreateConversationMutation();
 
-  const isPolling = isOpen ? 10000 : 0;
+   const isPolling = isOpen ? 10000 : 0;
+   //const isPolling = isOpen && Object.keys(conversationQuery).length === 0 ? 10000 : 0;
 
   const {
     data: getConversations,
@@ -322,8 +323,14 @@ const [markConversationMessagesAsSeen, { isLoading:isMarkSeenLoading, error: mar
       await createConversation([id, userData?.data?.id]).unwrap();
       setDropdownOpen(false);
       setConversationQuery({ is_user: id });
-    //  console.log('pendingQueryReset',id)
-      //setPendingQueryReset(true);
+     /*  console.log('pendingQueryReset',id)
+      setTimeout(() => {
+         console.log('setConversationQuery','empty')
+      setConversationQuery({}); // Reset the query string after fetching data
+    }, 1900); */
+
+     
+      setPendingQueryReset(true);
     } catch (error) {
       console.error("Failed to create conversation:", error);
     }
@@ -409,16 +416,13 @@ const [markConversationMessagesAsSeen, { isLoading:isMarkSeenLoading, error: mar
     }
   };
 
- /*  useEffect(() => {
+  useEffect(() => {
     if (pendingQueryReset && getConversations) {
-       setTimeout(() => {
-        setConversationQuery({});
+       setConversationQuery({});
       console.log('...setConversationQuery.',getConversations)
       setPendingQueryReset(false);
-    }, 13000);
-    
     }
-  }, [getConversations, pendingQueryReset]); */
+  }, [getConversations, pendingQueryReset]); 
 
   return (
     <>
